@@ -613,7 +613,20 @@ fact, sometimes only this weaker form of the axiom is needed.
 #def naiveextext-extext
   ( extext : ExtExt)
   : NaiveExtExt
-  := \ I ψ ϕ A a f g → (first (first (extext I ψ ϕ A a f g)))
+  := \ I ψ ϕ A a f g → (first (second (extext I ψ ϕ A a f g)))
+
+#def is-section-naiveextext-extext
+  ( extext : ExtExt)
+  ( I : CUBE)
+  ( ψ : I → TOPE)
+  ( ϕ : ψ → TOPE)
+  ( A : ψ → U)
+  ( a : (t : ϕ) → A t)
+  ( f : (t : ψ) → A t [ϕ t ↦ a t])
+  ( g : (t : ψ) → A t [ϕ t ↦ a t])
+  ( H : (t : ψ) → (f t = g t) [ϕ t ↦ refl])
+  : ( ext-htpy-eq I ψ ϕ A a f g) (naiveextext-extext extext I ψ ϕ A a f g H) = H
+  := (second (second (extext I ψ ϕ A a f g))) H
 ```
 
 We show that naive extension extensionality implies weak extension
