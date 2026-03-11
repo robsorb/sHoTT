@@ -27,6 +27,14 @@ This is a literate `rzk` file:
 - `05-segal-types.rzk.md` - We make heavy use of the notion of Segal types
 - `10-rezk-types.rzk.md`- We use Rezk types.
 
+
+
+```rzk
+#assume extext
+ : ExtExt
+```
+
+
 ## (Iso-)Inner familiess
 
 Inner families are (currently) defined as families where the base, the total
@@ -532,4 +540,97 @@ Pre-inner is what I'll temporarily be calling the ordinary notion of inner famil
   := \ t → da (t , t)
 
 #end edges-of-triangles
+```
+
+
+## Dependent arrows with fixed domain
+
+```rzk
+
+#section dependent-arrow-from
+
+#variable B : U
+
+#def arr-from
+  ( b : B)
+  : U
+  := (t : Δ¹) → B [t ≡ 0₂ ↦ b]
+
+#variable E : B → U
+
+#def darr-from
+  ( f : Δ¹ → B)
+  ( e : E(f 0₂))
+  : U
+  := (t : Δ¹) → E (f t) [t ≡ 0₂ ↦ e]
+
+```
+
+## Homotopies between arrows with fixed domain
+
+```rzk
+
+#def htpy-from
+  ( f : Δ¹ → B)
+  ( g : (t : Δ¹) → E (f t))
+  ( h : (t : Δ¹) → E (f t))
+  ( p : g 0₂ = h 0₂)
+  : U
+  := (t : Δ¹) → (g t =_{E (f t)} h t) [t ≡ 0₂ ↦ p]
+
+#def eq-htpy-from
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  ( g : darr-from f e)
+  ( h : darr-from f e)
+  ( H : htpy-from f g h refl)
+  : g =_{darr-from f e} h
+  :=
+    naiveextext-extext
+      extext
+      2
+      ( Δ¹)
+      ( \ t → t ≡ 0₂)
+      ( \ t → E (f t))
+      ( \ t → e)
+      ( g)
+      ( h)
+      H
+
+#def htpy-from-eq
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  ( g : darr-from f e)
+  ( h : darr-from f e)
+  ( p : g =_{darr-from f e} h)
+  : htpy-from f g h refl
+  :=
+    ext-htpy-eq
+      2
+      ( Δ¹)
+      ( \ t → t ≡ 0₂)
+      ( \ t → E (f t))
+      ( \ t → e)
+      ( g)
+      ( h)
+      p
+
+```
+
+### Concatenating homotopies with fixed domain
+
+```rzk
+#def concat-htpy-from
+  ( b : Δ¹ → B)
+  ( f : (t : Δ¹) → E (b t))
+  ( g : (t : Δ¹) → E (b t))
+  ( h : (t : Δ¹) → E (b t))
+  ( p : f 0₂ = g 0₂)
+  ( q : g 0₂ = h 0₂)
+  ( H1 : htpy-from b f g p)
+  ( H2 : htpy-from b g h q)
+  : htpy-from b f h (concat (E (b 0₂)) (f 0₂) (g 0₂) (h 0₂) p q)
+  := \ t → concat (E (b t)) (f t) (g t) (h t) (H1 t) (H2 t)
+
+#end dependent-arrow-from
 ```
