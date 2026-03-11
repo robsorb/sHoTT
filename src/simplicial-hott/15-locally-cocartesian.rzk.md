@@ -101,7 +101,7 @@ This is a literate `rzk` file:
         ( comp-over-Inner B E E-inner (degen-Δ²-vertical B b) f)
         ( h))
       ( ( Σ ( g : hom (E (b 1₂)) (f 1₂) e'')
-        , ( dhom2 B (b 0₂) (b 1₂) (b 1₂) b (id B (b 1₂)) b (degen-Δ²-vertical B b)
+        , ( dhom2 B (b 0₂) (b 1₂) (b 1₂) b (id-hom B (b 1₂)) b (degen-Δ²-vertical B b)
           E (f 0₂) (f 1₂) e'' f g h)))
       ( equiv-fib-comp-dtriangles-Inner B E E-inner (degen-Δ²-vertical B b) f h)
       ( is-contr-map-is-equiv
@@ -131,15 +131,15 @@ This is a literate `rzk` file:
 
 #def hom-action-id-id-locally-cocartesian
   ( b : B) (e : E b)
-  : hom (E b) (action-locally-cocartesian (id B b) e) (e)
-  := fill-locally-cocartesian-arrow B E (id B b)
-    ( first (second (lifts b b (id B b) e)))
+  : hom (E b) (action-locally-cocartesian (id-hom B b) e) (e)
+  := fill-locally-cocartesian-arrow B E (id-hom B b)
+    ( first (second (lifts b b (id-hom B b) e)))
     ( \ t → e)
-    ( second (second (lifts b b (id B b) e)))
+    ( second (second (lifts b b (id-hom B b) e)))
 
 #def hom-id-action-id-locally-cocartesian
   ( b : B) (e : E b)
-  : hom (E b) (e) (action-locally-cocartesian (id B b) e)
-  := first (second (lifts (b) (b) (id B b) e))
+  : hom (E b) (e) (action-locally-cocartesian (id-hom B b) e)
+  := first (second (lifts (b) (b) (id-hom B b) e))
 
 ```
