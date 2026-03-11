@@ -724,3 +724,62 @@ We will also need a different version of `dtriangle-over-horn`.
 #end def-is-inner
 
 ```
+
+
+## Composition over triangles for inner families
+
+```rzk
+
+#section properties-of-inner-families
+
+#variable B : U
+#variable E : B → U
+#variable E-inner : is-inner B E
+
+
+#def fill-over-Inner
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  : dtriangle-over-horn B E a f g
+  := center-contraction (dtriangle-over-horn B E a f g) (E-inner a f g)
+
+#def comp-over-Inner uses (E-inner)
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  : ( t : Δ¹) → E (comp-Δ² B a t)
+  := comp-dΔ² B E a (fill-over-Inner a f g)
+```
+
+
+## Uniqueness of composition
+
+### Equivalence between dependent triangles and equalities
+```rzk
+
+#def is-contr-dtriangle-over-horn-sigma-Inner
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  : is-contr (dtriangle-over-horn-sigma B E a f g)
+  := is-contr-equiv-is-contr
+    ( dtriangle-over-horn B E a f g)
+    ( dtriangle-over-horn-sigma B E a f g)
+    ( equiv-dtriangle-over-horn-dtriangle-over-horn-sigma B E a f g)
+    ( E-inner a f g)
+
+
+#def equiv-eq-comp-dtriangles-Inner uses (E-inner)
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  : ( h : dhom B (a (0₂ , 0₂)) (a (1₂ , 1₂)) (comp-Δ² B a) E (f 0₂) (g 1₂))
+  → Equiv (comp-over-Inner a f g = h) (dtriangle-with-boundary B E a f g h)
+  := second (first (fundamental-theorem-of-identity-types
+    ( dhom B (a (0₂ , 0₂)) (a (1₂ , 1₂)) (comp-Δ² B a) E (f 0₂) (g 1₂))
+    ( dtriangle-with-boundary B E a f g))
+    ( is-contr-dtriangle-over-horn-sigma-Inner a f g))
+
+#end properties-of-inner-families
+```
