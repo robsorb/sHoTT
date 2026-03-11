@@ -490,3 +490,46 @@ Vertical morphisms are dependent morphisms over an identity.
   Σ ( u : Iso B (is-segal-base-is-inner B P is-inner-family-P) b b')
   , dhom B b b' (first u) P e e'
 ```
+
+
+## Pre-inner families (Temporary)
+
+Pre-inner is what I'll temporarily be calling the ordinary notion of inner families.
+
+
+## Edges of triangles in types
+
+```rzk
+
+#section edges-of-triangles
+
+#variable B : U
+
+#def fst-Δ² (a : Δ² → B)
+  : Δ¹ → B
+  := \ t → a (t , 0₂)
+
+#def snd-Δ² (a : Δ² → B)
+  : Δ¹ → B
+  := \ t → a (1₂ , t)
+
+#def comp-Δ² (a : Δ² → B)
+  : Δ¹ → B
+  := \ t → a (t , t)
+
+#variable E : B → U
+
+#def fst-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
+  : ( t : Δ¹) → E (fst-Δ² a t)
+  := \ t → da (t , 0₂)
+
+#def snd-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
+  : ( t : Δ¹) → E (snd-Δ² a t)
+  := \ t → da (1₂ , t)
+
+#def comp-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
+  : ( t : Δ¹) → E (comp-Δ² a t)
+  := \ t → da (t , t)
+
+#end edges-of-triangles
+```

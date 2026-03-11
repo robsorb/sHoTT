@@ -92,3 +92,7 @@ lift, given a point in the fiber over the domain.
   : U
   := product (is-isoinner-family B P) (has-cocartesian-lifts B P)
 ```
+
+
+
+## Arrows are cocartesian whenever precomposition is an equivalence.
