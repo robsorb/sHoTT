@@ -782,6 +782,30 @@ We will also need a different version of `dtriangle-over-horn`.
     ( is-contr-dtriangle-over-horn-sigma-Inner a f g))
 ```
 
+### The fibers of precomposition are fillers
+
+```rzk
+#def equiv-fib-comp-dtriangles-Inner uses (E-inner)
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( h : darr-from B E (comp-Δ² B a) (f 0₂))
+  : Equiv
+    ( fib
+      ( darr-from B E (snd-Δ² B a) (f 1₂))
+      ( darr-from B E (comp-Δ² B a) (f 0₂))
+      ( comp-over-Inner a f)
+      ( h))
+    ( Σ ( g : dhom B (a (1₂ , 0₂)) (a (1₂ , 1₂)) (snd-Δ² B a) E (f 1₂) (h 1₂))
+    , dtriangle-with-boundary B E a f g (\ t → h t))
+  := total-equiv-family-of-equiv
+    ( dhom B (a (1₂ , 0₂)) (a (1₂ , 1₂)) (snd-Δ² B a) E (f 1₂) (h 1₂))
+    ( \ g → comp-over-Inner a f g = h)
+    ( \ g → dtriangle-with-boundary B E a f g (\ t → h t))
+    ( \ g → equiv-eq-comp-dtriangles-Inner a f g (\ t → h t))
+```
+
+
+
 ### Uniqueness of composites
 ```rzk
 
