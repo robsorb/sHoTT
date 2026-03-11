@@ -500,9 +500,6 @@ Vertical morphisms are dependent morphisms over an identity.
 ```
 
 
-## Pre-inner families (Temporary)
-
-Pre-inner is what I'll temporarily be calling the ordinary notion of inner families.
 
 
 ## Edges of triangles in types
@@ -542,6 +539,14 @@ Pre-inner is what I'll temporarily be calling the ordinary notion of inner famil
 #end edges-of-triangles
 ```
 
+## Degenerate triangles
+```rzk
+#def degen-Δ²
+  ( B : U)
+  ( f : Δ¹ → B)
+  : Δ² → B
+  := \ (x , y) → f y
+```
 
 ## Dependent arrows with fixed domain
 
@@ -633,4 +638,89 @@ Pre-inner is what I'll temporarily be calling the ordinary notion of inner famil
   := \ t → concat (E (b t)) (f t) (g t) (h t) (H1 t) (H2 t)
 
 #end dependent-arrow-from
+```
+
+
+
+## (Pre)-Inner families (Temporary)
+
+Pre-inner is what I'll temporarily be calling the ordinary notion of inner families.
+
+### Dependent triangles over horns
+
+```rzk
+
+#section def-is-inner
+
+#variable B : U
+#variable E : B → U
+
+#def dtriangle-over-horn
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  : U
+  := ((x , y) : Δ²) → E (a (x , y)) [ y ≡ 0₂ ↦ f x , x ≡ 1₂ ↦ g y ]
+
+```
+
+We will also need a different version of `dtriangle-over-horn`.
+
+```rzk
+
+#def dtriangle-with-boundary
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  ( h : dhom B (a (0₂ , 0₂)) (a (1₂ , 1₂)) (comp-Δ² B a) E (f 0₂) (g 1₂))
+  : U
+  := ((x , y) : Δ²) → E (a (x , y)) [x ≡ y ↦ h x , y ≡ 0₂ ↦ f x , x ≡ 1₂ ↦ g y]
+
+
+#def dtriangle-over-horn-sigma
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  : U
+  := (Σ (h : (t : Δ¹) → E (comp-Δ² B a t) [t ≡ 0₂ ↦ f 0₂ , t ≡ 1₂ ↦ g 1₂])
+  , dtriangle-with-boundary a f g h)
+
+
+#def equiv-dtriangle-over-horn-dtriangle-over-horn-sigma
+  ( a : Δ² → B)
+  ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+  : Equiv
+    ( dtriangle-over-horn a f g)
+    ( dtriangle-over-horn-sigma a f g)
+  := equiv-invertible-map
+    ( dtriangle-over-horn a f g)
+    ( dtriangle-over-horn-sigma a f g)
+    ( \ da → (comp-dΔ² B E a da , \ t → da t))
+    ( \ (h , da) → da , (\ x → refl , \ x → refl))
+```
+
+### Degenerate triangle over a degenerate horn
+
+```rzk
+#def degen-triangle-over-horn
+  ( f : Δ¹ → B)
+  ( g : (t : Δ¹) → E (f t))
+  : dtriangle-over-horn (degen-Δ² B f) (id-hom (E (f 0₂)) (g 0₂)) g
+  := \ (x , y) → g y
+```
+
+### Inner families
+
+```rzk
+
+#def is-inner
+  : U
+  := (a : Δ² → B)
+  → ( f : (t : Δ¹) → E (fst-Δ² B a t))
+  → ( g : darr-from B E (snd-Δ² B a) (f 1₂))
+    → is-contr (dtriangle-over-horn a f g)
+
+#end def-is-inner
+
 ```

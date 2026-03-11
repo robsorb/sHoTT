@@ -222,6 +222,19 @@ The type of equivalences between types uses `#!rzk is-equiv` rather than
   := Σ (f : A → B) , (is-equiv A B f)
 ```
 
+## Equivalences from invertible maps
+
+```rzk
+#def equiv-invertible-map
+  ( A B : U)
+  ( f : A → B)
+  ( f-inv : has-inverse A B f)
+  : Equiv A B
+  := (f , is-equiv-has-inverse A B f f-inv)
+
+
+```
+
 ## Induction with section
 
 We have two variants of induction with section that say that if `f : A → B` has
