@@ -780,6 +780,52 @@ We will also need a different version of `dtriangle-over-horn`.
     ( dhom B (a (0₂ , 0₂)) (a (1₂ , 1₂)) (comp-Δ² B a) E (f 0₂) (g 1₂))
     ( dtriangle-with-boundary B E a f g))
     ( is-contr-dtriangle-over-horn-sigma-Inner a f g))
+```
+
+### Uniqueness of composites
+```rzk
+
+#def eq-dtriangle-Inner uses (E-inner)
+  ( a : Δ² → B)
+  ( da : (t : Δ²) → E (a t))
+  : comp-over-Inner a (fst-dΔ² B E a da) (snd-dΔ² B E a da) = comp-dΔ² B E a da
+  := first (inv-equiv
+    ( comp-over-Inner a (fst-dΔ² B E a da) (snd-dΔ² B E a da) = comp-dΔ² B E a da)
+    ( dtriangle-with-boundary B E a
+      ( fst-dΔ² B E a da)
+      ( snd-dΔ² B E a da)
+      ( comp-dΔ² B E a da))
+    ( equiv-eq-comp-dtriangles-Inner a
+      ( fst-dΔ² B E a da)
+      ( snd-dΔ² B E a da)
+      ( comp-dΔ² B E a da))) (da)
+```
+
+
+## Left unit law for composition
+
+```rzk
+#def comp-over-id-Inner uses (E-inner)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  ( g : darr-from B E f e)
+  : comp-over-Inner (degen-Δ² B f) (id-hom (E (f 0₂)) e) g = g
+  := eq-dtriangle-Inner (degen-Δ² B f) (\ (x , y) → g y)
+
+
+#def comp-over-hom-eq-Inner uses (E-inner)
+  ( f : Δ¹ → B)
+  ( e e' : E (f 0₂))
+  ( p : e = e')
+  ( g : darr-from B E f e')
+  : comp-over-Inner (degen-Δ² B f) (hom-eq (E (f 0₂)) e e' p) g = g
+  := ind-path-end
+    ( E (f 0₂))
+    ( e')
+    ( \ e → \ p → comp-over-Inner (degen-Δ² B f) (hom-eq (E (f 0₂)) e e' p) g = g)
+    ( comp-over-id-Inner f e' g)
+    ( e)
+    ( p)
 
 #end properties-of-inner-families
 ```
