@@ -94,5 +94,60 @@ lift, given a point in the fiber over the domain.
 ```
 
 
-
 ## Arrows are cocartesian whenever precomposition is an equivalence.
+
+```rzk
+
+#section is-equiv-composition
+
+#variable B : U
+#variable E : B → U
+#variable E-inner : is-inner B E
+
+#def is-cocartesian-arrow-is-equiv-comp-over-Inner
+  ( b : Δ¹ → B)
+  ( f : (t : Δ¹) → E (b t))
+  : ( ( a : ((x , y) : Δ²) → B [y ≡ 0₂ ↦ b x])
+  → is-equiv
+      ( darr-from B E (snd-Δ² B a) (f 1₂))
+      ( darr-from B E (comp-Δ² B a) (f 0₂))
+      ( comp-over-Inner B E E-inner a f))
+  → is-cocartesian-arrow B (b 0₂) (b 1₂) b E (f 0₂) (f 1₂) f
+  := \ is-equiv-comp →
+    \ (b'' : B) → \ (v : hom B (b 1₂) (b'')) → \ (w : hom B (b 0₂) b'') →
+    \ (a : hom2 B (b 0₂) (b 1₂) b'' b v w) → \ (e'' : E b'') →
+    \ (h : dhom B (b 0₂) b'' w E (f 0₂) e'') →
+      is-contr-equiv-is-contr
+        ( fib
+          ( darr-from B E (snd-Δ² B a) (f 1₂))
+          ( darr-from B E (comp-Δ² B a) (f 0₂))
+          ( comp-over-Inner B E E-inner a f)
+          ( h))
+        ( Σ ( g : dhom B (a (1₂ , 0₂)) (a (1₂ , 1₂)) (snd-Δ² B a) E (f 1₂) (h 1₂))
+          , dtriangle-with-boundary B E a f g (\ t → h t))
+        ( equiv-fib-comp-dtriangles-Inner B E E-inner a f h)
+        ( is-contr-map-is-equiv
+          ( darr-from B E (snd-Δ² B a) (f 1₂))
+          ( darr-from B E (comp-Δ² B a) (f 0₂))
+          ( comp-over-Inner B E E-inner a f)
+          ( is-equiv-comp a)
+          h)
+
+#def has-cocart-lifts-is-equiv-comp-over-Inner
+  ( lift : (b : Δ¹ → B) → (e : E (b 0₂)) → darr-from B E b e)
+  : ( ( ( a : Δ² → B) → (e : E (a (0₂ , 0₂)))
+  → is-equiv
+      ( darr-from B E (snd-Δ² B a) (lift (fst-Δ² B a) e 1₂))
+      ( darr-from B E (comp-Δ² B a) e)
+      ( comp-over-Inner B E E-inner a (lift (fst-Δ² B a) e))))
+  → has-cocartesian-lifts B E
+  := \ is-equiv-comp → \ (b : B) → \ (b' : B) → \ (u : hom B b b') →
+    \ (e : E b) →
+      ( lift u e 1₂ , (\ t → lift u e t
+      , is-cocartesian-arrow-is-equiv-comp-over-Inner u (lift u e)
+        ( \ a →
+          is-equiv-comp a e)))
+
+#end is-equiv-composition
+
+```
