@@ -8,12 +8,33 @@ This is a literate `rzk` file:
 #lang rzk-1
 ```
 
+
+```rzk
+#assume extext
+ : ExtExt
+```
+
+
 ```rzk
 #def degen-Δ²-vertical
   ( B : U)
   ( f : Δ¹ → B)
   : Δ² → B
   := \ (x , y) → f x
+
+#def dhom2-over-arrow
+  ( B : U)
+  ( b : Δ¹ → B)
+  ( E : B → U)
+  ( x : E (b 0₂))
+  ( y z : E (b 1₂))
+  ( f : dhom B (b 0₂) (b 1₂) b E x y)
+  ( g : hom (E (b 1₂)) y z)
+  ( h : dhom B (b 0₂) (b 1₂) b E x z)
+  : U
+  := dhom2 B (b 0₂) (b 1₂) (b 1₂) b (id-hom B (b 1₂)) b (degen-Δ²-vertical B b)
+    E x y z f g h
+
 ```
 
 
@@ -32,11 +53,11 @@ This is a literate `rzk` file:
     → ( h : dhom B b b' u P e e'')
     → is-contr
         ( Σ ( g : hom (P b') e' e'')
-        , ( dhom2 B b b' b' u (id-hom B b') u (degen-Δ²-vertical B u) P e e' e'' f g h))
+        , ( dhom2-over-arrow B u P e e' e'' f g h))
 
 
 
-#def fill-locally-cocartesian-arrow
+#def hom-fill-locally-cocartesian-arrow
   ( B : U)
   ( E : B → U)
   ( b : Δ¹ → B)
@@ -46,6 +67,46 @@ This is a literate `rzk` file:
   → hom (E (b 1₂)) (f 1₂) (g 1₂)
   := \ is-locally-cocart →
     first (first (is-locally-cocart (g 1₂) (\ t → g t)))
+
+#def fill-locally-cocartesian-arrow
+  ( B : U)
+  ( E : B → U)
+  ( b : Δ¹ → B)
+  ( f : (t : Δ¹) → E (b t))
+  ( g : darr-from B E b (f 0₂))
+  ( f-loc-cocart : is-locally-cocartesian-arrow B (b 0₂) (b 1₂) b E (f 0₂) (f 1₂) (f))
+  : dhom2-over-arrow B b
+    E (f 0₂) (f 1₂) (g 1₂)
+    f (hom-fill-locally-cocartesian-arrow B E b f g f-loc-cocart) (\ t → g t)
+  :=
+    second (first (f-loc-cocart (g 1₂) (\ t → g t)))
+
+#def all-equal-fill-locally-cocartesian-arrow
+  ( B : U)
+  ( E : B → U)
+  ( b : Δ¹ → B)
+  ( f : (t : Δ¹) → E (b t))
+  ( g : darr-from B E b (f 0₂))
+  ( f-loc-cocart : is-locally-cocartesian-arrow B (b 0₂) (b 1₂) b E (f 0₂) (f 1₂) (f))
+  ( h h' : hom (E (b 1₂)) (f 1₂) (g 1₂))
+  ( a : dhom2-over-arrow B b E (f 0₂) (f 1₂) (g 1₂) f h (\ t → g t))
+  ( a' : dhom2-over-arrow B b E (f 0₂) (f 1₂) (g 1₂) f h' (\ t → g t))
+  : h =_{hom (E (b 1₂)) (f 1₂) (g 1₂)} h'
+  :=
+    ap
+      ( Σ ( h : hom (E (b 1₂)) (f 1₂) (g 1₂))
+      , dhom2-over-arrow B b E (f 0₂) (f 1₂) (g 1₂) f h (\ t → g t))
+      ( hom (E (b 1₂)) (f 1₂) (g 1₂))
+      ( h , a)
+      ( h' , a')
+      ( \ x → first x)
+      ( all-elements-equal-is-contr
+        ( Σ ( h : hom (E (b 1₂)) (f 1₂) (g 1₂))
+          , dhom2-over-arrow B b E (f 0₂) (f 1₂) (g 1₂) f h (\ t → g t))
+        ( f-loc-cocart (g 1₂) (\ t → g t))
+        ( h , a)
+        ( h' , a'))
+
 ```
 
 
@@ -129,17 +190,112 @@ This is a literate `rzk` file:
   : ( f : Δ¹ → B) → E (f 0₂) → E (f 1₂)
   := \ f e → first (lifts (f 0₂) (f 1₂) f e)
 
-#def hom-action-id-id-locally-cocartesian
+#def inv-lift-id-locally-cocartesian
   ( b : B) (e : E b)
   : hom (E b) (action-locally-cocartesian (id-hom B b) e) (e)
-  := fill-locally-cocartesian-arrow B E (id-hom B b)
+  := hom-fill-locally-cocartesian-arrow B E (id-hom B b)
     ( first (second (lifts b b (id-hom B b) e)))
     ( \ t → e)
     ( second (second (lifts b b (id-hom B b) e)))
 
-#def hom-id-action-id-locally-cocartesian
+#def lift-id-locally-cocartesian
   ( b : B) (e : E b)
   : hom (E b) (e) (action-locally-cocartesian (id-hom B b) e)
   := first (second (lifts (b) (b) (id-hom B b) e))
+
+
+-- #def hom2-id-action-id-locally-cocartesian
+--   ( b : B)
+--   ( e : E b)
+--   : hom2 (E b)
+--     ( e) (action-locally-cocartesian (id-hom B b) e) (e)
+--     ( lift-id-locally-cocartesian' b e)
+--     ( lift-id-locally-cocartesian b e)
+--     ( id-hom (E b) e)
+--   :=
+--     fill-locally-cocartesian-arrow B E (id-hom B b)
+--       ( first (second (lifts b b (id-hom B b) e)))
+--       ( \ t → e)
+--       ( second (second (lifts b b (id-hom B b) e)))
+
+#variable segal-fibers : (b : B) → is-segal (E b)
+
+
+#def is-section-lift-id-locally-cocartesian uses (lifts)
+  ( b : B)
+  ( e : E b)
+  : comp-is-segal
+    ( E b) (segal-fibers b)
+    ( e) (action-locally-cocartesian (id-hom B b) e) (e)
+    ( lift-id-locally-cocartesian b e)
+    ( inv-lift-id-locally-cocartesian b e)
+    = ( id-hom (E b) e)
+  :=
+    uniqueness-comp-is-segal
+      ( E b) (segal-fibers b)
+      ( e) (action-locally-cocartesian (id-hom B b) e) (e)
+      ( lift-id-locally-cocartesian b e)
+      ( inv-lift-id-locally-cocartesian b e)
+      ( id-hom (E b) e)
+      ( fill-locally-cocartesian-arrow B E (id-hom B b)
+        ( first (second (lifts b b (id-hom B b) e)))
+        ( \ t → e)
+        ( second (second (lifts b b (id-hom B b) e))))
+
+
+#def lift-id-inv-lift-id-lift-id-is-lift-id-locally-cocartesian uses (lifts)
+  ( b : B)
+  ( e : E b)
+  : comp-is-segal (E b) (segal-fibers b)
+    ( e) (action-locally-cocartesian (id-hom B b) e) (action-locally-cocartesian (id-hom B b) e)
+    ( lift-id-locally-cocartesian b e)
+    ( comp-is-segal (E b) (segal-fibers b)
+      ( action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+      ( inv-lift-id-locally-cocartesian b e)
+      ( lift-id-locally-cocartesian b e))
+    = ( lift-id-locally-cocartesian b e)
+  := triple-concat (hom (E b) e (action-locally-cocartesian (id-hom B b) e))
+    ( comp-is-segal (E b) (segal-fibers b)
+      ( e) (action-locally-cocartesian (id-hom B b) e) (action-locally-cocartesian (id-hom B b) e)
+      ( lift-id-locally-cocartesian b e)
+      ( comp-is-segal (E b) (segal-fibers b)
+        ( action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+        ( inv-lift-id-locally-cocartesian b e)
+        ( lift-id-locally-cocartesian b e)))
+    ( comp-is-segal (E b) (segal-fibers b)
+      ( e) (e) (action-locally-cocartesian (id-hom B b) e)
+      ( comp-is-segal (E b) (segal-fibers b)
+        ( e) (action-locally-cocartesian (id-hom B b) e) (e)
+        ( lift-id-locally-cocartesian b e)
+        ( inv-lift-id-locally-cocartesian b e))
+      ( lift-id-locally-cocartesian b e))
+    ( comp-is-segal (E b) (segal-fibers b)
+      ( e) (e) (action-locally-cocartesian (id-hom B b) e)
+      ( id-hom (E b) e)
+      ( lift-id-locally-cocartesian b e))
+    ( lift-id-locally-cocartesian b e) --
+    ( rev-associative-is-segal extext (E b) (segal-fibers b)
+      ( e) (action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+      ( lift-id-locally-cocartesian b e)
+      ( inv-lift-id-locally-cocartesian b e)
+      ( lift-id-locally-cocartesian b e))
+    (
+      ap
+        ( hom (E b) e e)
+        ( hom (E b) e (action-locally-cocartesian (id-hom B b) e))
+        ( comp-is-segal (E b) (segal-fibers b)
+          ( e) (action-locally-cocartesian (id-hom B b) e) (e)
+          ( lift-id-locally-cocartesian b e)
+          ( inv-lift-id-locally-cocartesian b e))
+        ( id-hom (E b) e)
+        ( \ h → comp-is-segal (E b) (segal-fibers b)
+          ( e) (e) (action-locally-cocartesian (id-hom B b) e)
+          ( h)
+          ( lift-id-locally-cocartesian b e))
+        ( is-section-lift-id-locally-cocartesian b e))
+    ( id-comp-is-segal (E b) (segal-fibers b)
+      ( e) (action-locally-cocartesian (id-hom B b) e)
+      ( lift-id-locally-cocartesian b e))
+
 
 ```
