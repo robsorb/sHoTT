@@ -107,6 +107,18 @@ This is a literate `rzk` file:
         ( h , a)
         ( h' , a'))
 
+#def is-id-locally-cocartesian-arrow
+  ( B : U)
+  ( E : B → U)
+  ( b : Δ¹ → B)
+  ( f : (t : Δ¹) → E (b t))
+  ( f-loc-cocart : is-locally-cocartesian-arrow B (b 0₂) (b 1₂) b E (f 0₂) (f 1₂) (f))
+  ( h : hom (E (b 1₂)) (f 1₂) (f 1₂))
+  ( a : dhom2-over-arrow B b E (f 0₂) (f 1₂) (f 1₂) f h f)
+  : h =_{hom (E (b 1₂)) (f 1₂) (f 1₂)} (id-hom (E (b 1₂)) (f 1₂))
+  :=
+    all-equal-fill-locally-cocartesian-arrow B E b f f f-loc-cocart
+      h (id-hom (E (b 1₂)) (f 1₂)) a (\ (x , y) → f x)
 ```
 
 
@@ -203,6 +215,11 @@ This is a literate `rzk` file:
   : hom (E b) (e) (action-locally-cocartesian (id-hom B b) e)
   := first (second (lifts (b) (b) (id-hom B b) e))
 
+#def is-locally-cocartesian-arrow-lift-id-locally-cocartesian
+  ( b : B) (e : E b)
+  : is-locally-cocartesian-arrow B (b) (b) (id-hom B b)
+    E (e) (action-locally-cocartesian (id-hom B b) e) (lift-id-locally-cocartesian b e)
+  := second (second (lifts b b (id-hom B b) e))
 
 -- #def hom2-id-action-id-locally-cocartesian
 --   ( b : B)
@@ -297,5 +314,62 @@ This is a literate `rzk` file:
       ( e) (action-locally-cocartesian (id-hom B b) e)
       ( lift-id-locally-cocartesian b e))
 
+
+#def is-retraction-lift-id-locally-cocartesian uses (extext lifts)
+  ( b : B)
+  ( e : E b)
+  : comp-is-segal (E b) (segal-fibers b)
+    ( action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+    ( inv-lift-id-locally-cocartesian b e)
+    ( lift-id-locally-cocartesian b e)
+  = id-hom (E b) (action-locally-cocartesian (id-hom B b) e)
+  :=
+    is-id-locally-cocartesian-arrow B E
+      ( id-hom B b)
+      ( lift-id-locally-cocartesian b e)
+      ( is-locally-cocartesian-arrow-lift-id-locally-cocartesian b e)
+      ( comp-is-segal (E b) (segal-fibers b)
+        ( action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+        ( inv-lift-id-locally-cocartesian b e)
+        ( lift-id-locally-cocartesian b e))
+      ( transport
+        ( hom (E b) e (action-locally-cocartesian (id-hom B b) e))
+        ( \ h → hom2 (E b)
+          ( e) (action-locally-cocartesian (id-hom B b) e) (action-locally-cocartesian (id-hom B b) e)
+          ( lift-id-locally-cocartesian b e)
+          ( comp-is-segal (E b) (segal-fibers b)
+            ( action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+            ( inv-lift-id-locally-cocartesian b e)
+            ( lift-id-locally-cocartesian b e))
+          ( h))
+        ( comp-is-segal (E b) (segal-fibers b)
+          ( e) (action-locally-cocartesian (id-hom B b) e) (action-locally-cocartesian (id-hom B b) e)
+          ( lift-id-locally-cocartesian b e)
+          ( comp-is-segal (E b) (segal-fibers b)
+            ( action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+            ( inv-lift-id-locally-cocartesian b e)
+            ( lift-id-locally-cocartesian b e)))
+        ( lift-id-locally-cocartesian b e)
+        ( lift-id-inv-lift-id-lift-id-is-lift-id-locally-cocartesian b e)
+        ( witness-comp-is-segal (E b) (segal-fibers b)
+          ( e) (action-locally-cocartesian (id-hom B b) e) (action-locally-cocartesian (id-hom B b) e)
+          ( lift-id-locally-cocartesian b e)
+          ( comp-is-segal (E b) (segal-fibers b)
+            ( action-locally-cocartesian (id-hom B b) e) (e) (action-locally-cocartesian (id-hom B b) e)
+            ( inv-lift-id-locally-cocartesian b e)
+            ( lift-id-locally-cocartesian b e))))
+
+#def is-iso-arrow-lift-id-locally-cocartesian uses (extext lifts)
+  ( b : B)
+  ( e : E b)
+  : is-iso-arrow (E b) (segal-fibers b)
+    ( e) (action-locally-cocartesian (id-hom B b) e)
+    ( lift-id-locally-cocartesian b e)
+  := is-iso-arrow-has-inverse-arrow (E b) (segal-fibers b)
+    ( e) (action-locally-cocartesian (id-hom B b) e)
+    ( lift-id-locally-cocartesian b e)
+    ( inv-lift-id-locally-cocartesian b e
+    , ( is-section-lift-id-locally-cocartesian b e
+      , is-retraction-lift-id-locally-cocartesian b e))
 
 ```
