@@ -221,22 +221,7 @@ This is a literate `rzk` file:
     E (e) (action-locally-cocartesian (id-hom B b) e) (lift-id-locally-cocartesian b e)
   := second (second (lifts b b (id-hom B b) e))
 
--- #def hom2-id-action-id-locally-cocartesian
---   ( b : B)
---   ( e : E b)
---   : hom2 (E b)
---     ( e) (action-locally-cocartesian (id-hom B b) e) (e)
---     ( lift-id-locally-cocartesian' b e)
---     ( lift-id-locally-cocartesian b e)
---     ( id-hom (E b) e)
---   :=
---     fill-locally-cocartesian-arrow B E (id-hom B b)
---       ( first (second (lifts b b (id-hom B b) e)))
---       ( \ t → e)
---       ( second (second (lifts b b (id-hom B b) e)))
-
 #variable segal-fibers : (b : B) → is-segal (E b)
-
 
 #def is-section-lift-id-locally-cocartesian uses (lifts)
   ( b : B)
