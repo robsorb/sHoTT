@@ -34,6 +34,16 @@
     , x ≡ y ↦ f x]
   := \ (x , y) → clamp f (x , y) t
 
+#variable E : B → U
+
+#def dclamp
+  ( f : Δ¹ → B)
+  ( g : (t : Δ¹) → E (f t))
+  ( ( u , l) : Δ²)
+  : dhom B (f l) (f u) (clamp f (u , l)) E (g l) (g u)
+  := \ t → recOR (t ≤ l ↦ g l , l ≤ t ↦
+    recOR (u ≤ t ↦ g u , t ≤ u ↦ g t))
+
 ```
 
 ## The horizontal edges along a simplex
@@ -360,7 +370,7 @@ Applying the pushforward to `fill-lift` yeilds a weakly degenerate triangle.
 ```rzk
 #def is-weakly-degen-action-fill-lift-coherent-action uses (E-inner)
   ( t : Δ¹)
-  : ( fst-dΔ² B E (degen-Δ² B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g))) t
+  : ( fst-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g))) t
     = action (fst-Δ² B a) e
   := action-comp (fst-Δ² B a) e t
 ```
@@ -373,7 +383,7 @@ This induces a homotopy between the diagona (the inverse of composition) and the
   : htpy-from B E
     ( snd-Δ² B a)
     ( inv-comp-lift-action a (comp-lift-action a e g))
-    ( snd-dΔ² B E (degen-Δ² B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+    ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
     ( concat
       ( E (a (1₂ , 0₂)))
       ( fid-cocart-prf)
@@ -395,7 +405,7 @@ This induces a homotopy between the diagona (the inverse of composition) and the
 #def htpy-snd-action-fill-lift-id-coherent-action uses (E-inner)
   : htpy-from B E
     ( snd-Δ² B a)
-    ( snd-dΔ² B E (degen-Δ² B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+    ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
     ( g)
     ( action-id (a (1₂ , 0₂)) (g 0₂))
   := \ t → action-id (a (1₂ , t)) (g t)
@@ -407,14 +417,14 @@ The vertical edge is also homotopic to our original `g`.
 #def htpy-snd-action-fill-lift-id'-coherent-action uses (E-inner)
   : htpy-from B E
     ( snd-Δ² B a)
-    ( snd-dΔ² B E (degen-Δ² B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+    ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
     ( g)
     ( action-comp (fst-Δ² B a) e 1₂)
   := transport
     ( idf-cocart-prf = f-cocart-prf)
     ( \ p → htpy-from B E
       ( snd-Δ² B a)
-      ( snd-dΔ² B E (degen-Δ² B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+      ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
       ( g)
       ( p))
     ( action-id (a (1₂ , 0₂)) (g 0₂))
@@ -470,7 +480,7 @@ We obtain a much simpler homotopy between the inverse of composition and our ori
   := concat-htpy-from-cancel-right
     ( snd-Δ² B a)
     ( inv-comp-lift-action a (comp-lift-action a e g))
-    ( snd-dΔ² B E (degen-Δ² B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+    ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
     ( g)
     ( action-comp (fst-Δ² B a) e 0₂)
     ( action-comp (fst-Δ² B a) e 1₂)

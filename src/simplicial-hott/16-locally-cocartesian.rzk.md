@@ -16,11 +16,7 @@ This is a literate `rzk` file:
 
 
 ```rzk
-#def degen-Δ²-vertical
-  ( B : U)
-  ( f : Δ¹ → B)
-  : Δ² → B
-  := \ (x , y) → f x
+
 
 #def dhom2-over-arrow
   ( B : U)
@@ -32,7 +28,7 @@ This is a literate `rzk` file:
   ( g : hom (E (b 1₂)) y z)
   ( h : dhom B (b 0₂) (b 1₂) b E x z)
   : U
-  := dhom2 B (b 0₂) (b 1₂) (b 1₂) b (id-hom B (b 1₂)) b (degen-Δ²-vertical B b)
+  := dhom2 B (b 0₂) (b 1₂) (b 1₂) b (id-hom B (b 1₂)) b (degen-Δ²-cod B b)
     E x y z f g h
 
 ```
@@ -164,23 +160,23 @@ This is a literate `rzk` file:
   : is-equiv
       ( arr-from (E (b 1₂)) (f 1₂))
       ( darr-from B E b (f 0₂))
-      ( comp-over-Inner B E E-inner (degen-Δ²-vertical B b) f)
+      ( comp-over-Inner B E E-inner (degen-Δ²-cod B b) f)
   → is-locally-cocartesian-arrow B (b 0₂) (b 1₂) b E (f 0₂) (f 1₂) f
   := \ is-equiv-comp e'' h →
     is-contr-equiv-is-contr
       ( fib
         ( arr-from (E (b 1₂)) (f 1₂))
         ( darr-from B E b (f 0₂))
-        ( comp-over-Inner B E E-inner (degen-Δ²-vertical B b) f)
+        ( comp-over-Inner B E E-inner (degen-Δ²-cod B b) f)
         ( h))
       ( ( Σ ( g : hom (E (b 1₂)) (f 1₂) e'')
-        , ( dhom2 B (b 0₂) (b 1₂) (b 1₂) b (id-hom B (b 1₂)) b (degen-Δ²-vertical B b)
+        , ( dhom2 B (b 0₂) (b 1₂) (b 1₂) b (id-hom B (b 1₂)) b (degen-Δ²-cod B b)
           E (f 0₂) (f 1₂) e'' f g h)))
-      ( equiv-fib-comp-dtriangles-Inner B E E-inner (degen-Δ²-vertical B b) f h)
+      ( equiv-fib-comp-dtriangles-Inner B E E-inner (degen-Δ²-cod B b) f h)
       ( is-contr-map-is-equiv
         ( arr-from (E (b 1₂)) (f 1₂))
         ( darr-from B E b (f 0₂))
-        ( comp-over-Inner B E E-inner (degen-Δ²-vertical B b) f)
+        ( comp-over-Inner B E E-inner (degen-Δ²-cod B b) f)
         ( is-equiv-comp)
         ( h))
 
@@ -207,24 +203,38 @@ This is a literate `rzk` file:
   : ( f : Δ¹ → B) → E (f 0₂) → E (f 1₂)
   := \ f e → first (lifts (f 0₂) (f 1₂) f e)
 
-#def inv-lift-id-locally-cocartesian
-  ( b : B) (e : E b)
-  : hom (E b) (action-locally-cocartesian (id-hom B b) e) (e)
-  := hom-fill-locally-cocartesian-arrow B E (id-hom B b)
-    ( first (second (lifts b b (id-hom B b) e)))
-    ( \ t → e)
-    ( second (second (lifts b b (id-hom B b) e)))
+#def lift-locally-cocartesian
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : dhom B (f 0₂) (f 1₂) f E e (action-locally-cocartesian f e)
+  := first (second (lifts (f 0₂) (f 1₂) (f) e))
 
-#def lift-id-locally-cocartesian
+#def is-locally-cocartesian-lift-locally-cocartesian
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : is-locally-cocartesian-arrow B (f 0₂) (f 1₂) (f)
+    E (e) (action-locally-cocartesian f e)  (lift-locally-cocartesian f e)
+  := second (second (lifts (f 0₂) (f 1₂) (f) e))
+
+#def lift-id-locally-cocartesian uses (lifts)
   ( b : B) (e : E b)
   : hom (E b) (e) (action-locally-cocartesian (id-hom B b) e)
-  := first (second (lifts (b) (b) (id-hom B b) e))
+  := lift-locally-cocartesian (id-hom B b) e
 
-#def is-locally-cocartesian-arrow-lift-id-locally-cocartesian
+#def is-locally-cocartesian-arrow-lift-id-locally-cocartesian uses (lifts)
   ( b : B) (e : E b)
   : is-locally-cocartesian-arrow B (b) (b) (id-hom B b)
     E (e) (action-locally-cocartesian (id-hom B b) e) (lift-id-locally-cocartesian b e)
-  := second (second (lifts b b (id-hom B b) e))
+  := is-locally-cocartesian-lift-locally-cocartesian (id-hom B b) e
+
+#def inv-lift-id-locally-cocartesian uses (lifts)
+  ( b : B) (e : E b)
+  : hom (E b) (action-locally-cocartesian (id-hom B b) e) (e)
+  := hom-fill-locally-cocartesian-arrow B E (id-hom B b)
+    ( lift-id-locally-cocartesian b e)
+    ( \ t → e)
+    ( is-locally-cocartesian-arrow-lift-id-locally-cocartesian b e)
+
 
 #variable segal-fibers : (b : B) → is-segal (E b)
 
@@ -362,6 +372,31 @@ This is a literate `rzk` file:
     , ( is-section-lift-id-locally-cocartesian b e
       , is-retraction-lift-id-locally-cocartesian b e))
 
+
+#def square-lift-lift'-locally-cocartesian uses (lifts)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : ( ( x , y) : 2 × 2) → E (f y)
+    [x ≡ 0₂ ↦ lift-action B E action-locally-cocartesian f e y
+    , x ≡ 1₂ ↦ lift-locally-cocartesian f e y
+    , y ≡ 0₂ ↦ inv-lift-id-locally-cocartesian (f 0₂) e x]
+  := \ (x , y) →
+    hom-fill-locally-cocartesian-arrow B E (clamp B f (y , 0₂))
+      ( lift-locally-cocartesian (clamp B f (y , 0₂)) e)
+      ( dclamp B E f (lift-locally-cocartesian f e) (y , 0₂))
+      ( is-locally-cocartesian-lift-locally-cocartesian (clamp B f (y , 0₂)) e)
+      x
+
+
+-- #def qqq
+--   ( f : Δ¹ → B)
+--   ( e : E (f 0₂))
+--   ( t : Δ¹)
+--   : lift-action B E action-locally-cocartesian f e t
+--     =_{E (f t)} lift-locally-cocartesian f e t
+--   := U
+
+
 -- #def qqq
 --   ( b : Δ¹ → B)
 --   ( x x' : E (b 0₂))
@@ -369,7 +404,7 @@ This is a literate `rzk` file:
 --   ( f : dhom B (b 0₂) (b 1₂) b E x y)
 --   ( f' : dhom B (b 0₂) (b 1₂) b E x' y)
 --   ( i : Iso (E (b 0₂)) (segal-fibers (b 0₂)) x x')
---   : dhom2 B (b 0₂) (b 0₂) (b 1₂) (id-hom B (b 0₂)) (b) (b) (degen-Δ² B b)
+--   : dhom2 B (b 0₂) (b 0₂) (b 1₂) (id-hom B (b 0₂)) (b) (b) (degen-Δ²-dom B b)
 --     E x x' y
 --     ( hom-iso (E (b 0₂)) (segal-fibers (b 0₂)) x x' i)
 --     f'

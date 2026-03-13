@@ -541,11 +541,17 @@ Vertical morphisms are dependent morphisms over an identity.
 
 ## Degenerate triangles
 ```rzk
-#def degen-Δ²
+#def degen-Δ²-dom
   ( B : U)
   ( f : Δ¹ → B)
   : Δ² → B
   := \ (x , y) → f y
+
+#def degen-Δ²-cod
+  ( B : U)
+  ( f : Δ¹ → B)
+  : Δ² → B
+  := \ (x , y) → f x
 ```
 
 ## Dependent arrows with fixed domain
@@ -862,7 +868,7 @@ We will also need a different version of `dtriangle-over-horn`.
 #def degen-triangle-over-horn
   ( f : Δ¹ → B)
   ( g : (t : Δ¹) → E (f t))
-  : dtriangle-over-horn (degen-Δ² B f) (id-hom (E (f 0₂)) (g 0₂)) g
+  : dtriangle-over-horn (degen-Δ²-dom B f) (id-hom (E (f 0₂)) (g 0₂)) g
   := \ (x , y) → g y
 ```
 
@@ -989,8 +995,8 @@ We will also need a different version of `dtriangle-over-horn`.
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
   ( g : darr-from B E f e)
-  : comp-over-Inner (degen-Δ² B f) (id-hom (E (f 0₂)) e) g = g
-  := eq-dtriangle-Inner (degen-Δ² B f) (\ (x , y) → g y)
+  : comp-over-Inner (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g = g
+  := eq-dtriangle-Inner (degen-Δ²-dom B f) (\ (x , y) → g y)
 
 
 #def comp-over-hom-eq-Inner uses (E-inner)
@@ -998,11 +1004,11 @@ We will also need a different version of `dtriangle-over-horn`.
   ( e e' : E (f 0₂))
   ( p : e = e')
   ( g : darr-from B E f e')
-  : comp-over-Inner (degen-Δ² B f) (hom-eq (E (f 0₂)) e e' p) g = g
+  : comp-over-Inner (degen-Δ²-dom B f) (hom-eq (E (f 0₂)) e e' p) g = g
   := ind-path-end
     ( E (f 0₂))
     ( e')
-    ( \ e → \ p → comp-over-Inner (degen-Δ² B f) (hom-eq (E (f 0₂)) e e' p) g = g)
+    ( \ e → \ p → comp-over-Inner (degen-Δ²-dom B f) (hom-eq (E (f 0₂)) e e' p) g = g)
     ( comp-over-id-Inner f e' g)
     ( e)
     ( p)
@@ -1032,14 +1038,14 @@ If the first edge of a triangle is strictly degenerate then it is equal to the s
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
   ( g : darr-from B E f e)
-  ( da : dtriangle-over-horn B E (degen-Δ² B f) (id-hom (E (f 0₂)) e) g)
-  : da = degen-triangle-over-horn B E f (snd-dΔ² B E (degen-Δ² B f) da)
+  ( da : dtriangle-over-horn B E (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g)
+  : da = degen-triangle-over-horn B E f (snd-dΔ² B E (degen-Δ²-dom B f) da)
   := all-equal-dtriangle-over-horn-Inner
-    ( degen-Δ² B f)
+    ( degen-Δ²-dom B f)
     ( id-hom (E (f 0₂)) e)
-    ( snd-dΔ² B E (degen-Δ² B f) da)
+    ( snd-dΔ² B E (degen-Δ²-dom B f) da)
     da
-    ( degen-triangle-over-horn B E f (snd-dΔ² B E (degen-Δ² B f) da))
+    ( degen-triangle-over-horn B E f (snd-dΔ² B E (degen-Δ²-dom B f) da))
 ```
 
 If the first edge of a triangle is strictly degenerate then the second edge is the composite.
@@ -1050,27 +1056,27 @@ If the first edge of a triangle is strictly degenerate then the second edge is t
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
   ( g : darr-from B E f e)
-  ( da : dtriangle-over-horn B E (degen-Δ² B f) (id-hom (E (f 0₂)) e) g)
-  : comp-dΔ² B E (degen-Δ² B f) da =_{darr-from B E f e} snd-dΔ² B E (degen-Δ² B f) da
+  ( da : dtriangle-over-horn B E (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g)
+  : comp-dΔ² B E (degen-Δ²-dom B f) da =_{darr-from B E f e} snd-dΔ² B E (degen-Δ²-dom B f) da
   := ap
-    ( dtriangle-over-horn B E (degen-Δ² B f) (id-hom (E (f 0₂)) e) g)
+    ( dtriangle-over-horn B E (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g)
     ( darr-from B E f e)
     ( da)
-    ( degen-triangle-over-horn B E f (snd-dΔ² B E (degen-Δ² B f) da))
-    ( comp-dΔ² B E (degen-Δ² B f))
+    ( degen-triangle-over-horn B E f (snd-dΔ² B E (degen-Δ²-dom B f) da))
+    ( comp-dΔ² B E (degen-Δ²-dom B f))
     ( eq-degen-dtriangle-over-horn-Inner f e g da)
 
 #def eq-darr-from-degen-dtriangle-Inner uses (E-inner)
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
   ( da : ((x , y) : Δ²) → E (f y) [y ≡ 0₂ ↦ e])
-  : comp-dΔ² B E (degen-Δ² B f) da
+  : comp-dΔ² B E (degen-Δ²-dom B f) da
     =_{darr-from B E f e}
-    snd-dΔ² B E (degen-Δ² B f) da
+    snd-dΔ² B E (degen-Δ²-dom B f) da
   := eq-darr-from-degen-dtriangle'-Inner
     f
     e
-    ( snd-dΔ² B E (degen-Δ² B f) da)
+    ( snd-dΔ² B E (degen-Δ²-dom B f) da)
     ( \ t → da t)
 ```
 
@@ -1083,14 +1089,14 @@ Such an equality induces a homotopy between the second edge and the composite.
   ( e : E (f 0₂))
   ( da : ((x , y) : Δ²) → E (f y) [y ≡ 0₂ ↦ e])
   : htpy-from B E f
-    ( comp-dΔ² B E (degen-Δ² B f) da)
-    ( snd-dΔ² B E (degen-Δ² B f) da)
+    ( comp-dΔ² B E (degen-Δ²-dom B f) da)
+    ( snd-dΔ² B E (degen-Δ²-dom B f) da)
     refl
   := htpy-from-eq B E
     ( f)
     ( e)
-    ( comp-dΔ² B E (degen-Δ² B f) da)
-    ( snd-dΔ² B E (degen-Δ² B f) da)
+    ( comp-dΔ² B E (degen-Δ²-dom B f) da)
+    ( snd-dΔ² B E (degen-Δ²-dom B f) da)
     ( eq-darr-from-degen-dtriangle-Inner f e da)
 ```
 
@@ -1103,13 +1109,13 @@ If the first edge is `hom-eq p` then we obtain a homotopy starting in `p`.
   ( e' : E (f 0₂))
   ( p : e = e')
   : ( da : ((x , y) : Δ²) → E (f y) [y ≡ 0₂ ↦ hom-eq (E (f 0₂)) e e' p x])
-    → htpy-from B E f (comp-dΔ² B E (degen-Δ² B f) da) (snd-dΔ² B E (degen-Δ² B f) da) p
+    → htpy-from B E f (comp-dΔ² B E (degen-Δ²-dom B f) da) (snd-dΔ² B E (degen-Δ²-dom B f) da) p
   := ind-path
     ( E (f 0₂))
     e
     ( \ e' → \ p →
       ( da : ((x , y) : Δ²) → E (f y) [y ≡ 0₂ ↦ hom-eq (E (f 0₂)) e e' p x])
-      → htpy-from B E f (comp-dΔ² B E (degen-Δ² B f) da) (snd-dΔ² B E (degen-Δ² B f) da) p)
+      → htpy-from B E f (comp-dΔ² B E (degen-Δ²-dom B f) da) (snd-dΔ² B E (degen-Δ²-dom B f) da) p)
     ( htpy-from-degen-dtriangle-Inner f e)
     e'
     p
@@ -1120,32 +1126,32 @@ If the first edge of a triangle is homotopic to the identity there is a dependen
 ```rzk
 #def dtriangle-with-boundary-hom-eq-weakly-degen-dtriangle uses (extext)
   ( f : Δ¹ → B)
-  ( da : (t : Δ²) → E (degen-Δ² B f t))
+  ( da : (t : Δ²) → E (degen-Δ²-dom B f t))
   ( e : E (f 0₂))
-  ( H : (t : Δ¹) → fst-dΔ² B E (degen-Δ² B f) da t = e)
-  : dtriangle-with-boundary B E (degen-Δ² B f)
+  ( H : (t : Δ¹) → fst-dΔ² B E (degen-Δ²-dom B f) da t = e)
+  : dtriangle-with-boundary B E (degen-Δ²-dom B f)
     ( hom-eq
       ( E (f 0₂))
-      ( fst-dΔ² B E (degen-Δ² B f) da 0₂)
-      ( fst-dΔ² B E (degen-Δ² B f) da 1₂)
-      ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ² B f) da) e H))
-    ( snd-dΔ² B E (degen-Δ² B f) da)
-    ( comp-dΔ² B E (degen-Δ² B f) da)
+      ( fst-dΔ² B E (degen-Δ²-dom B f) da 0₂)
+      ( fst-dΔ² B E (degen-Δ²-dom B f) da 1₂)
+      ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da) e H))
+    ( snd-dΔ² B E (degen-Δ²-dom B f) da)
+    ( comp-dΔ² B E (degen-Δ²-dom B f) da)
   :=
   transport
     ( hom (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂)))
     ( \ g →
-      dtriangle-with-boundary B E (degen-Δ² B f)
+      dtriangle-with-boundary B E (degen-Δ²-dom B f)
         g
-        ( snd-dΔ² B E (degen-Δ² B f) da)
-        ( comp-dΔ² B E (degen-Δ² B f) da))
-    ( fst-dΔ² B E (degen-Δ² B f) da)
+        ( snd-dΔ² B E (degen-Δ²-dom B f) da)
+        ( comp-dΔ² B E (degen-Δ²-dom B f) da))
+    ( fst-dΔ² B E (degen-Δ²-dom B f) da)
     ( hom-eq
       ( E (f 0₂))
-      ( fst-dΔ² B E (degen-Δ² B f) da 0₂)
-      ( fst-dΔ² B E (degen-Δ² B f) da 1₂)
-      ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ² B f) da) e H))
-    ( edge-is-hom-eq' (E (f 0₂)) (fst-dΔ² B E (degen-Δ² B f) da) e H)
+      ( fst-dΔ² B E (degen-Δ²-dom B f) da 0₂)
+      ( fst-dΔ² B E (degen-Δ²-dom B f) da 1₂)
+      ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da) e H))
+    ( edge-is-hom-eq' (E (f 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da) e H)
     da
 ```
 
@@ -1155,19 +1161,19 @@ If the first edge is homotopic to a degenerate edge we obtain a homotopy startin
 
 #def htpy-from-weakly-degen-dtriangle uses (extext E-inner)
   ( f : Δ¹ → B)
-  ( da : (t : Δ²) → E (degen-Δ² B f t))
+  ( da : (t : Δ²) → E (degen-Δ²-dom B f t))
   ( e : E (f 0₂))
-  ( H : (t : Δ¹) → fst-dΔ² B E (degen-Δ² B f) da t = e)
+  ( H : (t : Δ¹) → fst-dΔ² B E (degen-Δ²-dom B f) da t = e)
   : htpy-from B E
     ( f)
-    ( comp-dΔ² B E (degen-Δ² B f) da)
-    ( snd-dΔ² B E (degen-Δ² B f) da)
-    ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ² B f) da) e H)
+    ( comp-dΔ² B E (degen-Δ²-dom B f) da)
+    ( snd-dΔ² B E (degen-Δ²-dom B f) da)
+    ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da) e H)
   := htpy-from-dtriangle-hom-eq
     ( f)
-    ( fst-dΔ² B E (degen-Δ² B f) da 0₂)
-    ( fst-dΔ² B E (degen-Δ² B f) da 1₂)
-    ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ² B f) da) e H)
+    ( fst-dΔ² B E (degen-Δ²-dom B f) da 0₂)
+    ( fst-dΔ² B E (degen-Δ²-dom B f) da 1₂)
+    ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da) e H)
     ( dtriangle-with-boundary-hom-eq-weakly-degen-dtriangle f da e H)
 
 
@@ -1180,40 +1186,40 @@ If the fibers are Rezk then if the first edge is an iso we obtain a homotopy bet
 #def htpy-from-fst-iso-dtriangle-rezk-fibers-inner uses (E-inner)
   ( f : Δ¹ → B)
   ( rezk-fiber : is-rezk (E (f (0₂))))
-  ( da : (t : Δ²) → E (degen-Δ² B f t))
+  ( da : (t : Δ²) → E (degen-Δ²-dom B f t))
   ( is-iso-fst : is-iso-arrow (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber))
-      ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da))
+      ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da))
   : htpy-from B E
         f
-        ( comp-dΔ² B E (degen-Δ² B f) da)
-        ( snd-dΔ² B E (degen-Δ² B f) da)
+        ( comp-dΔ² B E (degen-Δ²-dom B f) da)
+        ( snd-dΔ² B E (degen-Δ²-dom B f) da)
         ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
-          ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))
+          ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da , is-iso-fst))
   := htpy-from-dtriangle-hom-eq
     ( f)
     ( da (0₂ , 0₂))
     ( da (1₂ , 0₂))
     ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
-      ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))
+      ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da , is-iso-fst))
     ( transport
       ( hom (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂)))
-      ( \ h → dtriangle-with-boundary B E (degen-Δ² B f)
+      ( \ h → dtriangle-with-boundary B E (degen-Δ²-dom B f)
         h
-        ( snd-dΔ² B E (degen-Δ² B f) da)
-        ( comp-dΔ² B E (degen-Δ² B f) da))
-      ( fst-dΔ² B E (degen-Δ² B f) da)
+        ( snd-dΔ² B E (degen-Δ²-dom B f) da)
+        ( comp-dΔ² B E (degen-Δ²-dom B f) da))
+      ( fst-dΔ² B E (degen-Δ²-dom B f) da)
       ( hom-eq (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂))
         ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
-          ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst)))
+          ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da , is-iso-fst)))
       ( rev
         ( hom (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂)))
         ( hom-eq (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂))
           ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
-            ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst)))
-        ( fst-dΔ² B E (degen-Δ² B f) da)
+            ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ²-dom B f) da , is-iso-fst)))
+        ( fst-dΔ² B E (degen-Δ²-dom B f) da)
         ( compute-first-iso-eq-eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
           ( da (0₂ , 0₂)) (da (1₂ , 0₂))
-          ( ( fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))))
+          ( ( fst-dΔ² B E (degen-Δ²-dom B f) da , is-iso-fst))))
       ( \ (x , y) → da (x , y)))
 
 
