@@ -1139,23 +1139,11 @@ If the first edge is homotopic to a degenerate edge we obtain a homotopy startin
 
 ```
 
+If the fibers are Rezk then if the first edge is an iso we obtain a homotopy between the other two edges.
+
 ```rzk
 
-#def htpy-from-is-degen-dtriangle-rezk-fibers-inner
-  -- ( f : Δ¹ → B)
-  -- ( rezk-fiber : is-rezk (E (f (0₂))))
-  -- ( e : E (f 0₂))
-  -- ( e' : E (f 0₂))
-  -- ( i : Iso (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber)) e e')
-  -- : ( da : ((x , y) : Δ²) → E (f y) [
-  --     y ≡ 0₂ ↦
-  --       hom-iso (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber))
-  --         e e' i
-  --         x])
-  --   → htpy-from B E f
-  --     ( comp-dΔ² B E (degen-Δ² B f) da)
-  --     ( snd-dΔ² B E (degen-Δ² B f) da)
-  --     ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber) e e' i)
+#def htpy-from-fst-iso-dtriangle-rezk-fibers-inner uses (E-inner)
   ( f : Δ¹ → B)
   ( rezk-fiber : is-rezk (E (f (0₂))))
   ( da : (t : Δ²) → E (degen-Δ² B f t))
@@ -1167,23 +1155,6 @@ If the first edge is homotopic to a degenerate edge we obtain a homotopy startin
         ( snd-dΔ² B E (degen-Δ² B f) da)
         ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
           ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))
-  -- := iso-ind-is-rezk
-  --   ( E (f 0₂))
-  --   ( rezk-fiber)
-  --   ( e)
-  --   ( \ e' i →
-  --     ( da : ((x , y) : Δ²) → E (f y) [
-  --       y ≡ 0₂ ↦
-  --         hom-iso (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber))
-  --           e e' i
-  --           x])
-  --     → htpy-from B E f
-  --       ( comp-dΔ² B E (degen-Δ² B f) da)
-  --       ( snd-dΔ² B E (degen-Δ² B f) da)
-  --       ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber) e e' i))
-  --   ( htpy-from-degen-dtriangle-Inner f e)
-  --   ( e')
-  --   i
   := htpy-from-dtriangle-hom-eq
     ( f)
     ( da (0₂ , 0₂))
@@ -1192,7 +1163,10 @@ If the first edge is homotopic to a degenerate edge we obtain a homotopy startin
       ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))
     ( transport
       ( hom (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂)))
-      ( \ h → ((x , y) : Δ²) → E (f y) [y ≡ 0₂ ↦ h x])
+      ( \ h → dtriangle-with-boundary B E (degen-Δ² B f)
+        h
+        ( snd-dΔ² B E (degen-Δ² B f) da)
+        ( comp-dΔ² B E (degen-Δ² B f) da))
       ( fst-dΔ² B E (degen-Δ² B f) da)
       ( hom-eq (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂))
         ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
@@ -1205,8 +1179,8 @@ If the first edge is homotopic to a degenerate edge we obtain a homotopy startin
         ( fst-dΔ² B E (degen-Δ² B f) da)
         ( compute-first-iso-eq-eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
           ( da (0₂ , 0₂)) (da (1₂ , 0₂))
-          ( ( e , is-iso-e)))
-      U))
+          ( ( fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))))
+      ( \ (x , y) → da (x , y)))
 
 
 #end properties-of-inner-families
