@@ -471,4 +471,24 @@ This is a literate `rzk` file:
           , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e)))
       ( square-lift-lift'-locally-cocartesian f e))
 
+#def is-locally-cocartesian-lift'-locally-cocartesian uses (extext lifts E-inner rezk-fibers)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : is-locally-cocartesian-arrow B (f 0₂) (f 1₂) (f)
+    E
+    ( action-locally-cocartesian (id-hom B (f 0₂)) e)
+    ( action-locally-cocartesian f e)
+    ( \ t → lift-action B E action-locally-cocartesian f e t)
+  := transport-rev
+    ( ( t : Δ¹) → E (f t))
+    ( \ h → is-locally-cocartesian-arrow B (f 0₂) (f 1₂) (f)
+      E
+      ( h 0₂)
+      ( h 1₂)
+      ( \ t → h t))
+    ( lift-action B E action-locally-cocartesian f e)
+    ( lift-locally-cocartesian f e)
+    ( eq-lift'-lift-locally-cocartesian f e)
+    ( is-locally-cocartesian-lift-locally-cocartesian f e)
+
 ```
