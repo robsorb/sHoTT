@@ -1136,6 +1136,79 @@ If the first edge is homotopic to a degenerate edge we obtain a homotopy startin
     ( dom-cod-eq-edge-htpy (E (f 0₂)) (fst-dΔ² B E (degen-Δ² B f) da) e H)
     ( dtriangle-with-boundary-hom-eq-weakly-degen-dtriangle f da e H)
 
+
+```
+
+```rzk
+
+#def htpy-from-is-degen-dtriangle-rezk-fibers-inner
+  -- ( f : Δ¹ → B)
+  -- ( rezk-fiber : is-rezk (E (f (0₂))))
+  -- ( e : E (f 0₂))
+  -- ( e' : E (f 0₂))
+  -- ( i : Iso (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber)) e e')
+  -- : ( da : ((x , y) : Δ²) → E (f y) [
+  --     y ≡ 0₂ ↦
+  --       hom-iso (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber))
+  --         e e' i
+  --         x])
+  --   → htpy-from B E f
+  --     ( comp-dΔ² B E (degen-Δ² B f) da)
+  --     ( snd-dΔ² B E (degen-Δ² B f) da)
+  --     ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber) e e' i)
+  ( f : Δ¹ → B)
+  ( rezk-fiber : is-rezk (E (f (0₂))))
+  ( da : (t : Δ²) → E (degen-Δ² B f t))
+  ( is-iso-fst : is-iso-arrow (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber))
+      ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da))
+  : htpy-from B E
+        f
+        ( comp-dΔ² B E (degen-Δ² B f) da)
+        ( snd-dΔ² B E (degen-Δ² B f) da)
+        ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
+          ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))
+  -- := iso-ind-is-rezk
+  --   ( E (f 0₂))
+  --   ( rezk-fiber)
+  --   ( e)
+  --   ( \ e' i →
+  --     ( da : ((x , y) : Δ²) → E (f y) [
+  --       y ≡ 0₂ ↦
+  --         hom-iso (E (f 0₂)) (is-segal-is-rezk (E (f 0₂)) (rezk-fiber))
+  --           e e' i
+  --           x])
+  --     → htpy-from B E f
+  --       ( comp-dΔ² B E (degen-Δ² B f) da)
+  --       ( snd-dΔ² B E (degen-Δ² B f) da)
+  --       ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber) e e' i))
+  --   ( htpy-from-degen-dtriangle-Inner f e)
+  --   ( e')
+  --   i
+  := htpy-from-dtriangle-hom-eq
+    ( f)
+    ( da (0₂ , 0₂))
+    ( da (1₂ , 0₂))
+    ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
+      ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst))
+    ( transport
+      ( hom (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂)))
+      ( \ h → ((x , y) : Δ²) → E (f y) [y ≡ 0₂ ↦ h x])
+      ( fst-dΔ² B E (degen-Δ² B f) da)
+      ( hom-eq (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂))
+        ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
+          ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst)))
+      ( rev
+        ( hom (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂)))
+        ( hom-eq (E (f 0₂)) (da (0₂ , 0₂)) (da (1₂ , 0₂))
+          ( eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
+            ( da (0₂ , 0₂)) (da (1₂ , 0₂)) (fst-dΔ² B E (degen-Δ² B f) da , is-iso-fst)))
+        ( fst-dΔ² B E (degen-Δ² B f) da)
+        ( compute-first-iso-eq-eq-iso-is-rezk (E (f 0₂)) (rezk-fiber)
+          ( da (0₂ , 0₂)) (da (1₂ , 0₂))
+          ( ( e , is-iso-e)))
+      U))
+
+
 #end properties-of-inner-families
 
 ```

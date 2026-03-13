@@ -189,6 +189,11 @@ This is a literate `rzk` file:
 
 ```
 
+1. Prove x->idx iso
+2. Derive x = idx
+3. Prove it is locally cocart
+4. Prove coherence
+
 
 ```rzk
 
@@ -356,5 +361,21 @@ This is a literate `rzk` file:
     ( inv-lift-id-locally-cocartesian b e
     , ( is-section-lift-id-locally-cocartesian b e
       , is-retraction-lift-id-locally-cocartesian b e))
+
+-- #def qqq
+--   ( b : Δ¹ → B)
+--   ( x x' : E (b 0₂))
+--   ( y : E (b 1₂))
+--   ( f : dhom B (b 0₂) (b 1₂) b E x y)
+--   ( f' : dhom B (b 0₂) (b 1₂) b E x' y)
+--   ( i : Iso (E (b 0₂)) (segal-fibers (b 0₂)) x x')
+--   : dhom2 B (b 0₂) (b 0₂) (b 1₂) (id-hom B (b 0₂)) (b) (b) (degen-Δ² B b)
+--     E x x' y
+--     ( hom-iso (E (b 0₂)) (segal-fibers (b 0₂)) x x' i)
+--     f'
+--     f
+--   → is-locally-cocartesian-arrow B (b 0₂) (b 1₂) b E x y f
+--   → is-locally-cocartesian-arrow B (b 0₂) (b 1₂) b E x' y f'
+--   := U
 
 ```
