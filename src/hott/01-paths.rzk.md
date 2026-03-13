@@ -761,6 +761,36 @@ Using `rev` we can deduce a path induction principle with fixed end point.
       ( ind-path A a (\ y q → C y (rev A a y q)) d x (rev A x a p))
 ```
 
+Double path induction
+
+```rzk
+#def double-ind-path
+  ( A B : U)
+  ( a : A)
+  ( b : B)
+  ( C : (a' : A) → (b' : B) → (p : a = a') → (q : b = b') → U)
+  ( c : C a b refl refl)
+  ( a' : A)
+  ( b' : B)
+  ( p : a = a')
+  ( q : b = b')
+  : C a' b' p q
+  := ind-path
+    B
+    b
+    ( \ b' q → C a' b' p q)
+    ( ind-path
+      A
+      a
+      ( \ a' p → C a' b p refl)
+      c
+      a'
+      p)
+    b'
+    q
+
+```
+
 ## Dependent application
 
 ```rzk

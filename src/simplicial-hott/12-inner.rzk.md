@@ -628,6 +628,21 @@ Vertical morphisms are dependent morphisms over an identity.
 
 ```
 
+## Homotopies between dependent homs
+
+```rzk
+
+#def htpy-dhom
+  ( b : Δ¹ → B)
+  ( f g : (t : Δ¹) → E (b t))
+  ( p : f 0₂ =_{E (b 0₂)} g 0₂)
+  ( q : f 1₂ =_{E (b 1₂)} g 1₂)
+  : U
+  := (t : Δ¹) → (f t =_{E (b t)} g t) [t ≡ 0₂ ↦ p , t ≡ 1₂ ↦ q]
+
+
+```
+
 ### Concatenating homotopies with fixed domain
 
 ```rzk
@@ -870,6 +885,12 @@ We will also need a different version of `dtriangle-over-horn`.
   ( g : (t : Δ¹) → E (f t))
   : dtriangle-over-horn (degen-Δ²-dom B f) (id-hom (E (f 0₂)) (g 0₂)) g
   := \ (x , y) → g y
+
+#def snd-degen-triangle-over-horn
+  ( f : Δ¹ → B)
+  ( g : (t : Δ¹) → E (f t))
+  : dtriangle-over-horn (degen-Δ²-cod B f) g (id-hom (E (f 1₂)) (g 1₂))
+  := \ (x , y) → g x
 ```
 
 ### Inner families
@@ -1057,10 +1078,11 @@ If the first edge of a triangle is strictly degenerate then the second edge is t
   ( e : E (f 0₂))
   ( g : darr-from B E f e)
   ( da : dtriangle-over-horn B E (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g)
-  : comp-dΔ² B E (degen-Δ²-dom B f) da =_{darr-from B E f e} snd-dΔ² B E (degen-Δ²-dom B f) da
+  : comp-dΔ² B E (degen-Δ²-dom B f) da
+    =_{dhom B (f 0₂) (f 1₂) f E e (g 1₂)} snd-dΔ² B E (degen-Δ²-dom B f) da
   := ap
     ( dtriangle-over-horn B E (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g)
-    ( darr-from B E f e)
+    ( dhom B (f 0₂) (f 1₂) f E e (g 1₂))
     ( da)
     ( degen-triangle-over-horn B E f (snd-dΔ² B E (degen-Δ²-dom B f) da))
     ( comp-dΔ² B E (degen-Δ²-dom B f))
@@ -1071,13 +1093,77 @@ If the first edge of a triangle is strictly degenerate then the second edge is t
   ( e : E (f 0₂))
   ( da : ((x , y) : Δ²) → E (f y) [y ≡ 0₂ ↦ e])
   : comp-dΔ² B E (degen-Δ²-dom B f) da
-    =_{darr-from B E f e}
+    =_{dhom B (f 0₂) (f 1₂) f E e (da (1₂ , 1₂))}
     snd-dΔ² B E (degen-Δ²-dom B f) da
   := eq-darr-from-degen-dtriangle'-Inner
     f
     e
     ( snd-dΔ² B E (degen-Δ²-dom B f) da)
     ( \ t → da t)
+
+#def eq-darr-from-snd-degen-dtriangle-Inner uses (E-inner)
+  ( f : Δ¹ → B)
+  ( e : E (f 1₂))
+  ( da : ((x , y) : Δ²) → E (f x) [x ≡ 1₂ ↦ e])
+  : comp-dΔ² B E (degen-Δ²-cod B f) da
+    =_{dhom B (f 0₂) (f 1₂) f E (da (0₂ , 0₂)) e}
+    fst-dΔ² B E (degen-Δ²-cod B f) da
+  := ap
+    ( dtriangle-over-horn B E (degen-Δ²-cod B f)
+      ( fst-dΔ² B E (degen-Δ²-cod B f) da)
+      ( id-hom (E (f 1₂)) e))
+    ( dhom B (f 0₂) (f 1₂) f E (da (0₂ , 0₂)) e)
+    ( \ t → da t)
+    ( snd-degen-triangle-over-horn B E f (fst-dΔ² B E (degen-Δ²-cod B f) da))
+    ( comp-dΔ² B E (degen-Δ²-cod B f))
+    ( all-equal-dtriangle-over-horn-Inner
+      ( degen-Δ²-cod B f)
+      ( fst-dΔ² B E (degen-Δ²-cod B f) da)
+      ( id-hom (E (f 1₂)) e)
+      ( \ t → da t)
+      ( snd-degen-triangle-over-horn B E f (fst-dΔ² B E (degen-Δ²-cod B f) da)))
+
+
+#def eq-degen-square-Inner uses (E-inner)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  ( e' : E (f 1₂))
+  ( da : ((x , y) : 2 × 2) → E (f x) [x ≡ 0₂ ↦ e , x ≡ 1₂ ↦ e'])
+  : ( \ t → da (t , 0₂)) =_{dhom B (f 0₂) (f 1₂) f E e e'} (\ t → da (t , 1₂))
+  := concat
+    ( dhom B (f 0₂) (f 1₂) f E e e')
+    ( \ t → da (t , 0₂))
+    ( \ t → da (t , t))
+    ( \ t → da (t , 1₂))
+    ( rev (dhom B (f 0₂) (f 1₂) f E e e')
+      ( \ t → da (t , t))
+      ( \ t → da (t , 0₂))
+      ( eq-darr-from-snd-degen-dtriangle-Inner f e' (\ t → da t)))
+    ( eq-darr-from-degen-dtriangle-Inner f e (\ (x , y) → da (y , x)))
+
+#def eq-weakly-degen-square-Inner uses (E-inner)
+  ( f : Δ¹ → B)
+  ( e00 : E (f 0₂))
+  ( e01 : E (f 0₂))
+  ( e10 : E (f 1₂))
+  ( e11 : E (f 1₂))
+  ( p : e00 = e01)
+  ( q : e10 = e11)
+  : ( da : ((x , y) : 2 × 2) → E (f x)
+      [x ≡ 0₂ ↦ hom-eq (E (f 0₂)) e00 e01 p y
+      , x ≡ 1₂ ↦ hom-eq (E (f 1₂)) e10 e11 q y])
+    → ( \ t → da (t , 0₂)) =_{(t : Δ¹) → E (f t)} (\ t → da (t , 1₂))
+  := double-ind-path (E (f 0₂)) (E (f 1₂))
+    e00 e10
+    ( \ e01 e11 p q →
+      ( da : ((x , y) : 2 × 2) → E (f x)
+      [x ≡ 0₂ ↦ hom-eq (E (f 0₂)) e00 e01 p y
+      , x ≡ 1₂ ↦ hom-eq (E (f 1₂)) e10 e11 q y])
+      → ( \ t → da (t , 0₂)) =_{(t : Δ¹) → E (f t)} (\ t → da (t , 1₂)))
+    ( eq-degen-square-Inner f e00 e10)
+    e01 e11
+    p q
+
 ```
 
 Such an equality induces a homotopy between the second edge and the composite.
