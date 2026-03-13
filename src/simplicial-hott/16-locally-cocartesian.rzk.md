@@ -191,7 +191,7 @@ This is a literate `rzk` file:
 
 1. Prove x->idx iso
 2. Derive x = idx
-3. Prove it is locally cocart
+3. Prove idx -> fx is locally cocart
 4. Prove coherence
 
 

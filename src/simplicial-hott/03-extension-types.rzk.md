@@ -1304,6 +1304,32 @@ pointwise.
 #end pointwise-homotopy-extension-type
 ```
 
+**TODO: Clean this up**
+
+```rzk
+
+#def naive-dedge-ext uses (extext)
+  ( X : U)
+  ( E : X → U)
+  ( f : Δ¹ → X)
+  ( g : (t : Δ¹) → E (f t))
+  ( h : (t : Δ¹) → E (f t))
+  ( H : (t : Δ¹) → g t = h t)
+  : g = h
+  := naiveextext-extext extext
+    2
+    Δ¹
+    ( \ t → BOT)
+    ( \ t → E (f t))
+    ( \ t → recBOT)
+    g
+    h
+    H
+
+
+```
+
+
 ## Relative extension types
 
 Given a map `α : A' → A`, there is also a notion of relative extension types.

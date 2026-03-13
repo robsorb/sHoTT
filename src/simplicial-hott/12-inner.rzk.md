@@ -637,7 +637,41 @@ Vertical morphisms are dependent morphisms over an identity.
   : htpy-from b f h (concat (E (b 0₂)) (f 0₂) (g 0₂) (h 0₂) p q)
   := \ t → concat (E (b t)) (f t) (g t) (h t) (H1 t) (H2 t)
 
+```
+
+### Characterization of equalities in the pullback of dependent arrows along the domain
+
+```rzk
+
+#def eq-pullback-darr-from uses (extext)
+  ( b : B)
+  ( f : Δ¹ → B)
+  ( F : E b → E (f 0₂))
+  ( e : E b)
+  ( e' : E b)
+  ( g : darr-from f (F e))
+  ( p : e = e')
+  : ( g' : darr-from f (F e'))
+    → ( htpy-from f g g' (ap (E b) (E (f 0₂)) e e' F p))
+    → ( e , g) =_{Σ (e'' : E b) , darr-from f (F e'')} (e' , g')
+  := ind-path
+    ( E b)
+    ( e)
+    ( \ e' → \ p → (g' : darr-from f (F e'))
+      → ( htpy-from f g g' (ap (E b) (E (f 0₂)) e e' F p))
+      → ( e , g) =_{Σ (e'' : E b) , darr-from f (F e'')} (e' , g'))
+    ( \ g' → \ H → ap
+      ( darr-from f (F e))
+      ( Σ ( e'' : E b) , darr-from f (F e''))
+      ( g)
+      ( g')
+      ( \ g → (e , g))
+      ( eq-htpy-from f (F e) g g' H))
+    ( e')
+    p
+
 #end dependent-arrow-from
+
 ```
 
 ## Properties of degenerate arrows
