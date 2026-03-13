@@ -372,6 +372,29 @@ This is a literate `rzk` file:
     , ( is-section-lift-id-locally-cocartesian b e
       , is-retraction-lift-id-locally-cocartesian b e))
 
+#def hom-fill-is-id-locally-cocartesian uses (lifts)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : hom-fill-locally-cocartesian-arrow B E f
+    ( lift-locally-cocartesian f e)
+    ( lift-locally-cocartesian f e)
+    ( is-locally-cocartesian-lift-locally-cocartesian f e)
+    = id-hom (E (f 1₂)) (action-locally-cocartesian f e)
+  := all-equal-fill-locally-cocartesian-arrow B E
+    f
+    ( lift-locally-cocartesian f e)
+    ( lift-locally-cocartesian f e)
+    ( is-locally-cocartesian-lift-locally-cocartesian f e)
+    ( hom-fill-locally-cocartesian-arrow B E f
+      ( lift-locally-cocartesian f e)
+      ( lift-locally-cocartesian f e)
+      ( is-locally-cocartesian-lift-locally-cocartesian f e))
+    ( id-hom (E (f 1₂)) (action-locally-cocartesian f e))
+    ( fill-locally-cocartesian-arrow B E f
+      ( lift-locally-cocartesian f e)
+      ( lift-locally-cocartesian f e)
+      ( is-locally-cocartesian-lift-locally-cocartesian f e))
+    ( \ (x , y) → lift-locally-cocartesian f e x)
 
 #def square-lift-lift'-locally-cocartesian uses (lifts)
   ( f : Δ¹ → B)
@@ -379,7 +402,11 @@ This is a literate `rzk` file:
   : ( ( x , y) : 2 × 2) → E (f y)
     [x ≡ 0₂ ↦ lift-action B E action-locally-cocartesian f e y
     , x ≡ 1₂ ↦ lift-locally-cocartesian f e y
-    , y ≡ 0₂ ↦ inv-lift-id-locally-cocartesian (f 0₂) e x]
+    , y ≡ 0₂ ↦ inv-lift-id-locally-cocartesian (f 0₂) e x
+    , y ≡ 1₂ ↦ hom-fill-locally-cocartesian-arrow B E f
+      ( lift-locally-cocartesian f e)
+      ( lift-locally-cocartesian f e)
+      ( is-locally-cocartesian-lift-locally-cocartesian f e) x]
   := \ (x , y) →
     hom-fill-locally-cocartesian-arrow B E (clamp B f (y , 0₂))
       ( lift-locally-cocartesian (clamp B f (y , 0₂)) e)
