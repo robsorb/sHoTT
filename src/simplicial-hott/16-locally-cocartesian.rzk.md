@@ -442,33 +442,25 @@ This is a literate `rzk` file:
       ( inv-lift-id-locally-cocartesian (f 0₂) e
       , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e))
     refl
-    ( transport
+    ( transport-rev
       ( hom (E (f 0₂)) (action-locally-cocartesian (id-hom B (f 0₂)) e) e)
       ( \ h → ((x , y) : 2 × 2) → E (f x)
         [x ≡ 0₂ ↦ h y
         , x ≡ 1₂ ↦ (action-locally-cocartesian f e)
         , y ≡ 0₂ ↦ lift-action B E action-locally-cocartesian f e x
         , y ≡ 1₂ ↦ lift-locally-cocartesian f e x])
-      ( inv-lift-id-locally-cocartesian (f 0₂) e)
       ( hom-eq (E (f 0₂)) (action-locally-cocartesian (id-hom B (f 0₂)) e) (e)
         ( eq-iso-is-rezk (E (f 0₂)) (rezk-fibers (f 0₂))
           ( action-locally-cocartesian (id-hom B (f 0₂)) e)
           ( e)
           ( inv-lift-id-locally-cocartesian (f 0₂) e
           , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e)))
-      ( rev (hom (E (f 0₂)) (action-locally-cocartesian (id-hom B (f 0₂)) e) e)
-        ( hom-eq (E (f 0₂)) (action-locally-cocartesian (id-hom B (f 0₂)) e) (e)
-          ( eq-iso-is-rezk (E (f 0₂)) (rezk-fibers (f 0₂))
-            ( action-locally-cocartesian (id-hom B (f 0₂)) e)
-            ( e)
-            ( inv-lift-id-locally-cocartesian (f 0₂) e
-            , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e)))
-        ( inv-lift-id-locally-cocartesian (f 0₂) e)
-        ( compute-first-iso-eq-eq-iso-is-rezk (E (f 0₂)) (rezk-fibers (f 0₂))
-          ( action-locally-cocartesian (id-hom B (f 0₂)) e)
-          ( e)
-          ( inv-lift-id-locally-cocartesian (f 0₂) e
-          , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e)))
+      ( inv-lift-id-locally-cocartesian (f 0₂) e)
+      ( compute-first-iso-eq-eq-iso-is-rezk (E (f 0₂)) (rezk-fibers (f 0₂))
+        ( action-locally-cocartesian (id-hom B (f 0₂)) e)
+        ( e)
+        ( inv-lift-id-locally-cocartesian (f 0₂) e
+        , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e))
       ( square-lift-lift'-locally-cocartesian f e))
 
 #def is-locally-cocartesian-lift'-locally-cocartesian uses (extext lifts E-inner rezk-fibers)
