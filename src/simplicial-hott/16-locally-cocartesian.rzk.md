@@ -588,11 +588,7 @@ This is a literate `rzk` file:
 #def dhom2-zigzag-locally-cocartesian uses (funext extext lifts rezk-fibers)
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
-  : dhom2 B
-    ( f 0₂) (f 1₂) (f 1₂)
-    ( f) (id-hom B (f 1₂)) (f)
-    ( degen-Δ²-cod B f)
-    E
+  : dhom2-over-arrow B f E
     ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (id-hom B (f 0₂)) e)
     ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (f) e)
     ( comp-action-locally-cocartesian (f) (id-hom B (f 1₂)) e)
@@ -604,12 +600,7 @@ This is a literate `rzk` file:
     ( dhom B (f 0₂) (f 1₂) (f) E
       ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (id-hom B (f 0₂)) e)
       ( comp-action-locally-cocartesian (f) (id-hom B (f 1₂)) e))
-    ( \ h →
-      dhom2 B
-      ( f 0₂) (f 1₂) (f 1₂)
-      ( f) (id-hom B (f 1₂)) (f)
-      ( degen-Δ²-cod B f)
-      E
+    ( \ h → dhom2-over-arrow B f E
       ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (id-hom B (f 0₂)) e)
       ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (f) e)
       ( comp-action-locally-cocartesian (f) (id-hom B (f 1₂)) e)
@@ -629,11 +620,7 @@ This is a literate `rzk` file:
 #def dhom2-coherence-locally-cocartesian uses (lifts)
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
-  : dhom2 B
-    ( f 0₂) (f 1₂) (f 1₂)
-    ( f) (id-hom B (f 1₂)) (f)
-    ( degen-Δ²-cod B f)
-    E
+  : dhom2-over-arrow B f E
     ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (id-hom B (f 0₂)) e)
     ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (f) e)
     ( comp-action-locally-cocartesian (f) (id-hom B (f 1₂)) e)
