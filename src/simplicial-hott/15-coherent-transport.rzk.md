@@ -77,19 +77,6 @@
 
 ```
 
-### The coherence morphism
-
-```rzk
-#def coherence-hom-action
-  ( f : Δ¹ → B)
-  ( e : E (f 0₂))
-  : hom (E (f 1₂))
-    ( action f (action (id-hom B (f 0₂)) e))
-    ( action (id-hom B (f 1₂)) (action f e))
-  := \ t → action (clamp B f (1₂ , t)) (lift-action f e t)
-
-```
-
 ### Lifts of triangles
 
 ```rzk
@@ -318,6 +305,67 @@ We can now show that `inv-comp-lift` is a right inverse of `tot-comp-lift`.
   := eq-comp-lift-inv-comp-lift-id-action-id a h
 
 ```
+
+
+## Coherence
+
+### The coherence condition
+
+```rzk
+#def coherence-hom-action
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : hom (E (f 1₂))
+    ( action f (action (id-hom B (f 0₂)) e))
+    ( action (id-hom B (f 1₂)) (action f e))
+  := \ t → action (clamp B f (1₂ , t)) (lift-action f e t)
+
+#def zig-zag-action
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : action f (action (id-hom B (f 0₂)) e) = action (id-hom B (f 1₂)) (action f e)
+  := zig-zag-concat (E (f 1₂))
+    ( action f (action (id-hom B (f 0₂)) e))
+    ( action f e)
+    ( action (id-hom B (f 1₂)) (action f e))
+    ( ap
+      ( E (f 0₂))
+      ( E (f 1₂))
+      ( action (id-hom B (f 0₂)) e)
+      ( e)
+      ( action f)
+      ( action-id (f 0₂) e))
+    ( action-id (f 1₂) (action f e))
+
+#def hom-zigzag-action uses (action-id)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : hom (E (f 1₂))
+    ( action f (action (id-hom B (f 0₂)) e))
+    ( action (id-hom B (f 1₂)) (action f e))
+  := hom-eq (E (f 1₂))
+    ( action f (action (id-hom B (f 0₂)) e))
+    ( action (id-hom B (f 1₂)) (action f e))
+    ( zig-zag-action f e)
+
+#def is-coherent-for-hom-action uses (action-id)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : U
+  := coherence-hom-action f e = hom-zigzag-action f e
+
+#def is-coherent-action uses (action action-id)
+  : U
+  := (f : Δ¹ → B) → (e : E (f 0₂)) → is-coherent-for-hom-action f e
+```
+
+
+
+
+
+
+
+
 
 
 ## Preserving composition

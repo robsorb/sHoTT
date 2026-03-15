@@ -633,14 +633,8 @@ This is a literate `rzk` file:
       ( action-locally-cocartesian (clamp B f (y , 0₂)) e)
 
 #def is-coherent-action-locally-cocartesian uses (funext extext lifts E-inner rezk-fibers)
-  ( f : Δ¹ → B)
-  ( e : E (f 0₂))
-  : coherence-hom-action B E (action-locally-cocartesian) f e
-    =_{hom (E (f 1₂))
-      ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (f) e)
-      ( comp-action-locally-cocartesian (f) (id-hom B (f 1₂)) e)}
-    ( \ y → square-zigzag-unit-locally-cocartesian f e (1₂ , y))
-  := all-equal-fill-locally-cocartesian-arrow B E f
+  : is-coherent-action B E (action-locally-cocartesian) (action-unit-locally-cocartesian)
+  := \ f e → all-equal-fill-locally-cocartesian-arrow B E f
     ( lift-action B E (action-locally-cocartesian) f
       ( action-locally-cocartesian (id-hom B (f 0₂)) e))
     ( \ x → comp-action-locally-cocartesian (clamp B f (x , 0₂)) (id-hom B (f x)) e)
