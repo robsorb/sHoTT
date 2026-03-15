@@ -485,4 +485,34 @@ This is a literate `rzk` file:
     ( eq-lift'-lift-locally-cocartesian f e)
     ( is-locally-cocartesian-lift-locally-cocartesian f e)
 
+
+
+
+#def square-zigzag-unit-locally-cocartesian uses (extext lifts rezk-fibers)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : ( ( x , y) : 2 × 2) → E (f x)
+  := \ (x , y) →
+    hom-eq (E (f x))
+      ( action-locally-cocartesian (id-hom B (f x))
+        ( action-locally-cocartesian (clamp B f (x , 0₂)) e))
+      ( action-locally-cocartesian (clamp B f (x , 0₂))
+        ( action-locally-cocartesian (id-hom B (f 0₂)) e))
+      ( zig-zag-concat (E (f x))
+        ( action-locally-cocartesian (id-hom B (f x))
+          ( action-locally-cocartesian (clamp B f (x , 0₂)) e))
+        ( action-locally-cocartesian (clamp B f (x , 0₂)) e)
+        ( action-locally-cocartesian (clamp B f (x , 0₂))
+          ( action-locally-cocartesian (id-hom B (f 0₂)) e))
+        ( action-unit-locally-cocartesian (f x)
+          ( action-locally-cocartesian (clamp B f (x , 0₂)) e))
+        ( ap
+          ( E (f 0₂))
+          ( E (f x))
+          ( action-locally-cocartesian (id-hom B (f 0₂)) e)
+          ( e)
+          ( action-locally-cocartesian (clamp B f (x , 0₂)))
+          ( action-unit-locally-cocartesian (f 0₂) e)))
+      y
+
 ```
