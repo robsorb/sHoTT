@@ -1079,7 +1079,7 @@ If the first edge of a triangle is strictly degenerate then the second edge is t
   ( g : darr-from B E f e)
   ( da : dtriangle-over-horn B E (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g)
   : comp-dΔ² B E (degen-Δ²-dom B f) da
-    =_{dhom B (f 0₂) (f 1₂) f E e (g 1₂)} snd-dΔ² B E (degen-Δ²-dom B f) da
+    =_{dhom B (f 0₂) (f 1₂) f E e (g 1₂)} (\ t → g t)
   := ap
     ( dtriangle-over-horn B E (degen-Δ²-dom B f) (id-hom (E (f 0₂)) e) g)
     ( dhom B (f 0₂) (f 1₂) f E e (g 1₂))
