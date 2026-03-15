@@ -372,6 +372,16 @@ This is a literate `rzk` file:
     , ( is-retraction-lift-id-locally-cocartesian b e
       , is-section-lift-id-locally-cocartesian b e))
 
+#def action-unit-locally-cocartesian uses (extext lifts)
+  ( b : B)
+  ( e : E b)
+  : action-locally-cocartesian (id-hom B b) e = e
+  := eq-iso-is-rezk (E b) (rezk-fibers b)
+    ( action-locally-cocartesian (id-hom B b) e)
+    ( e)
+    ( inv-lift-id-locally-cocartesian b e
+    , is-iso-arrow-inv-lift-id-locally-cocartesian b e)
+
 #def hom-fill-is-id-locally-cocartesian uses (lifts)
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
@@ -436,11 +446,7 @@ This is a literate `rzk` file:
     ( e)
     ( action-locally-cocartesian f e)
     ( action-locally-cocartesian f e)
-    ( eq-iso-is-rezk (E (f 0₂)) (rezk-fibers (f 0₂))
-      ( action-locally-cocartesian (id-hom B (f 0₂)) e)
-      ( e)
-      ( inv-lift-id-locally-cocartesian (f 0₂) e
-      , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e))
+    ( action-unit-locally-cocartesian (f 0₂) e)
     refl
     ( transport-rev
       ( hom (E (f 0₂)) (action-locally-cocartesian (id-hom B (f 0₂)) e) e)
@@ -450,11 +456,7 @@ This is a literate `rzk` file:
         , y ≡ 0₂ ↦ lift-action B E action-locally-cocartesian f e x
         , y ≡ 1₂ ↦ lift-locally-cocartesian f e x])
       ( hom-eq (E (f 0₂)) (action-locally-cocartesian (id-hom B (f 0₂)) e) (e)
-        ( eq-iso-is-rezk (E (f 0₂)) (rezk-fibers (f 0₂))
-          ( action-locally-cocartesian (id-hom B (f 0₂)) e)
-          ( e)
-          ( inv-lift-id-locally-cocartesian (f 0₂) e
-          , is-iso-arrow-inv-lift-id-locally-cocartesian (f 0₂) e)))
+        ( action-unit-locally-cocartesian (f 0₂) e))
       ( inv-lift-id-locally-cocartesian (f 0₂) e)
       ( compute-first-iso-eq-eq-iso-is-rezk (E (f 0₂)) (rezk-fibers (f 0₂))
         ( action-locally-cocartesian (id-hom B (f 0₂)) e)
