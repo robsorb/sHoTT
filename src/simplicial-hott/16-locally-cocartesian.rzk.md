@@ -185,11 +185,7 @@ This is a literate `rzk` file:
 
 ```
 
-1. Prove x->idx iso
-2. Derive x = idx
-3. Prove idx -> fx is locally cocart
-4. Prove coherence
-
+## Locally cocartesian families are cocartesian
 
 ```rzk
 
@@ -644,4 +640,16 @@ This is a literate `rzk` file:
     ( \ y → square-zigzag-unit-locally-cocartesian f e (1₂ , y))
     ( dhom2-coherence-locally-cocartesian f e)
     ( dhom2-zigzag-locally-cocartesian f e)
+
+
+#def is-cocartesian-locally-cocartesian uses (funext extext lifts E-inner rezk-fibers)
+  : has-cocartesian-lifts B E
+  := has-cocart-lifts-coherent-action
+    funext
+    extext
+    B E
+    action-locally-cocartesian
+    E-inner
+    action-unit-locally-cocartesian
+    is-coherent-action-locally-cocartesian
 ```

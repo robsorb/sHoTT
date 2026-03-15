@@ -359,6 +359,208 @@ We can now show that `inv-comp-lift` is a right inverse of `tot-comp-lift`.
   := (f : Δ¹ → B) → (e : E (f 0₂)) → is-coherent-for-hom-action f e
 ```
 
+```rzk
+
+#variable is-coherent-action-action : is-coherent-action
+
+#section bruh
+
+#variables a : Δ² → B
+#variables e : E (a (0₂ , 0₂))
+#variables g : darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e)
+
+#def htpy-inv-comp-lift-snd-action-fill-lift-coherent-action''''
+  : htpy-from B E
+    ( snd-Δ² B a)
+    ( inv-comp-lift-action a (comp-lift-action a e g))
+    ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+    ( zig-zag-action (fst-Δ² B a) e)
+  := htpy-from-dtriangle-hom-eq B E E-inner
+    ( snd-Δ² B a)
+    ( action (fst-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
+    ( action (id-hom B (a (1₂ , 0₂))) (action (fst-Δ² B a) e))
+    ( zig-zag-action (fst-Δ² B a) e)
+    ( transport
+      ( hom (E (a (1₂ , 0₂)))
+        ( action (fst-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
+        ( action (id-hom B (a (1₂ , 0₂))) (action (fst-Δ² B a) e)))
+      ( \ h →
+        dtriangle-with-boundary B E (degen-Δ²-dom B (snd-Δ² B a))
+        h
+        ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+        ( inv-comp-lift-action a (comp-lift-action a e g)))
+      ( coherence-hom-action (fst-Δ² B a) e)
+      ( hom-zigzag-action (fst-Δ² B a) e)
+      ( is-coherent-action-action (fst-Δ² B a) e)
+      ( action-dtriangle a (fill-lift-action a e g)))
+
+#def htpy-snd-action-fill-lift-id-coherent-action' uses (E-inner)
+  : htpy-from B E
+    ( snd-Δ² B a)
+    ( snd-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g)))
+    ( g)
+    ( action-id (a (1₂ , 0₂)) (g 0₂))
+  := \ t → action-id (a (1₂ , t)) (g t)
+
+
+```
+
+We define a utility for concatenating homotopies and simultaneously cancelling inverse paths.
+
+```rzk
+#def concat-htpy-from-cancel-right
+  ( b : Δ¹ → B)
+  ( f : (t : Δ¹) → E (b t))
+  ( g : (t : Δ¹) → E (b t))
+  ( h : (t : Δ¹) → E (b t))
+  ( p : f 0₂ = h 0₂)
+  ( q : g 0₂ = h 0₂)
+  ( H1 : htpy-from B E b f g (zig-zag-concat (E (b 0₂)) (f 0₂) (h 0₂) (g 0₂) p q))
+  ( H2 : htpy-from B E b g h q)
+  : htpy-from B E b f h p
+  := transport
+    ( f 0₂ = h 0₂)
+    ( htpy-from B E b f h)
+    ( concat
+      ( E (b 0₂))
+      ( f 0₂)
+      ( g 0₂)
+      ( h 0₂)
+      ( concat (E (b 0₂)) (f 0₂) (h 0₂) (g 0₂) p (rev (E (b 0₂)) (g 0₂) (h 0₂) q))
+      q)
+    p
+    ( section-postconcat (E (b 0₂)) (f 0₂) (g 0₂) (h 0₂) q p)
+    ( concat-htpy-from B E
+      b
+      f g h
+      ( concat (E (b 0₂)) (f 0₂) (h 0₂) (g 0₂) p (rev (E (b 0₂)) (g 0₂) (h 0₂) q))
+      q
+      H1
+      H2)
+```
+
+```rzk
+
+#def is-section-comp-lift-coherent-action' uses (E-inner is-coherent-action-action)
+  : ( action (id-hom B (a (0₂ , 0₂))) e , inv-comp-lift-action a (comp-lift-action a e g))
+      =_{Σ (e' : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e')}
+      ( e , g)
+  := eq-pullback-darr-from extext B E
+    ( a (0₂ , 0₂))
+    ( snd-Δ² B a)
+    ( action (fst-Δ² B a))
+    ( action (id-hom B (a (0₂ , 0₂))) e)
+    ( e)
+    ( inv-comp-lift-action a (comp-lift-action a e g))
+    ( action-id (a (0₂ , 0₂)) e)
+    ( g)
+    ( concat-htpy-from-cancel-right
+      ( snd-Δ² B a)
+      ( inv-comp-lift-action a (comp-lift-action a e g))
+      ( snd-dΔ² B E
+        ( degen-Δ²-dom B (snd-Δ² B a))
+        ( action-dtriangle a (fill-lift-action a e g)))
+      ( g)
+      ( ap
+        ( E (a (0₂ , 0₂)))
+        ( E (a (1₂ , 0₂)))
+        ( action (id-hom B (a (0₂ , 0₂))) e)
+        ( e)
+        ( action (fst-Δ² B a))
+        ( action-id (a (0₂ , 0₂)) e))
+      ( action-id (a (1₂ , 0₂)) (action (fst-Δ² B a) e))
+      htpy-inv-comp-lift-snd-action-fill-lift-coherent-action''''
+      htpy-snd-action-fill-lift-id-coherent-action')
+
+
+#end bruh
+
+```
+
+## Inner families with coherent action are (Segal)-cocartesian
+
+
+```rzk
+#def is-section-tot-comp-lift-coherent-action
+  uses (extext E-inner action-id is-coherent-action-action)
+  ( a : Δ² → B)
+  ( ( e , g) : Σ (e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+  : inv-tot-comp-lift-action a (tot-comp-lift-action a (e , g)) = (e , g)
+  := is-section-comp-lift-coherent-action' a e g
+```
+
+
+```rzk
+#def is-equiv-tot-comp-lift-coherent-action
+  uses (extext E-inner action-id is-coherent-action-action)
+  ( a : Δ² → B)
+  : is-equiv
+    ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+    ( ( t : Δ¹) → E (comp-Δ² B a t))
+    ( tot-comp-lift-action a)
+  := is-equiv-has-inverse
+    ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+    ( ( t : Δ¹) → E (comp-Δ² B a t))
+    ( tot-comp-lift-action a)
+    ( inv-tot-comp-lift-action a
+    , ( is-section-tot-comp-lift-coherent-action a
+      , is-retraction-tot-comp-lift-action-id a))
+
+
+#def is-equiv-comp-lift-coherent-action
+  uses (funext extext E-inner action-id is-coherent-action-action)
+  ( a : Δ² → B)
+  : ( e : E (a (0₂ , 0₂))) → is-equiv
+    ( darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+    ( darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
+    ( comp-over-Inner B E E-inner a (lift-action (fst-Δ² B a) e))
+  := is-equiv-fiberwise-is-equiv-total
+    ( E (a (0₂ , 0₂)))
+    ( \ e → darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+    ( \ e → darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
+    ( \ e → comp-over-Inner B E E-inner a (lift-action (fst-Δ² B a) e))
+    ( is-equiv-right-factor
+      ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+      ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
+      ( ( t : Δ¹) → E (comp-Δ² B a t))
+      ( total-map
+        ( E (a (0₂ , 0₂)))
+        ( \ e → darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+        ( \ e → darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
+        ( comp-lift-action a))
+      ( \ p → second p)
+      ( is-equiv-second-sigma-action-id-sections (comp-Δ² B a))
+      ( is-equiv-tot-comp-lift-coherent-action a))
+
+```
+
+**TODO: Cleanup the order of these parameters**
+
+```rzk
+#def has-cocart-lifts-coherent-action
+  uses (funext extext B E E-inner action action-id is-coherent-action-action)
+  : has-cocartesian-lifts B E
+  := \ b b' u e →
+    transport
+      ( E b)
+      ( \ e → Σ (e' : E b')
+      , Σ ( f : dhom B b b' u E e e')
+        , is-cocartesian-arrow B b b' u E e e' f)
+      ( action (id-hom B b) e)
+      ( e)
+      ( action-id b e)
+      ( lift-action u e 1₂
+      , ( \ t → lift-action u e t
+      , is-cocartesian-arrow-is-equiv-comp-over-Inner
+        B
+        E
+        E-inner
+        u
+        ( lift-action u e)
+        ( \ a → is-equiv-comp-lift-coherent-action a e)))
+```
+
+
 
 
 
@@ -496,39 +698,6 @@ The vertical edge is also homotopic to our original `g`.
     ( htpy-snd-action-fill-lift-id-coherent-action)
 ```
 
-We define a utility for concatenating homotopies and simultaneously cancelling inverse paths.
-
-```rzk
-#def concat-htpy-from-cancel-right
-  ( b : Δ¹ → B)
-  ( f : (t : Δ¹) → E (b t))
-  ( g : (t : Δ¹) → E (b t))
-  ( h : (t : Δ¹) → E (b t))
-  ( p : f 0₂ = h 0₂)
-  ( q : g 0₂ = h 0₂)
-  ( H1 : htpy-from B E b f g (concat (E (b 0₂)) (f 0₂) (h 0₂) (g 0₂) p (rev (E (b 0₂)) (g 0₂) (h 0₂) q)))
-  ( H2 : htpy-from B E b g h q)
-  : htpy-from B E b f h p
-  := transport
-    ( f 0₂ = h 0₂)
-    ( htpy-from B E b f h)
-    ( concat
-      ( E (b 0₂))
-      ( f 0₂)
-      ( g 0₂)
-      ( h 0₂)
-      ( concat (E (b 0₂)) (f 0₂) (h 0₂) (g 0₂) p (rev (E (b 0₂)) (g 0₂) (h 0₂) q))
-      q)
-    p
-    ( section-postconcat (E (b 0₂)) (f 0₂) (g 0₂) (h 0₂) q p)
-    ( concat-htpy-from B E
-      b
-      f g h
-      ( concat (E (b 0₂)) (f 0₂) (h 0₂) (g 0₂) p (rev (E (b 0₂)) (g 0₂) (h 0₂) q))
-      q
-      H1
-      H2)
-```
 
 We obtain a much simpler homotopy between the inverse of composition and our original `g`.
 
@@ -607,83 +776,4 @@ We conclude using `eq-pullback-darr-from`.
     ( htpy-inv-comp-lift-id'-coherent-action)
 
 #end prf-cocart-coherent-action-left-inverse
-```
-
-```rzk
-#def is-section-tot-comp-lift-coherent-action
-  uses (extext E-inner action-id action-comp left-unit-coherence right-unit-coherence)
-  ( a : Δ² → B)
-  ( ( e , g) : Σ (e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
-  : inv-tot-comp-lift-action a (tot-comp-lift-action a (e , g)) = (e , g)
-  := is-section-comp-lift-coherent-action a e g
-```
-
-## Inner families with coherent action are (Segal)-cocartesian
-
-```rzk
-#def is-equiv-tot-comp-lift-coherent-action
-  uses (extext E-inner action-id action-comp left-unit-coherence right-unit-coherence)
-  ( a : Δ² → B)
-  : is-equiv
-    ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
-    ( ( t : Δ¹) → E (comp-Δ² B a t))
-    ( tot-comp-lift-action a)
-  := is-equiv-has-inverse
-    ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
-    ( ( t : Δ¹) → E (comp-Δ² B a t))
-    ( tot-comp-lift-action a)
-    ( inv-tot-comp-lift-action a
-    , ( is-section-tot-comp-lift-coherent-action a
-      , is-retraction-tot-comp-lift-action-id a))
-
-
-#def is-equiv-comp-lift-coherent-action
-  uses (funext extext E-inner action-id action-comp left-unit-coherence right-unit-coherence)
-  ( a : Δ² → B)
-  : ( e : E (a (0₂ , 0₂))) → is-equiv
-    ( darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
-    ( darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
-    ( comp-over-Inner B E E-inner a (lift-action (fst-Δ² B a) e))
-  := is-equiv-fiberwise-is-equiv-total
-    ( E (a (0₂ , 0₂)))
-    ( \ e → darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
-    ( \ e → darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
-    ( \ e → comp-over-Inner B E E-inner a (lift-action (fst-Δ² B a) e))
-    ( is-equiv-right-factor
-      ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
-      ( Σ ( e : E (a (0₂ , 0₂))) , darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
-      ( ( t : Δ¹) → E (comp-Δ² B a t))
-      ( total-map
-        ( E (a (0₂ , 0₂)))
-        ( \ e → darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
-        ( \ e → darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
-        ( comp-lift-action a))
-      ( \ p → second p)
-      ( is-equiv-second-sigma-action-id-sections (comp-Δ² B a))
-      ( is-equiv-tot-comp-lift-coherent-action a))
-
-
-#def has-cocart-lifts-coherent-action
-  uses (funext extext E-inner action-id action-comp left-unit-coherence right-unit-coherence)
-  : has-cocartesian-lifts B E
-  := \ b b' u e →
-    transport
-      ( E b)
-      ( \ e → Σ (e' : E b')
-      , Σ ( f : dhom B b b' u E e e')
-        , is-cocartesian-arrow B b b' u E e e' f)
-      ( action (id-hom B b) e)
-      ( e)
-      ( action-id b e)
-      ( lift-action u e 1₂
-      , ( \ t → lift-action u e t
-      , is-cocartesian-arrow-is-equiv-comp-over-Inner
-        B
-        E
-        E-inner
-        u
-        ( lift-action u e)
-        ( \ a → is-equiv-comp-lift-coherent-action a e)))
-
-
 ```
