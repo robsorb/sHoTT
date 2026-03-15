@@ -882,7 +882,7 @@ identifications. This defines `#!rzk eq-htpy` to be the retraction to
   ( A : X → U)
   ( f g : (x : X) → A x)
   : ( ( x : X) → f x = g x) → (f = g)
-  := first (first (funext X A f g))
+  := first (second (funext X A f g))
 
 #def left-cancel-is-equiv uses (funext)
   ( A B : U)
@@ -905,6 +905,67 @@ identifications. This defines `#!rzk eq-htpy` to be the retraction to
     ( comp B A B f (π₁ (π₂ is-equiv-f)))
     ( identity B)
     ( π₂ (π₂ is-equiv-f))
+```
+
+### Homotopy induction
+
+```rzk
+
+#def compute-htpy-eq-eq-htpy
+  ( A : U)
+  ( B : A → U)
+  ( f : (a : A) → B a)
+  ( g : (a : A) → B a)
+  ( H : (a : A) → f a = g a)
+  : htpy-eq A B f g (eq-htpy A B f g H) = H
+  := second (second (funext A B f g)) H
+
+#def ind-htpy uses (funext)
+  ( A : U)
+  ( B : A → U)
+  ( f : (a : A) → B a)
+  ( C : (g : (a : A) → B a) → ((a : A) → f a = g a) → U)
+  ( c : C f (\ a → refl))
+  ( g : (a : A) → B a)
+  ( H : (a : A) → f a = g a)
+  : C g H
+  := transport
+    ( ( a : A) → f a = g a)
+    ( \ H → C g H)
+    ( htpy-eq A B f g (eq-htpy A B f g H))
+    ( H)
+    ( compute-htpy-eq-eq-htpy A B f g H)
+    ( ind-path
+      ( ( a : A) → B a)
+      ( f)
+      ( \ g → \ p → C g (htpy-eq A B f g p))
+      ( c)
+      ( g)
+      ( eq-htpy A B f g H))
+
+#def ind-htpy-end uses (funext)
+  ( A : U)
+  ( B : A → U)
+  ( g : (a : A) → B a)
+  ( C : (f : (a : A) → B a) → ((a : A) → f a = g a) → U)
+  ( c : C g (\ a → refl))
+  ( f : (a : A) → B a)
+  ( H : (a : A) → f a = g a)
+  : C f H
+  := transport
+    ( ( a : A) → f a = g a)
+    ( \ H → C f H)
+    ( htpy-eq A B f g (eq-htpy A B f g H))
+    ( H)
+    ( compute-htpy-eq-eq-htpy A B f g H)
+    ( ind-path-end
+      ( ( a : A) → B a)
+      ( g)
+      ( \ f → \ p → C f (htpy-eq A B f g p))
+      ( c)
+      ( f)
+      ( eq-htpy A B f g H))
+
 ```
 
 Using function extensionality, a fiberwise equivalence defines an equivalence of
