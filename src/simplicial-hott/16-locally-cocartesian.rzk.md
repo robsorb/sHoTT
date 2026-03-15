@@ -585,7 +585,7 @@ This is a literate `rzk` file:
       ( dom-htpy-zigzag-unit-is-refl-locally-cocartesian (f 0₂) e))
     ( square-zigzag-unit-locally-cocartesian f e)
 
-#def triangle-zigzag-locally-cocartesian uses (funext extext lifts rezk-fibers)
+#def dhom2-zigzag-locally-cocartesian uses (funext extext lifts rezk-fibers)
   ( f : Δ¹ → B)
   ( e : E (f 0₂))
   : dhom2 B
@@ -626,5 +626,23 @@ This is a literate `rzk` file:
       ( \ (y , x) → square-zigzag-unit-locally-cocartesian' f e (x , y)))
     ( \ (x , y) → square-zigzag-unit-locally-cocartesian' f e (x , y))
 
+#def dhom2-coherence-locally-cocartesian uses (lifts)
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : dhom2 B
+    ( f 0₂) (f 1₂) (f 1₂)
+    ( f) (id-hom B (f 1₂)) (f)
+    ( degen-Δ²-cod B f)
+    E
+    ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (id-hom B (f 0₂)) e)
+    ( comp-action-locally-cocartesian (id-hom B (f 0₂)) (f) e)
+    ( comp-action-locally-cocartesian (f) (id-hom B (f 1₂)) e)
+    ( \ t → lift-action B E (action-locally-cocartesian) f
+      ( action-locally-cocartesian (id-hom B (f 0₂)) e) t)
+    ( coherence-hom-action B E (action-locally-cocartesian) f e)
+    ( \ x → comp-action-locally-cocartesian (clamp B f (x , 0₂)) (id-hom B (f x)) e)
+  := \ (x , y) →
+    action-locally-cocartesian (clamp B f (x , y))
+      ( action-locally-cocartesian (clamp B f (y , 0₂)) e)
 
 ```

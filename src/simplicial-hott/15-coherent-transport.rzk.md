@@ -77,6 +77,19 @@
 
 ```
 
+### The coherence morphism
+
+```rzk
+#def coherence-hom-action
+  ( f : Δ¹ → B)
+  ( e : E (f 0₂))
+  : hom (E (f 1₂))
+    ( action f (action (id-hom B (f 0₂)) e))
+    ( action (id-hom B (f 1₂)) (action f e))
+  := \ t → action (clamp B f (1₂ , t)) (lift-action f e t)
+
+```
+
 ### Lifts of triangles
 
 ```rzk
@@ -306,6 +319,7 @@ We can now show that `inv-comp-lift` is a right inverse of `tot-comp-lift`.
 
 ```
 
+
 ## Preserving composition
 
 We the other side we need to assume that our action preserves some compositions.
@@ -368,6 +382,7 @@ We define some aliases for convenience.
 Applying the pushforward to `fill-lift` yeilds a weakly degenerate triangle.
 
 ```rzk
+
 #def is-weakly-degen-action-fill-lift-coherent-action uses (E-inner)
   ( t : Δ¹)
   : ( fst-dΔ² B E (degen-Δ²-dom B (snd-Δ² B a)) (action-dtriangle a (fill-lift-action a e g))) t
@@ -375,7 +390,7 @@ Applying the pushforward to `fill-lift` yeilds a weakly degenerate triangle.
   := action-comp (fst-Δ² B a) e t
 ```
 
-This induces a homotopy between the diagona (the inverse of composition) and the vertical one.
+This induces a homotopy between the diagonal (the inverse of composition) and the vertical one.
 
 ```rzk
 #def htpy-inv-comp-lift-snd-action-fill-lift-coherent-action
