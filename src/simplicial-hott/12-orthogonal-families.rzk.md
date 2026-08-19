@@ -37,71 +37,86 @@ This is a literate `rzk` file:
 #variable C : A → U
 
 
-#def is-right-orthogonal-is-equiv-restrict-sections
-  (is-equiv-restriction : (a : ψ -> A) ->
-    is-equiv
-      ((t : ψ) -> C (a t))
-      ((t : φ) -> C (a t))
-      (\ s t -> s t))
+#def is-right-orthogonal-family-is-equiv-restrict-sections
+  ( is-equiv-restriction : (a : ψ → A)
+  → is-equiv
+      ( ( t : ψ) → C (a t))
+      ( ( t : φ) → C (a t))
+      ( \ s t → s t))
   :
   is-right-orthogonal-family I ψ φ A C
-  := \ a f ->
+  := \ a f →
     equiv-with-contractible-domain-implies-contractible-codomain
-      (fib
-        ((t : ψ) -> C (a t))
-        ((t : φ) -> C (a t))
-        (\ s t -> s t)
+      ( fib
+        ( ( t : ψ) → C (a t))
+        ( ( t : φ) → C (a t))
+        ( \ s t → s t)
         f)
-      ((t : ψ) → C (a t) [φ t ↦ f t])
-      (inv-equiv
-        ((t : ψ) → C (a t) [φ t ↦ f t])
-        (fib
-          ((t : ψ) -> C (a t))
-          ((t : φ) -> C (a t))
-          (\ s t -> s t)
+      ( ( t : ψ) → C (a t) [φ t ↦ f t])
+      ( inv-equiv
+        ( ( t : ψ) → C (a t) [φ t ↦ f t])
+        ( fib
+          ( ( t : ψ) → C (a t))
+          ( ( t : φ) → C (a t))
+          ( \ s t → s t)
           f)
-        (extension-type-weakening-map I ψ φ
-          (\ t -> C (a t))
-          f,
-          is-equiv-extension-type-weakening I ψ φ
-            (\ t -> C (a t))
+        ( extension-type-weakening-map I ψ φ
+          ( \ t → C (a t))
+          f
+        , is-equiv-extension-type-weakening I ψ φ
+            ( \ t → C (a t))
             f))
-      (is-contr-map-is-equiv
-        ((t : ψ) -> C (a t))
-        ((t : φ) -> C (a t))
-        (\ s t -> s t)
-        (is-equiv-restriction a)
+      ( is-contr-map-is-equiv
+        ( ( t : ψ) → C (a t))
+        ( ( t : φ) → C (a t))
+        ( \ s t → s t)
+        ( is-equiv-restriction a)
         f)
 
-#def is-equiv-restrict-sections-is-right-orthogonal
-  (is-right-orthogonal-C : is-right-orthogonal-family I ψ φ A C)
+#def is-equiv-restrict-sections-is-right-orthogonal-family
+  ( is-right-orthogonal-C : is-right-orthogonal-family I ψ φ A C)
   :
-  (a : ψ -> A) ->
-    is-equiv
-      ((t : ψ) -> C (a t))
-      ((t : φ) -> C (a t))
-      (\ s t -> s t)
-  := \ a ->
+  ( a : ψ → A)
+  → is-equiv
+      ( ( t : ψ) → C (a t))
+      ( ( t : φ) → C (a t))
+      ( \ s t → s t)
+  := \ a →
     is-equiv-is-contr-map
-      ((t : ψ) -> C (a t))
-      ((t : φ) -> C (a t))
-      (\ s t -> s t)
-      (\ f ->
+      ( ( t : ψ) → C (a t))
+      ( ( t : φ) → C (a t))
+      ( \ s t → s t)
+      ( \ f →
         equiv-with-contractible-domain-implies-contractible-codomain
-          ((t : ψ) → C (a t) [φ t ↦ f t])
-          (fib
-            ((t : ψ) -> C (a t))
-            ((t : φ) -> C (a t))
-            (\ s t -> s t)
+          ( ( t : ψ) → C (a t) [φ t ↦ f t])
+          ( fib
+            ( ( t : ψ) → C (a t))
+            ( ( t : φ) → C (a t))
+            ( \ s t → s t)
             f)
-          (extension-type-weakening-map I ψ φ
-            (\ t -> C (a t))
-            f,
-            is-equiv-extension-type-weakening I ψ φ
-              (\ t -> C (a t))
+          ( extension-type-weakening-map I ψ φ
+            ( \ t → C (a t))
+            f
+          , is-equiv-extension-type-weakening I ψ φ
+              ( \ t → C (a t))
               f)
-          (is-right-orthogonal-C a f))
+          ( is-right-orthogonal-C a f))
+
+#def extend-section-is-right-orthogonal-family
+  ( is-right-orthogonal-C : is-right-orthogonal-family I ψ φ A C)
+  ( a : ψ → A)
+  :
+  ( ( t : φ) → C (a t)) → ((t : ψ) → C (a t))
+  := section-is-equiv
+    ( ( t : ψ) → C (a t))
+    ( ( t : φ) → C (a t))
+    ( \ s t → s t)
+    ( is-equiv-restrict-sections-is-right-orthogonal-family
+      is-right-orthogonal-C
+      a)
 
 #end is-right-orthogonal-iff-is-equiv-restrict-sections
+
+
 
 ```

@@ -4,69 +4,6 @@
 #lang rzk-1
 ```
 
-## Dependent coslice
-```rzk
-
-#section darr-from
-
-#variable B : U
-#variable E : B → U
-
-#def darr-from
-  ( f : Δ¹ → B)
-  ( e : E(f 0₂))
-  : U
-  := (t : Δ¹) → E (f t) [t ≡ 0₂ ↦ e]
-
-#end darr-from
-```
-
-## Edges of triangles in types
-
-```rzk
-
-#section edges-of-triangles
-
-#variable B : U
-
-#def fst-Δ² (a : Δ² → B)
-  : Δ¹ → B
-  := \ t → a (t , 0₂)
-
-#def snd-Δ² (a : Δ² → B)
-  : Δ¹ → B
-  := \ t → a (1₂ , t)
-
-#def comp-Δ² (a : Δ² → B)
-  : Δ¹ → B
-  := \ t → a (t , t)
-
-
-#def hor-edge-Δ²
-  ( a : Δ² → B)
-  ( y : Δ¹)
-  : hom B (a (y , y)) (a (1₂ , y))
-  := \ x → recOR (x ≤ y ↦ a (y , y) , y ≤ x ↦ a (x , y))
-
-
-#variable E
-  : B → U
-
-#def fst-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
-  : ( t : Δ¹) → E (fst-Δ² a t)
-  := \ t → da (t , 0₂)
-
-#def snd-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
-  : ( t : Δ¹) → E (snd-Δ² a t)
-  := \ t → da (1₂ , t)
-
-#def comp-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
-  : ( t : Δ¹) → E (comp-Δ² a t)
-  := \ t → da (t , t)
-
-#end edges-of-triangles
-```
-
 
 
 ## Clamping morphisms
@@ -135,7 +72,7 @@ construct a morphism $id_* e \to f_* e$ laying over it.
 
 ```rzk
 #def lift-action (f : Δ¹ → B) (e : E (f 0₂))
-  : darr-from B E f (action (id-hom B (f 0₂)) e)
+  : darr-from B f E (action (id-hom B (f 0₂)) e)
   := \ t → action (clamp-above B f t) e
 
 ```
@@ -184,7 +121,7 @@ over the start point:
 #def tot-inv-comp-lift-action
   ( a : Δ² → B)
   : ( ( t : Δ¹) → E (comp-Δ² B a t))
-  → Σ ( e' : E (a (0₂ , 0₂))) , darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e')
+  → Σ ( e' : E (a (0₂ , 0₂))) , darr-from B (snd-Δ² B a) E (action (fst-Δ² B a) e')
   := \ h → (h 0₂ , inv-comp-lift-action a h)
 
 ```
@@ -234,7 +171,7 @@ We want to show that the lifts induced by our action are cocartesian.
 Hence we want to show that the following map is an equivalence.
 
 ```rzk
--- #variables E-inner : is-inner B E
+-- #variables inner-E : is-inner-family B E
 
 
 -- #def comp-lift-action
