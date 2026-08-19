@@ -28,6 +28,8 @@ This is a literate `rzk` file:
 
 ```rzk
 
+#section is-right-orthogonal-iff-is-equiv-restrict-sections
+
 #variable I : CUBE
 #variable ψ : I → TOPE
 #variable φ : ψ → TOPE
@@ -99,5 +101,7 @@ This is a literate `rzk` file:
               (\ t -> C (a t))
               f)
           (is-right-orthogonal-C a f))
+
+#end is-right-orthogonal-iff-is-equiv-restrict-sections
 
 ```
