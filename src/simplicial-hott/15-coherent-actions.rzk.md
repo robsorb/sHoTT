@@ -130,7 +130,8 @@
 
 ### Lifts of edges
 
-Given a morphism $f : x \to y$ in the base and a start point $e : E(x)$ we can construct a morphism $id_* e \to f_* e$ laying over it.
+Given a morphism $f : x \to y$ in the base and a start point $e : E(x)$ we can
+construct a morphism $id_* e \to f_* e$ laying over it.
 
 ```rzk
 #def lift-action (f : Δ¹ → B) (e : E (f 0₂))
@@ -141,7 +142,8 @@ Given a morphism $f : x \to y$ in the base and a start point $e : E(x)$ we can c
 
 ### Lifts of triangles
 
-Given a triangle in the base and a morphism over the diagonal, we construct a lift of our triangle.
+Given a triangle in the base and a morphism over the diagonal, we construct a
+lift of our triangle.
 
 ```rzk
 
@@ -165,7 +167,8 @@ Given a triangle in the base and a morphism over the diagonal, we construct a li
 
 ```
 
-The following morphism will be the inverse of post-composition with the constructed lift:
+The following morphism will be the inverse of post-composition with the
+constructed lift:
 
 ```rzk
 #def inv-comp-lift-action uses (action)
@@ -174,7 +177,8 @@ The following morphism will be the inverse of post-composition with the construc
   := \ h → snd-dΔ² B E a (lift-2-action a h)
 ```
 
-The following is the same morphism but presented as a sigma type, quantifying over the start point:
+The following is the same morphism but presented as a sigma type, quantifying
+over the start point:
 
 ```rzk
 #def tot-inv-comp-lift-action
@@ -184,6 +188,86 @@ The following is the same morphism but presented as a sigma type, quantifying ov
   := \ h → (h 0₂ , inv-comp-lift-action a h)
 
 ```
+
+### Pushforward of dependent triangles
+
+Given a dependent triangle we can push it forward along the horizontal morphisms
+of the triangle in the base to obtain a dependent triangle laying over the
+second edge in the bottom triangle.
+
+```rzk
+#def action-dtriangle
+  ( a : Δ² → B)
+  ( da : (t : Δ²) → E (a t))
+  : ( ( x , y) : Δ²) → E (snd-Δ² B a y)
+  := \ (x , y) → action (clamp-below B (hor-edge-Δ² B a y) x) (da (x , y))
+
+#def action-dtriangle-comp uses (action)
+  ( a : Δ² → B)
+  ( da : (t : Δ²) → E(a t))
+  ( t : Δ¹)
+  : ( action-dtriangle a da) (t , t) = inv-comp-lift-action a (comp-dΔ² B E a da) t
+  := refl
+
+#def action-dtriangle-snd uses (action)
+  ( a : Δ² → B)
+  ( da : (t : Δ²) → E(a t))
+  ( t : Δ¹)
+  : ( action-dtriangle a da) (1₂ , t)
+    = action (id-hom B (snd-Δ² B a t)) ((snd-dΔ² B E a da) t)
+  := refl
+
+#def action-dtriangle-fst uses (action)
+  ( a : Δ² → B)
+  ( da : (t : Δ²) → E(a t))
+  ( t : Δ¹)
+  : ( action-dtriangle a da) (t , 0₂)
+    = action (clamp B (fst-Δ² B a) (1₂ , t)) (fst-dΔ² B E a da t)
+  := refl
+
+```
+
+
+## Composing with lifts
+
+We want to show that the lifts induced by our action are cocartesian.
+Hence we want to show that the following map is an equivalence.
+
+```rzk
+-- #variables E-inner : is-inner B E
+
+
+-- #def comp-lift-action
+--   ( a : Δ² → B)
+--   ( e : E (a (0₂ , 0₂)))
+--   : ( darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+--   → ( darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
+--   := \ g →
+--     comp-over-Inner B E E-inner
+--       a
+--       ( lift-action (fst-Δ² B a) e)
+--       g
+
+-- #def fill-lift-action
+--   ( a : Δ² → B)
+--   ( e : E (a (0₂ , 0₂)))
+--   ( g : darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+--   : ( t : Δ²) → E (a t)
+--   := fill-over-Inner B E
+--     E-inner
+--     a
+--     ( lift-action (fst-Δ² B a) e)
+--     g
+
+-- #def fst-fill-lift uses (E-inner)
+--   ( a : Δ² → B)
+--   ( e : E (a (0₂ , 0₂)))
+--   ( g : darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
+--   : fst-dΔ² B E a (fill-lift-action a e g) = (lift-action (fst-Δ² B a) e)
+--   := refl
+```
+
+
 
 
 ```rzk
