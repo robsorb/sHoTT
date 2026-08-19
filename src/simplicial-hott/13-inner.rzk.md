@@ -85,9 +85,6 @@ This is a literate `rzk` file:
 ```
 
 
-
-
-
 ## Inner families
 
 ```rzk
@@ -107,14 +104,15 @@ This is a literate `rzk` file:
 
 ```rzk
 
-#def comp-over-darr-from-is-inner-family
+#def comp-over-is-inner-family
   ( B : U)
   ( E : B → U)
   ( is-inner-E : is-inner-family B E)
   ( σ : Δ² → B)
   ( f : darr B (fst-Δ² B σ) E)
-  : darr-from B (snd-Δ² B σ) E (f 1₂) → darr-from B (comp-Δ² B σ) E (f 0₂)
-  := \ g t →
+  ( g : darr-from B (snd-Δ² B σ) E (f 1₂))
+  : dhom B (σ (0₂ , 0₂)) (σ (1₂ , 1₂)) (comp-Δ² B σ) E (f 0₂) (g 1₂)
+  := \ t →
     extend-section-is-right-orthogonal-family
       ( 2 × 2) Δ² Λ²₁ B E is-inner-E σ
       ( \ (x , y) →

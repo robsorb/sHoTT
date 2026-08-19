@@ -171,20 +171,18 @@ We want to show that the lifts induced by our action are cocartesian.
 Hence we want to show that the following map is an equivalence.
 
 ```rzk
--- #variables inner-E : is-inner-family B E
+#variables is-inner-E : is-inner-family B E
 
+#def comp-lift-action
+  ( σ : Δ² → B)
+  ( e : E (σ (0₂ , 0₂)))
+  : ( darr-from B (snd-Δ² B σ) E (action (fst-Δ² B σ) e))
+  → ( darr-from B (comp-Δ² B σ) E (action (id-hom B (σ (0₂ , 0₂))) e))
+  := comp-over-darr-from-is-inner-family B E is-inner-E σ
+    ( lift-action (fst-Δ² B σ) e)
+```
 
--- #def comp-lift-action
---   ( a : Δ² → B)
---   ( e : E (a (0₂ , 0₂)))
---   : ( darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
---   → ( darr-from B E (comp-Δ² B a) (action (id-hom B (a (0₂ , 0₂))) e))
---   := \ g →
---     comp-over-Inner B E E-inner
---       a
---       ( lift-action (fst-Δ² B a) e)
---       g
-
+```rzk
 -- #def fill-lift-action
 --   ( a : Δ² → B)
 --   ( e : E (a (0₂ , 0₂)))
