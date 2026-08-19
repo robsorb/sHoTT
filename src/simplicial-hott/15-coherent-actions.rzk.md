@@ -72,7 +72,7 @@ construct a morphism $id_* e \to f_* e$ laying over it.
 
 ```rzk
 #def lift-action (f : Δ¹ → B) (e : E (f 0₂))
-  : darr-from B f E (action (id-hom B (f 0₂)) e)
+  : dhom-arr B f E (action (id-hom B (f 0₂)) e) (action f e)
   := \ t → action (clamp-above B f t) e
 
 ```
@@ -175,11 +175,15 @@ Hence we want to show that the following map is an equivalence.
 
 #def comp-lift-action
   ( σ : Δ² → B)
-  ( e : E (σ (0₂ , 0₂)))
-  : ( darr-from B (snd-Δ² B σ) E (action (fst-Δ² B σ) e))
-  → ( darr-from B (comp-Δ² B σ) E (action (id-hom B (σ (0₂ , 0₂))) e))
-  := comp-over-darr-from-is-inner-family B E is-inner-E σ
-    ( lift-action (fst-Δ² B σ) e)
+  ( x : E (σ (0₂ , 0₂)))
+  ( z : E (σ (1₂ , 1₂)))
+  : ( dhom-arr B (snd-Δ² B σ) E (action (fst-Δ² B σ) x) z)
+  → ( dhom-arr B (comp-Δ² B σ) E (action (id-hom B (σ (0₂ , 0₂))) x) z)
+  := comp-over-is-inner-family B E is-inner-E σ
+    ( action (id-hom B (σ (0₂ , 0₂))) x)
+    ( action (fst-Δ² B σ) x)
+    z
+    ( lift-action (fst-Δ² B σ) x)
 ```
 
 ```rzk
