@@ -38,6 +38,21 @@ This is a literate `rzk` file:
 
 ```
 
+## Dependent homs over arrows
+
+```rzk
+
+#def dhom-arr
+  ( B : U)
+  ( f : Δ¹ → B)
+  ( E : B → U)
+  ( x : E(f 0₂))
+  ( y : E(f 1₂))
+  : U
+  := dhom B (f 0₂) (f 1₂) f E x y
+
+```
+
 ## Edges of triangles in types
 
 ```rzk
@@ -109,10 +124,13 @@ This is a literate `rzk` file:
   ( E : B → U)
   ( is-inner-E : is-inner-family B E)
   ( σ : Δ² → B)
-  ( f : darr B (fst-Δ² B σ) E)
-  ( g : darr-from B (snd-Δ² B σ) E (f 1₂))
-  : dhom B (σ (0₂ , 0₂)) (σ (1₂ , 1₂)) (comp-Δ² B σ) E (f 0₂) (g 1₂)
-  := \ t →
+  ( x : E(σ (0₂ , 0₂)))
+  ( y : E(σ (1₂ , 0₂)))
+  ( z : E(σ (1₂ , 1₂)))
+  :
+  ( dhom-arr B (fst-Δ² B σ) E x y) → (dhom-arr B (snd-Δ² B σ) E y z)
+  → dhom-arr B (comp-Δ² B σ) E x z
+  := \ f g t →
     extend-section-is-right-orthogonal-family
       ( 2 × 2) Δ² Λ²₁ B E is-inner-E σ
       ( \ (x , y) →
