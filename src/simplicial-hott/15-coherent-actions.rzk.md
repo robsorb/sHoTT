@@ -186,17 +186,34 @@ Hence we want to show that the following map is an equivalence.
     ( lift-action (fst-Δ² B σ) x)
 ```
 
+We will do this by passing to the map on total types
+
 ```rzk
--- #def fill-lift-action
---   ( a : Δ² → B)
---   ( e : E (a (0₂ , 0₂)))
---   ( g : darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
---   : ( t : Δ²) → E (a t)
---   := fill-over-Inner B E
---     E-inner
---     a
---     ( lift-action (fst-Δ² B a) e)
---     g
+
+#def tot-comp-lift-action uses (is-inner-E)
+  ( σ : Δ² → B)
+  :
+  ( Σ ( x : E (σ (0₂ , 0₂)))
+  , darr-from B (snd-Δ² B σ) E (action (fst-Δ² B σ) x))
+  → darr B (comp-Δ² B σ) E
+  := \ (x , g) →
+    comp-lift-action σ x (g 1₂) (\ t → g t)
+
+```
+
+```rzk
+#def fill-lift-action
+  ( σ : Δ² → B)
+  ( e : E(σ (0₂ , 0₂)))
+  ( g : darr-from B (snd-Δ² B σ) E (action (fst-Δ² B σ) e))
+  : dtriangle-with-horn B σ E
+    ( action (id-hom B (σ (0₂ , 0₂))) e)
+    ( action (fst-Δ² B σ) e)
+    ( g 1₂)
+    ( lift-action (fst-Δ² B σ) e)
+    ( \ t → g t)
+  := fill-over-is-inner-family B E is-inner-E ?x ?y ?z ?f ?g
+
 
 -- #def fst-fill-lift uses (E-inner)
 --   ( a : Δ² → B)
