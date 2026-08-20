@@ -71,8 +71,13 @@ Given a morphism $f : x \to y$ in the base and a start point $e : E(x)$ we can
 construct a morphism $id_* e \to f_* e$ laying over it.
 
 ```rzk
-#def lift-action (f : Δ¹ → B) (e : E (f 0₂))
-  : dhom-arr B f E (action (id-hom B (f 0₂)) e) (action f e)
+
+
+#def lift-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : dhom B x y f E (action (id-hom B x) e) (action f e)
   := \ t → action (clamp-above B f t) e
 
 ```
@@ -85,22 +90,16 @@ lift of our triangle.
 ```rzk
 
 #def lift-2-action uses (action)
-  ( a : Δ² → B)
-  ( h : (t : Δ¹) → E (comp-Δ² B a t))
-  : ( t : Δ²) → E (a t)
-  := \ (x , y) → lift-action (hor-edge-Δ² B a y) (h y) x
-
-#def lift-2-action-fst uses (action)
-  ( a : Δ² → B)
-  ( h : (t : Δ¹) → E (comp-Δ² B a t))
-  : fst-dΔ² B E a (lift-2-action a h) = lift-action (fst-Δ² B a) (h 0₂)
-  := refl
-
-#def lift-2-action-comp uses (action)
-  ( a : Δ² → B)
-  ( h : (t : Δ¹) → E (comp-Δ² B a t))
-  : comp-dΔ² B E a (lift-2-action a h) = (\ t → action (id-hom B (a (t , t))) (h t))
-  := refl
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( h' : dhom B x z h E x' z')
+  : ( t : Δ²) → E (σ t)
+  := \ (s , t) → lift-action (hor-edge-Δ² B σ t) (h t) s
 
 ```
 

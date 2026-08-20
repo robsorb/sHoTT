@@ -38,84 +38,27 @@ This is a literate `rzk` file:
 
 ```
 
-## Dependent homs over arrows
-
-```rzk
-
-#def dhom-arr
-  ( B : U)
-  ( f : Δ¹ → B)
-  ( E : B → U)
-  ( x : E(f 0₂))
-  ( y : E(f 1₂))
-  : U
-  := dhom B (f 0₂) (f 1₂) f E x y
-
-```
-
-## Edges of triangles in types
-
-```rzk
-
-#section edges-of-triangles
-
-#variable B : U
-
-#def fst-Δ² (a : Δ² → B)
-  : Δ¹ → B
-  := \ t → a (t , 0₂)
-
-#def snd-Δ² (a : Δ² → B)
-  : Δ¹ → B
-  := \ t → a (1₂ , t)
-
-#def comp-Δ² (a : Δ² → B)
-  : Δ¹ → B
-  := \ t → a (t , t)
-
-
-#def hor-edge-Δ²
-  ( a : Δ² → B)
-  ( y : Δ¹)
-  : hom B (a (y , y)) (a (1₂ , y))
-  := \ x → recOR (x ≤ y ↦ a (y , y) , y ≤ x ↦ a (x , y))
-
-
-#variable E
-  : B → U
-
-#def fst-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
-  : ( t : Δ¹) → E (fst-Δ² a t)
-  := \ t → da (t , 0₂)
-
-#def snd-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
-  : ( t : Δ¹) → E (snd-Δ² a t)
-  := \ t → da (1₂ , t)
-
-#def comp-dΔ² (a : Δ² → B) (da : (t : Δ²) → E (a t))
-  : ( t : Δ¹) → E (comp-Δ² a t)
-  := \ t → da (t , t)
-
-#end edges-of-triangles
-```
-
-## Triangles with fixed boundaries
+## Triangles with fixed spine
 
 ```rzk
 
 #def dtriangle-with-horn
   ( B : U)
-  ( σ : Δ² → B)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
   ( E : B → U)
-  ( x : E(σ (0₂ , 0₂)))
-  ( y : E(σ (1₂ , 0₂)))
-  ( z : E(σ (1₂ , 1₂)))
-  ( f : dhom-arr B (fst-Δ² B σ) E x y)
-  ( g : dhom-arr B (snd-Δ² B σ) E y z)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
   : U
   := ((s , t) : Δ²) → E (σ (s , t)) [
-    t ≡ 0₂ ↦ f s
-  , s ≡ 1₂ ↦ g t
+    t ≡ 0₂ ↦ f' s
+  , s ≡ 1₂ ↦ g' t
   ]
 
 ```
@@ -145,31 +88,36 @@ This is a literate `rzk` file:
 #variable B : U
 #variable E : B → U
 #variable is-inner-E : is-inner-family B E
-#variable σ : Δ² → B
+#variables x y z : B
+#variable f : hom B x y
+#variable g : hom B  y z
+#variable h : hom B  x z
+#variable σ : hom2 B x y z f g h
 
 #def fill-over-is-inner-family
-  ( x : E(σ (0₂ , 0₂)))
-  ( y : E(σ (1₂ , 0₂)))
-  ( z : E(σ (1₂ , 1₂)))
-  ( f : dhom-arr B (fst-Δ² B σ) E x y)
-  ( g : dhom-arr B (snd-Δ² B σ) E y z)
-  : dtriangle-with-horn B σ E x y z f g
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  : dtriangle-with-horn B x y z f g h σ E x' y' z' f' g'
   := extend-section-is-right-orthogonal-family
       ( 2 × 2) Δ² Λ²₁ B E is-inner-E σ
       ( \ (s , t) →
         recOR (
-          t ≡ 0₂ ↦ f s
-        , s ≡ 1₂ ↦ g t
+          t ≡ 0₂ ↦ f' s
+        , s ≡ 1₂ ↦ g' t
         ))
 
-#def comp-over-is-inner-family uses (is-inner-E)
-  ( x : E(σ (0₂ , 0₂)))
-  ( y : E(σ (1₂ , 0₂)))
-  ( z : E(σ (1₂ , 1₂)))
+#def comp-over-is-inner-family uses (is-inner-E σ)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
   :
-  ( dhom-arr B (fst-Δ² B σ) E x y) → (dhom-arr B (snd-Δ² B σ) E y z)
-  → dhom-arr B (comp-Δ² B σ) E x z
-  := \ f g t → fill-over-is-inner-family x y z f g (t , t)
+  ( dhom B x y f E x' y')
+  → ( dhom B y z g E y' z')
+  → ( dhom B x z h E x' z')
+  := \ f' g' t → fill-over-is-inner-family x' y' z' f' g' (t , t)
 
 #end composition-is-inner-family
 
