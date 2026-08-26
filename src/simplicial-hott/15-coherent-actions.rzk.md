@@ -52,6 +52,26 @@
 #end clamping
 ```
 
+## Horizontal morpihsms in a triangle
+```rzk
+
+#def hor-hom-hom2
+  ( B : U)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( t : Δ¹)
+  : hom B (h t) (g t)
+  := \ s →
+    recOR (
+      s ≤ t ↦ h t
+      , t ≤ s ↦ σ (s , t)
+    )
+
+```
+
 
 
 ## Lifts from transport
@@ -62,7 +82,7 @@
 
 #variable B : U
 #variable E : B → U
-#variable action : (f : Δ¹ → B) → E (f 0₂) → E (f 1₂)
+#variable action : (x y : B) → hom B x y → E x → E y
 ```
 
 ### Lifts of edges
@@ -77,8 +97,8 @@ construct a morphism $id_* e \to f_* e$ laying over it.
   ( x y : B)
   ( f : hom B x y)
   ( e : E x)
-  : dhom B x y f E (action (id-hom B x) e) (action f e)
-  := \ t → action (clamp-above B f t) e
+  : dhom B x y f E (action x x (id-hom B x) e) (action x y f e)
+  := \ t → action x (f t) (clamp-above B f t) e
 
 ```
 
@@ -89,6 +109,31 @@ lift of our triangle.
 
 ```rzk
 
+#def action-id-dhom
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( f' : dhom B x y f E x' y')
+  : dhom B x y f E
+    ( action x x (id-hom B x) x')
+    ( action y y (id-hom B y) y')
+  := \ t → action (f t) (f t) (id-hom B (f t)) (f' t)
+
+#def inv-comp-lift-action uses (action)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( h' : dhom B x z h E x' z')
+  : dhom B y z g E
+    ( action x y f x')
+    ( action z z (id-hom B z) z')
+  := \ t → action (h t) (g t) (hor-hom-hom2 B x y z f g h σ t) (h' t)
+
 #def lift-2-action uses (action)
   ( x y z : B)
   ( f : hom B x y)
@@ -98,8 +143,17 @@ lift of our triangle.
   ( x' : E x)
   ( z' : E z)
   ( h' : dhom B x z h E x' z')
-  : ( t : Δ²) → E (σ t)
-  := \ (s , t) → lift-action (hor-edge-Δ² B σ t) (h t) s
+  : dhom2 B x y z f g h σ E
+    ( action x x (id-hom B x) x')
+    ( action x y f x')
+    ( action z z (id-hom B z) z')
+    ( lift-action x y f x')
+    ( inv-comp-lift-action x y z f g h σ x' z' h')
+    ( action-id-dhom x z h x' z' h')
+  := \ (s , t) →
+    lift-action
+      ( h t) (g t) (hor-hom-hom2 B x y z f g h σ t)
+      ( h' t) s
 
 ```
 
@@ -107,122 +161,23 @@ The following morphism will be the inverse of post-composition with the
 constructed lift:
 
 ```rzk
-#def inv-comp-lift-action uses (action)
-  ( a : Δ² → B)
-  : ( ( t : Δ¹) → E (comp-Δ² B a t)) → ((t : Δ¹) → E (snd-Δ² B a t))
-  := \ h → snd-dΔ² B E a (lift-2-action a h)
+-- #def inv-comp-lift-action uses (action)
+--   ( a : Δ² → B)
+--   : ( ( t : Δ¹) → E (comp-Δ² B a t)) → ((t : Δ¹) → E (snd-Δ² B a t))
+--   := \ h → snd-dΔ² B E a (lift-2-action a h)
 ```
 
 The following is the same morphism but presented as a sigma type, quantifying
 over the start point:
 
 ```rzk
-#def tot-inv-comp-lift-action
-  ( a : Δ² → B)
-  : ( ( t : Δ¹) → E (comp-Δ² B a t))
-  → Σ ( e' : E (a (0₂ , 0₂))) , darr-from B (snd-Δ² B a) E (action (fst-Δ² B a) e')
-  := \ h → (h 0₂ , inv-comp-lift-action a h)
-
-```
-
-### Pushforward of dependent triangles
-
-Given a dependent triangle we can push it forward along the horizontal morphisms
-of the triangle in the base to obtain a dependent triangle laying over the
-second edge in the bottom triangle.
-
-```rzk
-#def action-dtriangle
-  ( a : Δ² → B)
-  ( da : (t : Δ²) → E (a t))
-  : ( ( x , y) : Δ²) → E (snd-Δ² B a y)
-  := \ (x , y) → action (clamp-below B (hor-edge-Δ² B a y) x) (da (x , y))
-
-#def action-dtriangle-comp uses (action)
-  ( a : Δ² → B)
-  ( da : (t : Δ²) → E(a t))
-  ( t : Δ¹)
-  : ( action-dtriangle a da) (t , t) = inv-comp-lift-action a (comp-dΔ² B E a da) t
-  := refl
-
-#def action-dtriangle-snd uses (action)
-  ( a : Δ² → B)
-  ( da : (t : Δ²) → E(a t))
-  ( t : Δ¹)
-  : ( action-dtriangle a da) (1₂ , t)
-    = action (id-hom B (snd-Δ² B a t)) ((snd-dΔ² B E a da) t)
-  := refl
-
-#def action-dtriangle-fst uses (action)
-  ( a : Δ² → B)
-  ( da : (t : Δ²) → E(a t))
-  ( t : Δ¹)
-  : ( action-dtriangle a da) (t , 0₂)
-    = action (clamp B (fst-Δ² B a) (1₂ , t)) (fst-dΔ² B E a da t)
-  := refl
-
-```
-
-
-## Composing with lifts
-
-We want to show that the lifts induced by our action are cocartesian.
-Hence we want to show that the following map is an equivalence.
-
-```rzk
-#variables is-inner-E : is-inner-family B E
-
-#def comp-lift-action
-  ( σ : Δ² → B)
-  ( x : E (σ (0₂ , 0₂)))
-  ( z : E (σ (1₂ , 1₂)))
-  : ( dhom-arr B (snd-Δ² B σ) E (action (fst-Δ² B σ) x) z)
-  → ( dhom-arr B (comp-Δ² B σ) E (action (id-hom B (σ (0₂ , 0₂))) x) z)
-  := comp-over-is-inner-family B E is-inner-E σ
-    ( action (id-hom B (σ (0₂ , 0₂))) x)
-    ( action (fst-Δ² B σ) x)
-    z
-    ( lift-action (fst-Δ² B σ) x)
-```
-
-We will do this by passing to the map on total types
-
-```rzk
-
-#def tot-comp-lift-action uses (is-inner-E)
-  ( σ : Δ² → B)
-  :
-  ( Σ ( x : E (σ (0₂ , 0₂)))
-  , darr-from B (snd-Δ² B σ) E (action (fst-Δ² B σ) x))
-  → darr B (comp-Δ² B σ) E
-  := \ (x , g) →
-    comp-lift-action σ x (g 1₂) (\ t → g t)
-
-```
-
-```rzk
-#def fill-lift-action
-  ( σ : Δ² → B)
-  ( e : E(σ (0₂ , 0₂)))
-  ( g : darr-from B (snd-Δ² B σ) E (action (fst-Δ² B σ) e))
-  : dtriangle-with-horn B σ E
-    ( action (id-hom B (σ (0₂ , 0₂))) e)
-    ( action (fst-Δ² B σ) e)
-    ( g 1₂)
-    ( lift-action (fst-Δ² B σ) e)
-    ( \ t → g t)
-  := fill-over-is-inner-family B E is-inner-E ?x ?y ?z ?f ?g
-
-
--- #def fst-fill-lift uses (E-inner)
+-- #def tot-inv-comp-lift-action
 --   ( a : Δ² → B)
---   ( e : E (a (0₂ , 0₂)))
---   ( g : darr-from B E (snd-Δ² B a) (action (fst-Δ² B a) e))
---   : fst-dΔ² B E a (fill-lift-action a e g) = (lift-action (fst-Δ² B a) e)
---   := refl
+--   : ( ( t : Δ¹) → E (comp-Δ² B a t))
+--   → Σ ( e' : E (a (0₂ , 0₂))) , darr-from B (snd-Δ² B a) E (action (fst-Δ² B a) e')
+--   := \ h → (h 0₂ , inv-comp-lift-action a h)
+
 ```
-
-
 
 
 ```rzk
