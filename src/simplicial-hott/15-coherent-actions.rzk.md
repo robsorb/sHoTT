@@ -105,7 +105,7 @@ construct a morphism $id_* e \to f_* e$ laying over it.
 ### Lifts of triangles
 
 Given a triangle in the base and a morphism over the diagonal, we construct a
-lift of our triangle.
+lift over our triangle.
 
 ```rzk
 
