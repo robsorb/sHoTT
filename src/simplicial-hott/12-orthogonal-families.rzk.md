@@ -102,19 +102,6 @@ This is a literate `rzk` file:
               f)
           ( is-right-orthogonal-C a f))
 
-#def extend-section-is-right-orthogonal-family
-  ( is-right-orthogonal-C : is-right-orthogonal-family I ψ φ A C)
-  ( a : ψ → A)
-  :
-  ( ( t : φ) → C (a t)) → ((t : ψ) → C (a t))
-  := section-is-equiv
-    ( ( t : ψ) → C (a t))
-    ( ( t : φ) → C (a t))
-    ( \ s t → s t)
-    ( is-equiv-restrict-sections-is-right-orthogonal-family
-      is-right-orthogonal-C
-      a)
-
 #end is-right-orthogonal-iff-is-equiv-restrict-sections
 
 

@@ -61,8 +61,95 @@ This is a literate `rzk` file:
   , s ≡ 1₂ ↦ g' t
   ]
 
+#def diagonal-dtriangle-with-horn
+  ( B : U)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( E : B → U)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  : dtriangle-with-horn B x y z f g h σ E x' y' z' f' g'
+  → dhom B x z h E x' z'
+  := \ σ' → \ t → σ' (t , t)
+
+#def forget-diagonal-dhom2
+  ( B : U)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( E : B → U)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  ( h' : dhom B x z h E x' z')
+  :
+  dhom2 B x y z f g h σ E x' y' z' f' g' h'
+  → dtriangle-with-horn B x y z f g h σ E x' y' z' f' g'
+  := \ σ' → σ'
+
+#def dhom2-dtriangle-with-horn
+  ( B : U)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( E : B → U)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  ( σ' : dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+  : dhom2 B x y z f g h σ E x' y' z' f' g'
+    ( diagonal-dtriangle-with-horn B x y z f g h σ E x' y' z' f' g' σ')
+  := \ t → σ' t
+
 ```
 
+### If dependent triangles are equal up to their diagonal, then the diagonals are equal
+
+```rzk
+#def eq-dhom-eq-dtriangle-with-horn
+  ( B : U)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( E : B → U)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  ( h' : dhom B x z h E x' z')
+  ( h'' : dhom B x z h E x' z')
+  ( σ' : dhom2 B x y z f g h σ E x' y' z' f' g' h')
+  ( σ'' : dhom2 B x y z f g h σ E x' y' z' f' g' h'')
+  : ( forget-diagonal-dhom2 B x y z f g h σ E x' y' z' f' g' h' σ'
+  = forget-diagonal-dhom2 B x y z f g h σ E x' y' z' f' g' h'' σ'')
+    → ( h' = h'')
+  := ap
+    ( dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+    ( dhom B x z h E x' z')
+    ( forget-diagonal-dhom2 B x y z f g h σ E x' y' z' f' g' h' σ')
+    ( forget-diagonal-dhom2 B x y z f g h σ E x' y' z' f' g' h'' σ'')
+    ( diagonal-dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+
+
+
+```
 
 ## Inner families
 
@@ -94,20 +181,31 @@ This is a literate `rzk` file:
 #variable h : hom B  x z
 #variable σ : hom2 B x y z f g h
 
-#def fill-over-is-inner-family
+
+
+#def is-contr-fillers-inner-family
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  : is-contr (dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+  := is-inner-E
+    σ
+    ( \ (s , t) → recOR (t ≡ 0₂ ↦ f' s , s ≡ 1₂ ↦ g' t))
+
+
+#def fill-over-is-inner-family uses (is-inner-E)
   ( x' : E x)
   ( y' : E y)
   ( z' : E z)
   ( f' : dhom B x y f E x' y')
   ( g' : dhom B y z g E y' z')
   : dtriangle-with-horn B x y z f g h σ E x' y' z' f' g'
-  := extend-section-is-right-orthogonal-family
-      ( 2 × 2) Δ² Λ²₁ B E is-inner-E σ
-      ( \ (s , t) →
-        recOR (
-          t ≡ 0₂ ↦ f' s
-        , s ≡ 1₂ ↦ g' t
-        ))
+  :=
+    center-contraction
+      ( dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+      ( is-contr-fillers-inner-family x' y' z' f' g')
 
 #def comp-over-is-inner-family uses (is-inner-E σ)
   ( x' : E x)
@@ -119,9 +217,49 @@ This is a literate `rzk` file:
   → ( dhom B x z h E x' z')
   := \ f' g' t → fill-over-is-inner-family x' y' z' f' g' (t , t)
 
+```
+
+### Dependent triangles witness equality for inner families
+
+```rzk
+
+#def unqiue-fill-over-is-inner-family uses (is-inner-E)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  ( σ' : dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+  : fill-over-is-inner-family x' y' z' f' g' = σ'
+  := homotopy-contraction
+    ( dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+    ( is-contr-fillers-inner-family x' y' z' f' g')
+    σ'
+
+#def unqiue-comp-over-is-inner-family uses (is-inner-E)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  ( h' : dhom B x z h E x' z')
+  :
+  dhom2 B x y z f g h σ E x' y' z' f' g' h'
+  → ( comp-over-is-inner-family x' y' z' f' g') = h'
+  := \ σ' →
+    eq-dhom-eq-dtriangle-with-horn B x y z f g h σ E x' y' z' f' g'
+      ( comp-over-is-inner-family x' y' z' f' g')
+      ( h')
+      ( dhom2-dtriangle-with-horn B x y z f g h σ E x' y' z' f' g'
+        ( fill-over-is-inner-family x' y' z' f' g'))
+      ( σ')
+      ( unqiue-fill-over-is-inner-family x' y' z' f' g'
+        ( forget-diagonal-dhom2 B x y z f g h σ E x' y' z' f' g' h' σ'))
+
 #end composition-is-inner-family
 
 ```
+
 
 
 ## Iso-Inner families
