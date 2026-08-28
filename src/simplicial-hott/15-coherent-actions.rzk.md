@@ -92,7 +92,6 @@ construct a morphism $id_* e \to f_* e$ laying over it.
 
 ```rzk
 
-
 #def lift-action
   ( x y : B)
   ( f : hom B x y)
@@ -104,22 +103,11 @@ construct a morphism $id_* e \to f_* e$ laying over it.
 
 ### Lifts of triangles
 
-Given a triangle in the base and a morphism over the diagonal, we construct a
-lift over our triangle.
+Given a triangle `hom2 B x y z f g h` in the base and a morphism over `h`,
+we construct a morphism over `g` that will be the inverse to postcomposition
+with the lift over `f`
 
 ```rzk
-
-#def action-id-dhom
-  ( x y : B)
-  ( f : hom B x y)
-  ( x' : E x)
-  ( y' : E y)
-  ( f' : dhom B x y f E x' y')
-  : dhom B x y f E
-    ( action x x (id-hom B x) x')
-    ( action y y (id-hom B y) y')
-  := \ t → action (f t) (f t) (id-hom B (f t)) (f' t)
-
 #def inv-comp-lift-action uses (action)
   ( x y z : B)
   ( f : hom B x y)
@@ -133,6 +121,23 @@ lift over our triangle.
     ( action x y f x')
     ( action z z (id-hom B z) z')
   := \ t → action (h t) (g t) (hor-hom-hom2 B x y z f g h σ t) (h' t)
+```
+
+We can lift the entire triangle to a dependent triangle, which will witness
+the right inverse law
+
+```rzk
+
+#def action-id-dhom
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( f' : dhom B x y f E x' y')
+  : dhom B x y f E
+    ( action x x (id-hom B x) x')
+    ( action y y (id-hom B y) y')
+  := \ t → action (f t) (f t) (id-hom B (f t)) (f' t)
 
 #def lift-2-action uses (action)
   ( x y z : B)
@@ -157,25 +162,65 @@ lift over our triangle.
 
 ```
 
-The following morphism will be the inverse of post-composition with the
-constructed lift:
+## Composing with lifts
+
+Now we will assume that our family is inner
 
 ```rzk
--- #def inv-comp-lift-action uses (action)
---   ( a : Δ² → B)
---   : ( ( t : Δ¹) → E (comp-Δ² B a t)) → ((t : Δ¹) → E (snd-Δ² B a t))
---   := \ h → snd-dΔ² B E a (lift-2-action a h)
+
+#variable is-inner-E : is-inner-family B E
+
 ```
 
-The following is the same morphism but presented as a sigma type, quantifying
-over the start point:
+If `E` is inner we can compose with the lift. We would like to show that this
+map is an equivalence.
 
 ```rzk
--- #def tot-inv-comp-lift-action
---   ( a : Δ² → B)
---   : ( ( t : Δ¹) → E (comp-Δ² B a t))
---   → Σ ( e' : E (a (0₂ , 0₂))) , darr-from B (snd-Δ² B a) E (action (fst-Δ² B a) e')
---   := \ h → (h 0₂ , inv-comp-lift-action a h)
+
+#def comp-lift-action
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( g' : dhom B y z g E (action x y f x') z')
+  : dhom B x z h E (action x x (id-hom B x) x') z'
+  := comp-over-is-inner-family B E is-inner-E
+    x y z f g h σ
+    ( action x x (id-hom B x) x')
+    ( action x y f x') z'
+    ( lift-action x y f x')
+    ( g')
+
+```
+
+The lift over our triangle witnesses the right inverse law
+
+```rzk
+
+#def comp-lift-action-inv-lift-action-is-action-id-dhom-action
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( h' : dhom B x z h E x' z')
+  : comp-lift-action x y z f g h σ x' (action z z (id-hom B z) z')
+    ( inv-comp-lift-action x y z f g h σ x' z' h')
+    = action-id-dhom x z h x' z' h'
+  := unqiue-comp-over-is-inner-family B E is-inner-E
+    x y z f g h σ
+    ( action x x (id-hom B x) x')
+    ( action x y f x')
+    ( action z z (id-hom B z) z')
+    ( lift-action x y f x')
+    ( inv-comp-lift-action x y z f g h σ x' z' h')
+    ( action-id-dhom x z h x' z' h')
+    ( lift-2-action x y z f g h σ x' z' h')
 
 ```
 
