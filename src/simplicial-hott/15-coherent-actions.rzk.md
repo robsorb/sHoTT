@@ -185,14 +185,32 @@ map is an equivalence.
   ( σ : hom2 B x y z f g h)
   ( x' : E x)
   ( z' : E z)
-  ( g' : dhom B y z g E (action x y f x') z')
-  : dhom B x z h E (action x x (id-hom B x) x') z'
-  := comp-over-is-inner-family B E is-inner-E
+  : dhom B y z g E (action x y f x') z'
+  → dhom B x z h E (action x x (id-hom B x) x') z'
+  := \ g' → comp-over-is-inner-family B E is-inner-E
     x y z f g h σ
     ( action x x (id-hom B x) x')
     ( action x y f x') z'
     ( lift-action x y f x')
     ( g')
+
+```
+
+We will do this by considering the map on total types
+
+```rzk
+
+#def tot-comp-lift-action uses (is-inner-E)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  :
+  ( Σ ( x' : E x) , darr-from B g E (action x y f x'))
+  → ( ( t : Δ¹) → E (h t))
+  := \ (x' , g') → comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)
+
 
 ```
 
