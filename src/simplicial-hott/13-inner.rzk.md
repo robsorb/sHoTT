@@ -222,6 +222,18 @@ This is a literate `rzk` file:
   → ( dhom B x z h E x' z')
   := \ f' g' t → fill-over-is-inner-family x' y' z' f' g' (t , t)
 
+#def fill-over-is-inner-family' uses (is-inner-E)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  : dhom2 B x y z f g h σ E x' y' z'
+    f'
+    g'
+    ( comp-over-is-inner-family x' y' z' f' g')
+  := \ t → fill-over-is-inner-family x' y' z' f' g' t
+
 ```
 
 ### Dependent triangles witness equality for inner families

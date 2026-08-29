@@ -257,6 +257,27 @@ map is an equivalence.
     ( lift-action x y f x')
     ( g')
 
+#def fill-lift-action
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( g' : dhom B y z g E (action x y f x') z')
+  : dhom2 B x y z f g h σ E (action x x (id-hom B x) x') (action x y f x') z'
+    ( lift-action x y f x')
+    ( g')
+    ( comp-lift-action x y z f g h σ x' z' g')
+  :=
+  fill-over-is-inner-family' B E is-inner-E
+    x y z f g h σ
+    ( action x x (id-hom B x) x')
+    ( action x y f x') z'
+    ( lift-action x y f x')
+    ( g')
+
 ```
 
 We will do this by considering the map on total types
@@ -464,17 +485,36 @@ This triangle witnesses the left inverse law for our total map
 
 ```rzk
 
-#def is-section-tot-comp-lift-action uses (is-inner-E)
+#def is-section-tot-comp-lift-action uses (is-inner-E is-coherent-unital-action-action)
   ( x y z : B)
   ( f : hom B x y)
   ( g : hom B y z)
   ( h : hom B x z)
   ( σ : hom2 B x y z f g h)
-  ( g' : Σ (x' : E x) , darr-from B g E (action x y f x'))
-  : ( inv-tot-comp-lift-action x y z f g h σ
+  : ( g' : Σ (x' : E x) , darr-from B g E (action x y f x'))
+  → ( inv-tot-comp-lift-action x y z f g h σ
     ( tot-comp-lift-action x y z f g h σ g'))
     = g'
-  := ?
+  := \ (x' , g') →
+    eq-pullback-dom-projection-dhom2-ext-homotopy-inner-family
+      extext B E is-inner-E
+      x y z g
+      ( action x x (id-hom B x) x')
+      ( x')
+      ( g' 1₂)
+      ( is-unital-action x x')
+      ( action x y f)
+      ( action-id-dhom y z g (action x y f x') (g' 1₂) (\ t → g' t))
+      ( \ t → g' t)
+      ( \ t → is-unital-action (g t) (g' t))
+      ( inv-comp-lift-action x y z f g h σ
+        ( action x x (id-hom B x) x')
+        ( g' 1₂)
+        ( comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)))
+      ( degen-edge-action-dhom2-action x y z f g h σ x' (g' 1₂)
+        ( \ t → g' t)
+        ( comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t))
+        ( fill-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)))
 
 ```
 
