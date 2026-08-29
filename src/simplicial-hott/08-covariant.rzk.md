@@ -2175,6 +2175,75 @@ transported along an arrow f : hom A x y to give a term in C x.
       ( dhom-to A x y f C v)
       ( is-contravariant-C x y f v)
       ( lift))
+
+#def contravariant-uniqueness-curried
+  ( A : U)
+  ( x y : A)
+  ( f : hom A x y)
+  ( C : A → U)
+  ( is-contravariant-C : is-contravariant A C)
+  ( v : C y)
+  : ( u : C x)
+  → ( dhom A x y f C u v)
+  → ( contravariant-transport A x y f C is-contravariant-C v) = u
+  :=
+    \ u g → contravariant-uniqueness A x y f C is-contravariant-C v (u , g)
+```
+
+We show that for each `v : C y`, the map `contravariant-uniqueness` is an
+equivalence. This follows from the fact that the total types (summed over
+`u : C x`) of both sides are contractible.
+
+```rzk title="RS17, Lemma 8.15, dual"
+#def is-equiv-total-map-contravariant-uniqueness-curried
+  ( A : U)
+  ( x y : A)
+  ( f : hom A x y)
+  ( C : A → U)
+  ( is-contravariant-C : is-contravariant A C)
+  ( v : C y)
+  : is-equiv
+      ( Σ ( u : C x) , dhom A x y f C u v)
+      ( Σ ( u : C x)
+        , contravariant-transport A x y f C is-contravariant-C v = u)
+      ( total-map (C x)
+        ( \ u → dhom A x y f C u v)
+        ( \ u → contravariant-transport A x y f C is-contravariant-C v = u)
+        ( contravariant-uniqueness-curried A x y f C is-contravariant-C v))
+  :=
+    is-equiv-are-contr
+      ( Σ ( u : C x) , dhom A x y f C u v)
+      ( Σ ( u : C x)
+        , contravariant-transport A x y f C is-contravariant-C v = u)
+      ( is-contravariant-C x y f v)
+      ( is-contr-based-paths (C x)
+        ( contravariant-transport A x y f C is-contravariant-C v))
+      ( total-map (C x)
+        ( \ u → dhom A x y f C u v)
+        ( \ u → contravariant-transport A x y f C is-contravariant-C v = u)
+        ( contravariant-uniqueness-curried A x y f C is-contravariant-C v))
+
+#def is-equiv-contravariant-uniqueness-curried
+  ( A : U)
+  ( x y : A)
+  ( f : hom A x y)
+  ( C : A → U)
+  ( is-contravariant-C : is-contravariant A C)
+  ( v : C y)
+  ( u : C x)
+  : is-equiv
+      ( dhom A x y f C u v)
+      ( contravariant-transport A x y f C is-contravariant-C v = u)
+      ( contravariant-uniqueness-curried A x y f C is-contravariant-C v u)
+  :=
+    is-equiv-fiberwise-is-equiv-total
+      ( C x)
+      ( \ u' → dhom A x y f C u' v)
+      ( \ u' → contravariant-transport A x y f C is-contravariant-C v = u')
+      ( contravariant-uniqueness-curried A x y f C is-contravariant-C v)
+      ( is-equiv-total-map-contravariant-uniqueness-curried
+        A x y f C is-contravariant-C v)
+      u
 ```
 
 ## Contravariant functoriality
@@ -2364,4 +2433,235 @@ preservation of local types by equivalences.
   ( is-discrete-hom-is-segal A
     ( is-segal-is-discrete extext A is-discrete-A)
     ( x) (y))
+```
+
+## Naive right fibrations
+
+For any functor `p : Ĉ → A`, we can make a naive definition of what it means to
+be a right fibration.
+
+```rzk
+#def is-naive-right-fibration
+  ( A Ĉ : U)
+  ( p : Ĉ → A)
+  : U
+  :=
+    is-homotopy-cartesian
+      Ĉ (slice Ĉ)
+      A (slice A)
+      p (slice-fun Ĉ A p)
+
+```
+
+As a sanity check we unpack the definition of `is-naive-right-fibration`.
+
+```rzk
+#def is-naive-right-fibration-unpacked
+  ( A Ĉ : U)
+  ( p : Ĉ → A)
+  : is-naive-right-fibration A Ĉ p
+    = ( ( c : Ĉ) → is-equiv (slice Ĉ c) (slice A (p c)) (slice-fun Ĉ A p c))
+  := refl
+```
+
+### Naive right fibrations are right fibrations
+
+Recall that a map `α : A' → A` is called a right fibration if it is right
+orthogonal to the shape inclusion `{1} ⊂ Δ¹`.
+
+This notion agrees with that of a naive right fibration.
+
+```rzk
+#section is-right-fibration-is-naive-right-fibration
+
+#variables A' A : U
+#variable α : A' → A
+
+#def is-right-fibration-is-naive-right-fibration
+  ( is-nrf : is-naive-right-fibration A A' α)
+  : is-right-fibration A' A α
+  :=
+    \ a' →
+      is-equiv-equiv-is-equiv
+        ( slice' A' (a' 1₂)) (slice' A (α (a' 1₂)))
+        ( \ σ' t → α (σ' t))
+        ( slice A' (a' 1₂)) (slice A (α (a' 1₂)))
+        ( slice-fun A' A α (a' 1₂))
+        ( ( slice-slice' A' (a' 1₂) , slice-slice' A (α (a' 1₂)))
+        , \ _ → refl)
+        ( is-equiv-slice-slice' A' (a' 1₂))
+        ( is-equiv-slice-slice' A (α (a' 1₂)))
+        ( is-nrf (a' 1₂))
+
+#def is-naive-right-fibration-is-right-fibration
+  ( is-rf : is-right-fibration A' A α)
+  : is-naive-right-fibration A A' α
+  :=
+    \ a' →
+      is-equiv-equiv-is-equiv'
+        ( slice' A' a') (slice' A (α a'))
+        ( \ σ' t → α (σ' t))
+        ( slice A' a') (slice A (α a'))
+        ( slice-fun A' A α a')
+        ( ( slice-slice' A' a' , slice-slice' A (α a'))
+        , \ _ → refl)
+        ( is-equiv-slice-slice' A' a')
+        ( is-equiv-slice-slice' A (α a'))
+        ( is-rf (\ t → a'))
+
+#def is-naive-right-fibration-iff-is-right-fibration
+  : iff
+      ( is-naive-right-fibration A A' α)
+      ( is-right-fibration A' A α)
+  :=
+    ( is-right-fibration-is-naive-right-fibration
+    , is-naive-right-fibration-is-right-fibration)
+
+#end is-right-fibration-is-naive-right-fibration
+```
+
+### Naive right fibrations vs. contravariant families
+
+```rzk
+#section is-naive-right-fibration-is-contravariant-proof
+#variable A : U
+#variable a : A
+#variable C : A → U
+#variable c : C a
+
+#def temp-K9m2-slice-fun
+  : slice (total-type A C) (a , c) → slice A a
+  := slice-fun (total-type A C) A (\ (x , _) → x) (a , c)
+
+#def temp-K9m2-fib
+  ( a' : A)
+  ( f : hom A a' a)
+  : U
+  :=
+    fib (slice (total-type A C) (a , c))
+        ( slice A a)
+        ( temp-K9m2-slice-fun)
+        ( a' , f)
+
+#def temp-K9m2-forward
+  ( a' : A)
+  ( f : hom A a' a)
+  : dhom-to A a' a f C c → temp-K9m2-fib a' f
+  :=
+    \ (c' , f̂) → (((a' , c') , \ t → (f t , f̂ t)) , refl)
+
+#def temp-K9m2-has-section'-forward
+  ( ( a' , f) : slice A a)
+  ( u : temp-K9m2-fib a' f)
+  : U
+  := Σ (v : dhom-to A a' a f C c) , (temp-K9m2-forward a' f v = u)
+
+#def temp-K9m2-forward-section'
+  : ( ( a' , f) : slice A a)
+  → ( u : temp-K9m2-fib a' f)
+  → temp-K9m2-has-section'-forward (a' , f) u
+  :=
+    ind-fib
+      ( slice (total-type A C) (a , c))
+      ( slice A a)
+      ( temp-K9m2-slice-fun)
+      ( temp-K9m2-has-section'-forward)
+      ( \ ((a' , c') , ĝ) → ((c' , \ t → second (ĝ t)) , refl))
+
+#def temp-K9m2-has-inverse-forward
+  ( a' : A)
+  ( f : hom A a' a)
+  : has-inverse
+      ( dhom-to A a' a f C c)
+      ( temp-K9m2-fib a' f)
+      ( temp-K9m2-forward a' f)
+  :=
+    ( \ u → first (temp-K9m2-forward-section' (a' , f) u)
+  , ( \ _ → refl
+    , \ u → second (temp-K9m2-forward-section' (a' , f) u)
+    ))
+
+#def temp-K9m2-the-equivalence
+  ( a' : A)
+  ( f : hom A a' a)
+  : Equiv
+      ( dhom-to A a' a f C c)
+      ( temp-K9m2-fib a' f)
+  :=
+    ( ( temp-K9m2-forward a' f)
+    , is-equiv-has-inverse
+        ( dhom-to A a' a f C c)
+        ( temp-K9m2-fib a' f)
+        ( temp-K9m2-forward a' f)
+        ( temp-K9m2-has-inverse-forward a' f)
+    )
+
+#end is-naive-right-fibration-is-contravariant-proof
+```
+
+```rzk title="RS17, Theorem 8.5"
+#def is-naive-right-fibration-is-contravariant
+  ( A : U)
+  ( C : A → U)
+  ( is-contravariant-C : is-contravariant A C)
+  : is-naive-right-fibration A (total-type A C) (\ (a , _) → a)
+  :=
+    \ (a , c) →
+      is-equiv-is-contr-map
+        ( slice (total-type A C) (a , c))
+        ( slice A a)
+        ( temp-K9m2-slice-fun A a C c)
+        ( \ (a' , f) →
+          is-contr-equiv-is-contr
+            ( dhom-to A a' a f C c)
+            ( temp-K9m2-fib A a C c a' f)
+            ( temp-K9m2-the-equivalence A a C c a' f)
+            ( is-contravariant-C a' a f c)
+        )
+
+#def is-contravariant-is-naive-right-fibration
+  ( A : U)
+  ( C : A → U)
+  ( inrf-ΣC : is-naive-right-fibration A (total-type A C) (\ (a , _) → a))
+  : is-contravariant A C
+  :=
+    \ a' a f c →
+      is-contr-equiv-is-contr'
+        ( dhom-to A a' a f C c)
+        ( temp-K9m2-fib A a C c a' f)
+        ( temp-K9m2-the-equivalence A a C c a' f)
+        ( is-contr-map-is-equiv
+          ( slice (total-type A C) (a , c))
+          ( slice A a)
+          ( temp-K9m2-slice-fun A a C c)
+          ( inrf-ΣC (a , c))
+          ( a' , f)
+        )
+
+#def is-naive-right-fibration-iff-is-contravariant
+  ( A : U)
+  ( C : A → U)
+  :
+    iff
+      ( is-contravariant A C)
+      ( is-naive-right-fibration A (total-type A C) (\ (a , _) → a))
+  :=
+    ( is-naive-right-fibration-is-contravariant A C
+    , is-contravariant-is-naive-right-fibration A C)
+```
+
+## Total type of a contravariant family over a Segal type
+
+```rzk title="RS17, Theorem 8.8"
+#def is-segal-total-type-contravariant-family-is-segal-base uses (extext)
+  ( A : U)
+  ( C : A → U)
+  ( is-contravariant-C : is-contravariant A C)
+  : is-segal A → is-segal (total-type A C)
+  :=
+    is-segal-domain-right-fibration-is-segal-codomain extext
+      ( total-type A C) A (\ (a , _) → a)
+        ( is-right-fibration-is-naive-right-fibration
+            ( total-type A C) A (\ (a , _) → a)
+            ( is-naive-right-fibration-is-contravariant A C is-contravariant-C))
 ```

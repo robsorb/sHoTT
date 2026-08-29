@@ -63,7 +63,4 @@
     "editor.insertSpaces": true
   },
   "rzk.format.enable": true
-  // "[literate rzk markdown]": {
-  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
-  // }
 }
