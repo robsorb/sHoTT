@@ -405,7 +405,57 @@ sense that the coherence morphism is equal to the following canonical morphism
   ( x y : B) → (f : hom B x y) → (e : E x)
   → ( coherence-morphism-action x y f e) = (zig-zag-hom-unital-action x y f e)
 
+#assume is-coherent-unital-action-action : is-coherent-unital-action
 
+```
+
+We can use this to change the bottom edge of our pushed forward triangle
+`action-dhom2-action`.
+
+
+```rzk
+
+#def degen-edge-action-dhom2-action uses (is-unital-action)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( g' : dhom B y z g E (action x y f x') z')
+  ( h' : dhom B x z h E (action x x (id-hom B x) x') z')
+  ( σ' : dhom2 B x y z f g h σ E
+    ( action x x (id-hom B x) x')
+    ( action x y f x')
+    z'
+    ( lift-action x y f x')
+    g'
+    h')
+  : dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E
+    ( action x y f (action x x (id-hom B x) x'))
+    ( action y y (id-hom B y) (action x y f x'))
+    ( action z z (id-hom B z) z')
+    ( zig-zag-hom-unital-action x y f x')
+    ( action-id-dhom y z g (action x y f x') z' g')
+    ( inv-comp-lift-action x y z f g h σ (action x x (id-hom B x) x') z' h')
+  :=
+  transport
+    ( hom (E y)
+      ( action x y f (action x x (id-hom B x) x'))
+      ( action y y (id-hom B y) (action x y f x')))
+    ( \ c →
+      dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E
+        ( action x y f (action x x (id-hom B x) x'))
+        ( action y y (id-hom B y) (action x y f x'))
+        ( action z z (id-hom B z) z')
+        ( c)
+        ( action-id-dhom y z g (action x y f x') z' g')
+        ( inv-comp-lift-action x y z f g h σ (action x x (id-hom B x) x') z' h'))
+    ( coherence-morphism-action x y f x')
+    ( zig-zag-hom-unital-action x y f x')
+    ( is-coherent-unital-action-action x y f x')
+    ( action-dhom2-action x y z f g h σ x' z' g' h' σ')
 
 ```
 
