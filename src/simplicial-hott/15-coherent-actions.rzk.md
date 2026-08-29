@@ -56,7 +56,7 @@
 #end clamping
 ```
 
-## Horizontal morpihsms in a triangle
+## Horizontal morphisms in a triangle
 ```rzk
 
 #def hor-hom-hom2
