@@ -459,6 +459,25 @@ We can use this to change the bottom edge of our pushed forward triangle
 
 ```
 
+This triangle witnesses the left inverse law for our total map
+`tot-comp-lift-action`
+
+```rzk
+
+#def is-section-tot-comp-lift-action uses (is-inner-E)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( g' : Σ (x' : E x) , darr-from B g E (action x y f x'))
+  : ( inv-tot-comp-lift-action x y z f g h σ
+    ( tot-comp-lift-action x y z f g h σ g'))
+    = g'
+  := ?
+
+```
+
 
 ```rzk
 #end lift-action

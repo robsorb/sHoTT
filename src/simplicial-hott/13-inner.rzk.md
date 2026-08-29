@@ -16,6 +16,11 @@ This is a literate `rzk` file:
 ## Prerequisites
 
 
+```rzk
+#assume extext : ExtExt
+```
+
+
 
 
 ## Dependent arrows
@@ -257,6 +262,126 @@ This is a literate `rzk` file:
         ( forget-diagonal-dhom2 B x y z f g h σ E x' y' z' f' g' h' σ'))
 
 #end composition-is-inner-family
+
+```
+
+#### Dependent triangles with one degenerate edge induce equalities of dependent homs
+
+```rzk
+
+#def eq-dhom-dhom2-id-hom-inner-family
+  ( B : U)
+  ( E : B → U)
+  ( is-inner-E : is-inner-family B E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( f' : dhom B x y f E x' y')
+  ( f'' : dhom B x y f E x' y')
+  : dhom2 B x x y (id-hom B x) f f (id-comp-witness B x y f) E x' x' y'
+    ( id-hom (E x) x')
+    f''
+    f'
+  → f' = f''
+  :=
+  \ σ' →
+    eq-dhom-eq-dtriangle-with-horn
+      B x x y (id-hom B x) f f (id-comp-witness B x y f)
+      E x' x' y' (id-hom (E x) x') f''
+      f'
+      f''
+      σ'
+      ( \ (t , s) → f'' s)
+      ( all-elements-equal-is-contr
+        ( dtriangle-with-horn B x x y (id-hom B x) f f (id-comp-witness B x y f)
+          E x' x' y' (id-hom (E x) x') f'')
+        ( is-contr-fillers-inner-family B E is-inner-E
+          x x y (id-hom B x) f f (id-comp-witness B x y f)
+          x' x' y' (id-hom (E x) x') f'')
+        σ'
+        ( \ (t , s) → f'' s))
+
+```
+
+#### Utilities
+
+This is a special lemma used in the coherent actions proof
+
+```rzk
+
+#def eq-pullback-dom-projection-dhom2-ext-homotopy-inner-family
+  ( B : U)
+  ( E : B → U)
+  ( is-inner-E : is-inner-family B E)
+  ( x y z : B)
+  ( g : hom B y z)
+  ( x' x'' : E x)
+  ( z'' : E z)
+  ( p : x' = x'')
+  ( F : E x → E y)
+  ( g'' : (t : Δ¹) → E (g t))
+  ( g' : dhom B y z g E (F x'') z'')
+  ( H : (t : Δ¹) → g'' t =_{E (g t)} g' t)
+  :
+  ( h' : dhom B y z g E (F x') (g'' 1₂))
+  → ( dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E (F x') (g'' 0₂) (g'' 1₂)
+    ( hom-eq (E y) (F x') (g'' 0₂)
+      ( zig-zag-concat (E y)
+        ( F x')
+        ( F x'')
+        ( g'' 0₂)
+        ( ap (E x) (E y) (x') (x'') F p)
+        ( H 0₂)))
+    g''
+    h'
+  )
+  → ( x' , h') =_{Σ (e : E x) , darr-from B g E (F e)} (x'' , g')
+  :=
+  ind-ext-htpy-end extext 2 Δ¹ (\ _ → BOT) (\ t → E (g t)) (\ _ → recBOT)
+    g'
+    ( \ g'' H →
+      ( h' : dhom B y z g E (F x') (g'' 1₂))
+    → ( dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E (F x') (g'' 0₂) (g'' 1₂)
+        ( hom-eq (E y) (F x') (g'' 0₂)
+          ( zig-zag-concat (E y)
+            ( F x')
+            ( F x'')
+            ( g'' 0₂)
+            ( ap (E x) (E y) (x') (x'') F p)
+            ( H 0₂)))
+        g''
+        h'
+      )
+      → ( x' , h') =_{Σ (e : E x) , darr-from B g E (F e)} (x'' , g'))
+    ( \ h' σ' →
+      ind-path
+        ( E x)
+        x'
+        ( \ x'' p →
+          ( g' : dhom B y z g E (F x'') z'')
+        → ( dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E
+            ( F x') (F x'') (z'')
+            ( hom-eq (E y) (F x') (F x'') (ap (E x) (E y) x' x'' F p))
+            g'
+            h')
+          → ( x' , h') =_{Σ (e : E x) , darr-from B g E (F e)} (x'' , g'))
+        ( \ g' σ' →
+          ap
+            ( dhom B y z g E (F x') z'')
+            ( Σ ( e : E x) , darr-from B g E (F e))
+            h'
+            g'
+            ( \ k → (x' , k))
+            ( eq-dhom-dhom2-id-hom-inner-family B E is-inner-E
+              y z g
+              ( F x') (z'')
+              h'
+              g'
+              σ'))
+        x'' p
+        g' σ')
+    g'' H
 
 ```
 
