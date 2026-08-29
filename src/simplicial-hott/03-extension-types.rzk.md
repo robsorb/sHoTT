@@ -1353,6 +1353,55 @@ pointwise.
 #end pointwise-homotopy-extension-type
 ```
 
+### Extension homotopy induction
+
+A path induction principle for homotopies of extension types
+
+```rzk
+
+#def ext-htpy
+  ( I : CUBE)
+  ( ψ : I → TOPE)
+  ( ϕ : ψ → TOPE)
+  ( A : ψ → U)
+  ( a : (t : ϕ) → A t)
+  ( f : (t : ψ) → A t [ϕ t ↦ a t])
+  ( g : (t : ψ) → A t [ϕ t ↦ a t])
+  : U
+  := (t : ψ) → (f t =_{A t} g t) [ϕ t ↦ refl]
+
+#def refl-ext-htpy
+  ( I : CUBE)
+  ( ψ : I → TOPE)
+  ( ϕ : ψ → TOPE)
+  ( A : ψ → U)
+  ( a : (t : ϕ) → A t)
+  ( f : (t : ψ) → A t [ϕ t ↦ a t])
+  : ext-htpy I ψ ϕ A a f f
+  := \ t → refl
+
+#def ind-ext-htpy
+  ( I : CUBE)
+  ( ψ : I → TOPE)
+  ( ϕ : ψ → TOPE)
+  ( A : ψ → U)
+  ( a : (t : ϕ) → A t)
+  ( f : (t : ψ) → A t [ϕ t ↦ a t])
+  ( C : (g : (t : ψ) → A t [ϕ t ↦ a t]) → (ext-htpy I ψ ϕ A a f g) → U)
+  ( d : C f (refl-ext-htpy I ψ ϕ A a f))
+  ( g : (t : ψ) → A t [ϕ t ↦ a t])
+  ( H : (t : ψ) → (f t =_{A t} g t) [ϕ t ↦ refl])
+  : C g (ext-htpy-eq I ψ ϕ A a f g (naiveextext-extext extext I ψ ϕ A a f g H))
+  := ind-path
+    ( ( t : ψ) → A t [ϕ t ↦ a t])
+    f
+    ( \ g p → C g (ext-htpy-eq I ψ ϕ A a f g p))
+    d
+    g
+    ( naiveextext-extext extext I ψ ϕ A a f g H)
+```
+
+
 ## Relative extension types
 
 Given a map `α : A' → A`, there is also a notion of relative extension types.
