@@ -187,7 +187,7 @@ over the codomain of `f`, which we call the coherence morphism.
 
 ### Pushforward of dependent triangles
 
-Any dependent tiangle, with bottom edge being the lift induced by the action,
+Any dependent triangle, with bottom edge being the lift induced by the action,
 can be pushed forward to a triangle involving, the inverse to composition with
 the lift and the coherence morphism.
 
@@ -288,7 +288,7 @@ We will do this by considering the map on total types
 
 ```
 
-The lift over our triangle witnesses the right inverse law
+The lift over our triangle almost witnesses the right inverse law
 
 ```rzk
 
@@ -316,7 +316,7 @@ The lift over our triangle witnesses the right inverse law
 
 ```
 
-To make this work we need to assume that our action is unital
+For the next part of the argument we need to assume that the action is unital
 
 ```rzk
 #variable is-unital-action :
