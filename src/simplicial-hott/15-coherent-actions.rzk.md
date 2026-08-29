@@ -185,6 +185,45 @@ over the codomain of `f`, which we call the coherence morphism.
 
 ```
 
+### Pushforward of dependent triangles
+
+Any dependent tiangle, with bottom edge being the lift induced by the action,
+can be pushed forward to a triangle involving, the inverse to composition with
+the lift and the coherence morphism.
+
+```rzk
+
+#def action-dhom2-action
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( g' : dhom B y z g E (action x y f x') z')
+  ( h' : dhom B x z h E (action x x (id-hom B x) x') z')
+  ( σ' : dhom2 B x y z f g h σ E
+    ( action x x (id-hom B x) x')
+    ( action x y f x')
+    z'
+    ( lift-action x y f x')
+    g'
+    h')
+  : dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E
+    ( action x y f (action x x (id-hom B x) x'))
+    ( action y y (id-hom B y) (action x y f x'))
+    ( action z z (id-hom B z) z')
+    ( coherence-morphism-action x y f x')
+    ( action-id-dhom y z g (action x y f x') z' g')
+    ( inv-comp-lift-action x y z f g h σ (action x x (id-hom B x) x') z' h')
+  := \ (t , s) →
+    action (σ (t , s)) (g s)
+      ( clamp-below B (hor-hom-hom2 B x y z f g h σ s) t)
+      ( σ' (t , s))
+
+```
+
 ## Composing with lifts
 
 Now we will assume that our family is inner
