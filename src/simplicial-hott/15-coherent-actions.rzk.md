@@ -251,6 +251,33 @@ The lift over our triangle witnesses the right inverse law
     ( action-id-dhom x z h x' z' h')
     ( lift-2-action x y z f g h σ x' z' h')
 
+#def is-retraction-tot-comp-lift-action uses (is-inner-E action)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  ( h' : dhom B x z h E x' z')
+  : tot-comp-lift-action x y z f g h σ
+    ( inv-tot-comp-lift-action x y z f g h σ h')
+    = h'
+  := concat ((t : Δ¹) → E (h t))
+    ( tot-comp-lift-action x y z f g h σ
+      ( inv-tot-comp-lift-action x y z f g h σ h'))
+    ( action-id-dhom x z h x' z' (h'))
+    h'
+    ( ap
+      ( dhom B x z h E (action x x (id-hom B x) x') (action z z (id-hom B z) z'))
+      ( ( t : Δ¹) → E (h t))
+      ( comp-lift-action x y z f g h σ x' (action z z (id-hom B z) z')
+        ( inv-comp-lift-action x y z f g h σ x' z' h'))
+      ( action-id-dhom x z h x' z' h')
+      ( \ h' → \ t → h' t)
+      ( comp-lift-action-inv-lift-action-is-action-id-dhom-action x y z f g h σ x' z' h'))
+    ?q
+
 ```
 
 
