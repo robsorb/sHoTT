@@ -1411,6 +1411,38 @@ A path induction principle for homotopies of extension types
       d
       g
       ( naiveextext-extext extext I ψ ϕ A a f g H))
+
+#def ind-ext-htpy-end
+  ( I : CUBE)
+  ( ψ : I → TOPE)
+  ( ϕ : ψ → TOPE)
+  ( A : ψ → U)
+  ( a : (t : ϕ) → A t)
+  ( f : (t : ψ) → A t [ϕ t ↦ a t])
+  ( C : (g : (t : ψ) → A t [ϕ t ↦ a t]) → (ext-htpy I ψ ϕ A a g f) → U)
+  ( d : C f (refl-ext-htpy I ψ ϕ A a f))
+  ( g : (t : ψ) → A t [ϕ t ↦ a t])
+  ( H : ext-htpy I ψ ϕ A a g f)
+  : C g H
+  :=
+  transport
+    ( ext-htpy I ψ ϕ A a g f)
+    ( C g)
+    ( ext-htpy-eq I ψ ϕ A a g f (naiveextext-extext extext I ψ ϕ A a g f H))
+    H
+    ( is-section-retraction-is-equiv
+      ( g = f)
+      ( ( t : ψ) → (g t =_{A t} f t) [ϕ t ↦ refl])
+      ( ext-htpy-eq I ψ ϕ A a g f)
+      ( extext I ψ ϕ A a g f)
+      H)
+    ( ind-path-end
+      ( ( t : ψ) → A t [ϕ t ↦ a t])
+      f
+      ( \ g p → C g (ext-htpy-eq I ψ ϕ A a g f p))
+      d
+      g
+      ( naiveextext-extext extext I ψ ϕ A a g f H))
 ```
 
 
