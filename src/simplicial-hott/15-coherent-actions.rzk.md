@@ -166,13 +166,33 @@ the right inverse law
 
 ```
 
+### The coherence morphism
+
+There is always a dependent morphism `f_* id_* e -> id_* f_* e` in the fiber
+over the codomain of `f`, which we call the coherence morphism.
+
+```rzk
+
+#def coherence-morphism-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : hom (E y)
+    ( action x y f (action x x (id-hom B x) e))
+    ( action y y (id-hom B y) (action x y f e))
+  := \ t →
+    ( action (f t) y (clamp-below B f t) (action x (f t) (clamp-above B f t) e))
+
+```
+
 ## Composing with lifts
 
 Now we will assume that our family is inner
 
 ```rzk
 
-#variable is-inner-E : is-inner-family B E
+#variable is-inner-E
+  : is-inner-family B E
 
 ```
 
