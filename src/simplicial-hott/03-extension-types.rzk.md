@@ -1390,15 +1390,22 @@ A path induction principle for homotopies of extension types
   ( C : (g : (t : ψ) → A t [ϕ t ↦ a t]) → (ext-htpy I ψ ϕ A a f g) → U)
   ( d : C f (refl-ext-htpy I ψ ϕ A a f))
   ( g : (t : ψ) → A t [ϕ t ↦ a t])
-  ( H : (t : ψ) → (f t =_{A t} g t) [ϕ t ↦ refl])
-  : C g (ext-htpy-eq I ψ ϕ A a f g (naiveextext-extext extext I ψ ϕ A a f g H))
-  := ind-path
-    ( ( t : ψ) → A t [ϕ t ↦ a t])
-    f
-    ( \ g p → C g (ext-htpy-eq I ψ ϕ A a f g p))
-    d
-    g
-    ( naiveextext-extext extext I ψ ϕ A a f g H)
+  ( H : ext-htpy I ψ ϕ A a f g)
+  : C g H
+  :=
+  transport
+    ( ext-htpy I ψ ϕ A a f g)
+    ( C g)
+    ( ext-htpy-eq I ψ ϕ A a f g (naiveextext-extext extext I ψ ϕ A a f g H))
+    H
+    ?p
+    ( ind-path
+      ( ( t : ψ) → A t [ϕ t ↦ a t])
+      f
+      ( \ g p → C g (ext-htpy-eq I ψ ϕ A a f g p))
+      d
+      g
+      ( naiveextext-extext extext I ψ ϕ A a f g H))
 ```
 
 

@@ -86,6 +86,34 @@ We define equivalences to be bi-invertible maps.
 #end equivalence-data
 ```
 
+## The retraction of an equivalence is also a section
+
+```rzk
+
+#def is-section-retraction-is-equiv
+  ( A B : U)
+  ( f : A → B)
+  ( is-equiv-f : is-equiv A B f)
+  : homotopy B B (comp B A B f (retraction-is-equiv A B f is-equiv-f)) (identity B)
+  :=
+  \ b →
+    concat
+      B
+      ( f (retraction-is-equiv A B f is-equiv-f b))
+      ( f (section-is-equiv A B f is-equiv-f b))
+      b
+      ( ap A B
+        ( retraction-is-equiv A B f is-equiv-f b)
+        ( section-is-equiv A B f is-equiv-f b)
+        f
+        ( rev A
+          ( section-is-equiv A B f is-equiv-f b)
+          ( retraction-is-equiv A B f is-equiv-f b)
+          ( homotopy-section-retraction-is-equiv A B f is-equiv-f b)))
+      ( second (second is-equiv-f) b)
+
+```
+
 ## Invertible maps
 
 The following type of more coherent equivalences is not a proposition.
