@@ -366,6 +366,49 @@ Now we can show that our total map has a right inverse
 
 ```
 
+For the left inverse we will need to assume that our action is coherent, in the
+sense that the coherence morphism is equal to the following canonical morphism
+
+```rzk
+
+#def zig-zag-hom-unital-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : hom (E y)
+    ( action x y f (action x x (id-hom B x) e))
+    ( action y y (id-hom B y) (action x y f e))
+  :=
+  hom-eq (E y)
+    ( action x y f (action x x (id-hom B x) e))
+    ( action y y (id-hom B y) (action x y f e))
+    ( zig-zag-concat (E y)
+      ( action x y f (action x x (id-hom B x) e))
+      ( action x y f e)
+      ( action y y (id-hom B y) (action x y f e))
+      ( ap
+        ( E x)
+        ( E y)
+        ( action x x (id-hom B x) e)
+        ( e)
+        ( action x y f)
+        ( is-unital-action x e))
+      ( is-unital-action y (action x y f e)))
+
+```
+
+```rzk
+
+#def is-coherent-unital-action uses (is-unital-action)
+  : U
+  :=
+  ( x y : B) → (f : hom B x y) → (e : E x)
+  → ( coherence-morphism-action x y f e) = (zig-zag-hom-unital-action x y f e)
+
+
+
+```
+
 
 ```rzk
 #end lift-action
