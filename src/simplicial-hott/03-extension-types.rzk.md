@@ -1398,7 +1398,12 @@ A path induction principle for homotopies of extension types
     ( C g)
     ( ext-htpy-eq I ψ ϕ A a f g (naiveextext-extext extext I ψ ϕ A a f g H))
     H
-    ?p
+    ( is-section-retraction-is-equiv
+      ( f = g)
+      ( ( t : ψ) → (f t =_{A t} g t) [ϕ t ↦ refl])
+      ( ext-htpy-eq I ψ ϕ A a f g)
+      ( extext I ψ ϕ A a f g)
+      H)
     ( ind-path
       ( ( t : ψ) → A t [ϕ t ↦ a t])
       f
