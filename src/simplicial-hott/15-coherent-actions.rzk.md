@@ -212,6 +212,17 @@ We will do this by considering the map on total types
   := \ (x' , g') → comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)
 
 
+#def inv-tot-comp-lift-action
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  :
+  ( ( t : Δ¹) → E (h t))
+  → ( Σ ( x' : E x) , darr-from B g E (action x y f x'))
+  := \ h' → (h' 0₂ , inv-comp-lift-action x y z f g h σ (h' 0₂) (h' 1₂) h')
+
 ```
 
 The lift over our triangle witnesses the right inverse law
