@@ -4,6 +4,10 @@
 #lang rzk-1
 ```
 
+```rzk
+#assume extext : ExtExt
+```
+
 
 
 ## Clamping morphisms
@@ -251,6 +255,21 @@ The lift over our triangle witnesses the right inverse law
     ( action-id-dhom x z h x' z' h')
     ( lift-2-action x y z f g h σ x' z' h')
 
+```
+
+To make this work we need to assume that our action is unital
+
+```rzk
+#variable is-unital-action :
+  ( x : B)
+  → ( e : E x)
+  → action x x (id-hom B x) e = e
+```
+
+Now we can show that our total map has a right inverse
+
+```rzk
+
 #def is-retraction-tot-comp-lift-action uses (is-inner-E action)
   ( x y z : B)
   ( f : hom B x y)
@@ -276,7 +295,15 @@ The lift over our triangle witnesses the right inverse law
       ( action-id-dhom x z h x' z' h')
       ( \ h' → \ t → h' t)
       ( comp-lift-action-inv-lift-action-is-action-id-dhom-action x y z f g h σ x' z' h'))
-    ?q
+    ( naiveextext-extext extext
+      2
+      Δ¹
+      ( \ _ → BOT)
+      ( \ t → E (h t))
+      ( \ _ → recBOT)
+      ( action-id-dhom x z h x' z' (h'))
+      h'
+      ( \ t → is-unital-action (h t) (h' t)))
 
 ```
 
