@@ -50,6 +50,85 @@ this is preferred for usage.
         , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
 ```
 
+### An arrow is cocartesian if and only if post-composition is an equivalence
+
+```rzk
+
+#def is-cocartesian-arrow-is-equiv-comp-over-is-inner
+  ( B : U)
+  ( P : B → U)
+  ( is-inner-P : is-inner-family B P)
+  ( b b' : B)
+  ( u : hom B b b')
+  ( e : P b)
+  ( e' : P b')
+  ( f : dhom B b b' u P e e')
+  : ( ( b'' : B) → (v : hom B b' b'') → (w : hom B b b'')
+    → ( sigma : hom2 B b b' b'' u v w) → (e'' : P b'')
+    → is-equiv
+      ( dhom B b' b'' v P e' e'')
+      ( dhom B b b'' w P e e'')
+      ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f))
+  → is-cocartesian-arrow  B b b' u P e e' f
+  :=
+  \ is-equiv-comp b'' v w sigma e'' h →
+    is-contr-equiv-is-contr
+      ( fib
+        ( dhom B b' b'' v P e' e'')
+        ( dhom B b b'' w P e e'')
+        ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+        h)
+      ( Σ ( g : dhom B b' b'' v P e' e'')
+        , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
+      ( equiv-fib-comp-tot-dhom2 B P is-inner-P b b' b'' u v w sigma e e' e'' f h)
+      ( is-contr-map-is-equiv
+        ( dhom B b' b'' v P e' e'')
+        ( dhom B b b'' w P e e'')
+        ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+        ( is-equiv-comp b'' v w sigma e'')
+        ( h))
+
+#def is-equiv-comp-over-is-inner-is-cocartesian-arrow
+  ( B : U)
+  ( P : B → U)
+  ( is-inner-P : is-inner-family B P)
+  ( b b' : B)
+  ( u : hom B b b')
+  ( e : P b)
+  ( e' : P b')
+  ( f : dhom B b b' u P e e')
+  ( is-cocart-f : is-cocartesian-arrow  B b b' u P e e' f)
+  ( b'' : B)
+  ( v : hom B b' b'')
+  ( w : hom B b b'')
+  ( sigma : hom2 B b b' b'' u v w)
+  ( e'' : P b'')
+  : is-equiv
+    ( dhom B b' b'' v P e' e'')
+    ( dhom B b b'' w P e e'')
+    ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+  := i
+  s-equiv-is-contr-map
+    ( dhom B b' b'' v P e' e'')
+    ( dhom B b b'' w P e e'')
+    ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+    ( \ h →
+      is-contr-equiv-is-contr'
+        ( fib
+          ( dhom B b' b'' v P e' e'')
+          ( dhom B b b'' w P e e'')
+          ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w
+            sigma e e' e'' f)
+          ( h))
+        ( Σ ( g : dhom B b' b'' v P e' e'')
+        , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
+        ( equiv-fib-comp-tot-dhom2 B P is-inner-P b b' b'' u v w
+          sigma e e' e'' f h)
+        ( is-cocart-f b'' v w sigma e'' h))
+
+```
+
+
 ## Cocartesian lifts
 
 The following is the type of cocartesian lifts of a fixed arrow in the base with
