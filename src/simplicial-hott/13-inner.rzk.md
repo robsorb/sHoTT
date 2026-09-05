@@ -122,6 +122,60 @@ This is a literate `rzk` file:
 
 ```
 
+### Triangles with fixed spine in terms of sigma types
+
+```rzk
+
+#def dtriangle-with-horn'
+  ( B : U)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( E : B → U)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  : U
+  := Σ (h' : dhom B x z h E x' z') , dhom2 B x y z f g h σ E x' y' z' f' g' h'
+
+```
+
+These two types are equivalent.
+
+```rzk
+
+#def equiv-dtriangle-with-horn-dtriangle-with-horn'
+  ( B : U)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( E : B → U)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  : Equiv
+    ( dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+    ( dtriangle-with-horn' B x y z f g h σ E x' y' z' f' g')
+  := equiv-has-inverse
+    ( dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+    ( dtriangle-with-horn' B x y z f g h σ E x' y' z' f' g')
+    ( \ σ' → (\ t → σ' (t , t) , \ t → σ' t))
+    ( \ (h' , σ') → σ')
+    ( \ σ' → refl)
+    ( \ σ' → refl)
+
+```
+
+
+
 ### If dependent triangles are equal up to their diagonal, then the diagonals are equal
 
 ```rzk
@@ -199,6 +253,19 @@ This is a literate `rzk` file:
     σ
     ( \ (s , t) → recOR (t ≡ 0₂ ↦ f' s , s ≡ 1₂ ↦ g' t))
 
+#def is-contr-fillers'-inner-family uses (is-inner-E)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  : is-contr (dtriangle-with-horn' B x y z f g h σ E x' y' z' f' g')
+  := is-contr-equiv-is-contr
+    ( dtriangle-with-horn B x y z f g h σ E x' y' z' f' g')
+    ( dtriangle-with-horn' B x y z f g h σ E x' y' z' f' g')
+    ( equiv-dtriangle-with-horn-dtriangle-with-horn' B x y z f g h σ
+      E x' y' z' f' g')
+    ( is-contr-fillers-inner-family x' y' z' f' g')
 
 #def fill-over-is-inner-family uses (is-inner-E)
   ( x' : E x)
@@ -272,6 +339,48 @@ This is a literate `rzk` file:
       ( σ')
       ( unqiue-fill-over-is-inner-family x' y' z' f' g'
         ( forget-diagonal-dhom2 B x y z f g h σ E x' y' z' f' g' h' σ'))
+
+
+#def equiv-eq-dhom2-is-inner-family uses (is-inner-E)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( g' : dhom B y z g E y' z')
+  ( h' : dhom B x z h E x' z')
+  : Equiv
+    ( comp-over-is-inner-family x' y' z' f' g' = h')
+    ( dhom2 B x y z f g h σ E x' y' z' f' g' h')
+  :=
+  second
+    ( first
+      ( fundamental-theorem-of-identity-types
+        ( dhom B x z h E x' z')
+        ( \ h' → dhom2 B x y z f g h σ E x' y' z' f' g' h'))
+      ( is-contr-fillers'-inner-family x' y' z' f' g'))
+    ( h')
+
+
+#def equiv-fib-comp-tot-dhom2 uses (is-inner-E)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E z)
+  ( f' : dhom B x y f E x' y')
+  ( h' : dhom B x z h E x' z')
+  : Equiv
+    ( fib
+      ( dhom B y z g E y' z')
+      ( dhom B x z h E x' z')
+      ( comp-over-is-inner-family x' y' z' f')
+      ( h'))
+    ( Σ ( g' : dhom B y z g E y' z')
+    , dhom2 B x y z f g h σ E x' y' z' f' g' h')
+  :=
+  total-equiv-family-of-equiv
+    ( dhom B y z g E y' z')
+    ( \ g' → comp-over-is-inner-family x' y' z' f' g' = h')
+    ( \ g' → dhom2 B x y z f g h σ E x' y' z' f' g' h')
+    ( \ g' → equiv-eq-dhom2-is-inner-family x' y' z' f' g' h')
 
 #end composition-is-inner-family
 
