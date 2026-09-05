@@ -337,6 +337,8 @@ The lift over our triangle almost witnesses the right inverse law
 
 ```
 
+## Unital actions
+
 For the next part of the argument we need to assume that the action is unital
 
 ```rzk
@@ -345,6 +347,8 @@ For the next part of the argument we need to assume that the action is unital
   → ( e : E x)
   → action x x (id-hom B x) e = e
 ```
+
+### The right inverse law
 
 Now we can show that our total map has a right inverse
 
@@ -386,6 +390,8 @@ Now we can show that our total map has a right inverse
       ( \ t → is-unital-action (h t) (h' t)))
 
 ```
+
+## Coherent actions
 
 For the left inverse we will need to assume that our action is coherent, in the
 sense that the coherence morphism is equal to the following canonical morphism
@@ -479,6 +485,8 @@ We can use this to change the bottom edge of our pushed forward triangle
     ( action-dhom2-action x y z f g h σ x' z' g' h' σ')
 
 ```
+
+### Left inverse law
 
 This triangle witnesses the left inverse law for our total map
 `tot-comp-lift-action`
