@@ -672,7 +672,79 @@ Finally, we show that the other endpoint can also be fixed
 
 ```
 
+It follows that our lift is indeed a cocartesian morphism.
+
+```rzk
+
+#def is-cocartesian-arrow-lift-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  : is-cocartesian-arrow B x y f E
+    ( action x x (id-hom B x) x')
+    ( action x y f x')
+    ( lift-action x y f x')
+  :=
+  is-cocartesian-arrow-is-equiv-comp-over-is-inner B E is-inner-E x y f
+    ( action x x (id-hom B x) x')
+    ( action x y f x')
+    ( lift-action x y f x')
+    ( \ z g h σ z' → is-equiv-comp-lift-action x y z f g h σ x' z')
+
+```
 
 ```rzk
 #end lift-action
+```
+
+It follows that all morpshisms have cocartesian lifts
+
+```rzk
+
+#def has-cocartesian-lifts-coherent-action uses (extext)
+  ( B : U)
+  ( E : B → U)
+  ( is-inner-E : is-inner-family B E)
+  ( action : (x y : B) → hom B x y → E x → E y)
+  ( is-unital-action : (x : B) → (e : E x) → action x x (id-hom B x) e = e)
+  ( is-coherent-unital-action-action :
+    is-coherent-unital-action B E action is-unital-action)
+  : has-cocartesian-lifts B E
+  :=
+  \ x y f x' →
+    transport
+      ( E x)
+      ( \ x' →
+        Σ ( y' : E y)
+      , Σ ( f' : dhom B x y f E x' y')
+      , is-cocartesian-arrow B x y f E x' y' f')
+      ( action x x (id-hom B x) x')
+      x'
+      ( is-unital-action x x')
+      ( action x y f x'
+      , ( lift-action B E action x y f x'
+        , is-cocartesian-arrow-lift-action B E
+          action
+          is-inner-E
+          is-unital-action
+          is-coherent-unital-action-action
+          x y f x'))
+
+#def is-cocartesian-coherent-action uses (extext)
+  ( B : U)
+  ( E : B → U)
+  ( is-iso-inner-E : is-isoinner-family B E)
+  ( action : (x y : B) → hom B x y → E x → E y)
+  ( is-unital-action : (x : B) → (e : E x) → action x x (id-hom B x) e = e)
+  ( is-coherent-unital-action-action :
+    is-coherent-unital-action B E action is-unital-action)
+  : is-cocartesian-family B E
+  :=
+  ( is-iso-inner-E
+  , has-cocartesian-lifts-coherent-action B E
+    ( first (is-iso-inner-E))
+    action
+    is-unital-action
+    is-coherent-unital-action-action)
+
 ```
