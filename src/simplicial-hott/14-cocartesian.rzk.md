@@ -107,8 +107,8 @@ this is preferred for usage.
     ( dhom B b' b'' v P e' e'')
     ( dhom B b b'' w P e e'')
     ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
-  := i
-  s-equiv-is-contr-map
+  :=
+  is-equiv-is-contr-map
     ( dhom B b' b'' v P e' e'')
     ( dhom B b b'' w P e e'')
     ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
