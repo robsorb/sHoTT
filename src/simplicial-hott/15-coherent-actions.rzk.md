@@ -623,6 +623,54 @@ First we show that we obtain an equivalence when one endpoint is fixed.
 
 ```
 
+Finally, we show that the other endpoint can also be fixed
+
+```rzk
+
+#def is-equiv-comp-lift-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  ( z' : E z)
+  : is-equiv
+    ( dhom B y z g E (action x y f x') z')
+    ( dhom B x z h E (action x x (id-hom B x) x') z')
+    ( comp-lift-action x y z f g h σ x' z')
+  :=
+  is-equiv-fiberwise-is-equiv-total
+    ( E z)
+    ( dhom B y z g E (action x y f x'))
+    ( dhom B x z h E (action x x (id-hom B x) x'))
+    ( comp-lift-action x y z f g h σ x')
+    ( is-equiv-left-factor
+      ( darr-from B g E (action x y f x'))
+      ( Σ ( z' : E z) , dhom B y z g E (action x y f x') z')
+      ( Σ ( z' : E z) , dhom B x z h E (action x x (id-hom B x) x') z')
+      ( \ g' → (g' 1₂ , \ t → g' t))
+      ( is-equiv-has-inverse
+        ( darr-from B g E (action x y f x'))
+        ( Σ ( z' : E z) , dhom B y z g E (action x y f x') z')
+        ( \ g' → (g' 1₂ , \ t → g' t))
+        ( \ (z' , g') → g' , (\ g' → refl , \ g' → refl)))
+      ( \ (z' , g') → (z' , comp-lift-action x y z f g h σ x' z' g'))
+      ( is-equiv-right-factor
+        ( darr-from B g E (action x y f x'))
+        ( Σ ( z' : E z) , dhom B x z h E (action x x (id-hom B x) x') z')
+        ( darr-from B h E (action x x (id-hom B x) x'))
+        ( \ g' → (g' 1₂ , comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)))
+        ( \ (z' , g') → g')
+        ( is-equiv-has-inverse
+          ( Σ ( z' : E z) , dhom B x z h E (action x x (id-hom B x) x') z')
+          ( darr-from B h E (action x x (id-hom B x) x'))
+          ( \ (z' , g') → g')
+          ( \ g' → (g' 1₂ , \ t → g' t) , (\ g' → refl , \ g' → refl)))
+        ( is-equiv-comp-lift-darr-from-action x y z f g h σ x')))
+    z'
+
+```
 
 
 ```rzk
