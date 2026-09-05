@@ -32,6 +32,26 @@ cocartesian. This is an alternative version using unpacked extension types, as
 this is preferred for usage.
 
 ```rzk title="BW23, Definition 5.1.1"
+
+#def is-cocartesian-arrow-over
+  ( B : U)
+  ( b b' b'' : B)
+  ( u : hom B b b')
+  ( v : hom B b' b'')
+  ( w : hom B b b'')
+  ( sigma : hom2 B b b' b'' u v w)
+  ( P : B → U)
+  ( e : P b)
+  ( e' : P b')
+  ( e'' : P b'')
+  ( f : dhom B b b' u P e e')
+  : U
+  :=
+  ( h : dhom B b b'' w P e e'')
+  → is-contr
+    ( Σ ( g : dhom B b' b'' v P e' e'')
+    , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
+
 #def is-cocartesian-arrow
   ( B : U)
   ( b b' : B)
@@ -44,15 +64,49 @@ this is preferred for usage.
   :=
     ( b'' : B) → (v : hom B b' b'') → (w : hom B b b'')
     → ( sigma : hom2 B b b' b'' u v w) → (e'' : P b'')
-    → ( h : dhom B b b'' w P e e'')
-    → is-contr
-        ( Σ ( g : dhom B b' b'' v P e' e'')
-        , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
+    → is-cocartesian-arrow-over B b b' b'' u v w sigma P e e' e'' f
 ```
 
 ### An arrow is cocartesian if and only if post-composition is an equivalence
 
 ```rzk
+
+#def is-cocartesian-arrow-over-is-equiv-comp-over-is-inner
+  ( B : U)
+  ( P : B → U)
+  ( is-inner-P : is-inner-family B P)
+  ( b b' b'' : B)
+  ( u : hom B b b')
+  ( v : hom B b' b'')
+  ( w : hom B b b'')
+  ( sigma : hom2 B b b' b'' u v w)
+  ( e : P b)
+  ( e' : P b')
+  ( e'' : P b'')
+  ( f : dhom B b b' u P e e')
+  : is-equiv
+      ( dhom B b' b'' v P e' e'')
+      ( dhom B b b'' w P e e'')
+      ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+  → is-cocartesian-arrow-over B b b' b'' u v w sigma P e e' e'' f
+  :=
+  \ is-equiv-comp h →
+    is-contr-equiv-is-contr
+      ( fib
+        ( dhom B b' b'' v P e' e'')
+        ( dhom B b b'' w P e e'')
+        ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+        h)
+      ( Σ ( g : dhom B b' b'' v P e' e'')
+        , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
+      ( equiv-fib-comp-tot-dhom2 B P is-inner-P b b' b'' u v w sigma e e' e'' f h)
+      ( is-contr-map-is-equiv
+        ( dhom B b' b'' v P e' e'')
+        ( dhom B b b'' w P e e'')
+        ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+        ( is-equiv-comp)
+        ( h))
+
 
 #def is-cocartesian-arrow-is-equiv-comp-over-is-inner
   ( B : U)
@@ -71,38 +125,25 @@ this is preferred for usage.
       ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f))
   → is-cocartesian-arrow  B b b' u P e e' f
   :=
-  \ is-equiv-comp b'' v w sigma e'' h →
-    is-contr-equiv-is-contr
-      ( fib
-        ( dhom B b' b'' v P e' e'')
-        ( dhom B b b'' w P e e'')
-        ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
-        h)
-      ( Σ ( g : dhom B b' b'' v P e' e'')
-        , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
-      ( equiv-fib-comp-tot-dhom2 B P is-inner-P b b' b'' u v w sigma e e' e'' f h)
-      ( is-contr-map-is-equiv
-        ( dhom B b' b'' v P e' e'')
-        ( dhom B b b'' w P e e'')
-        ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
-        ( is-equiv-comp b'' v w sigma e'')
-        ( h))
+  \ is-equiv-comp b'' v w sigma e'' →
+    is-cocartesian-arrow-over-is-equiv-comp-over-is-inner
+      B P is-inner-P b b' b'' u v w sigma e e' e'' f
+      ( is-equiv-comp b'' v w sigma e'')
 
-#def is-equiv-comp-over-is-inner-is-cocartesian-arrow
+#def is-equiv-comp-over-is-inner-is-cocartesian-arrow-over
   ( B : U)
   ( P : B → U)
   ( is-inner-P : is-inner-family B P)
-  ( b b' : B)
+  ( b b' b'' : B)
   ( u : hom B b b')
-  ( e : P b)
-  ( e' : P b')
-  ( f : dhom B b b' u P e e')
-  ( is-cocart-f : is-cocartesian-arrow  B b b' u P e e' f)
-  ( b'' : B)
   ( v : hom B b' b'')
   ( w : hom B b b'')
   ( sigma : hom2 B b b' b'' u v w)
+  ( e : P b)
+  ( e' : P b')
   ( e'' : P b'')
+  ( f : dhom B b b' u P e e')
+  ( is-cocart-f : is-cocartesian-arrow-over B b b' b'' u v w sigma P e e' e'' f)
   : is-equiv
     ( dhom B b' b'' v P e' e'')
     ( dhom B b b'' w P e e'')
@@ -124,7 +165,31 @@ this is preferred for usage.
         , ( dhom2 B b b' b'' u v w sigma P e e' e'' f g h))
         ( equiv-fib-comp-tot-dhom2 B P is-inner-P b b' b'' u v w
           sigma e e' e'' f h)
-        ( is-cocart-f b'' v w sigma e'' h))
+        ( is-cocart-f h))
+
+#def is-equiv-comp-over-is-inner-is-cocartesian-arrow
+  ( B : U)
+  ( P : B → U)
+  ( is-inner-P : is-inner-family B P)
+  ( b b' : B)
+  ( u : hom B b b')
+  ( e : P b)
+  ( e' : P b')
+  ( f : dhom B b b' u P e e')
+  ( is-cocart-f : is-cocartesian-arrow  B b b' u P e e' f)
+  ( b'' : B)
+  ( v : hom B b' b'')
+  ( w : hom B b b'')
+  ( sigma : hom2 B b b' b'' u v w)
+  ( e'' : P b'')
+  : is-equiv
+    ( dhom B b' b'' v P e' e'')
+    ( dhom B b b'' w P e e'')
+    ( comp-over-is-inner-family B P is-inner-P b b' b'' u v w sigma e e' e'' f)
+  :=
+  is-equiv-comp-over-is-inner-is-cocartesian-arrow-over
+    B P is-inner-P b b' b'' u v w sigma e e' e'' f
+    ( is-cocart-f b'' v w sigma e'')
 
 ```
 
