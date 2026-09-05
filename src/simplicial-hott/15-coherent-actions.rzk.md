@@ -524,7 +524,105 @@ This triangle witnesses the left inverse law for our total map
         ( comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t))
         ( fill-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)))
 
+#def is-equiv-tot-comp-lift-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  : is-equiv
+    ( Σ ( x' : E x) , darr-from B g E (action x y f x'))
+    ( ( t : Δ¹) → E (h t))
+    ( tot-comp-lift-action x y z f g h σ)
+  :=
+  is-equiv-has-inverse
+    ( Σ ( x' : E x) , darr-from B g E (action x y f x'))
+    ( ( t : Δ¹) → E (h t))
+    ( tot-comp-lift-action x y z f g h σ)
+    ( inv-tot-comp-lift-action x y z f g h σ
+    , ( is-section-tot-comp-lift-action x y z f g h σ
+    , ( \ h' →
+      is-retraction-tot-comp-lift-action x y z f g h σ (h' 0₂) (h' 1₂) h')))
+
 ```
+
+### Cocartesianness
+
+We know now that our total map is an equivalence. Now it remains to prove the
+equivalence on fibers and conclude that our family is cocartesian. We will do
+this in two steps.
+
+First we show that we obtain an equivalence when one endpoint is fixed.
+
+```rzk
+
+#def comp-lift-darr-from-action uses (is-inner-E)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  : darr-from B g E (action x y f x')
+  → darr-from B h E (action x x (id-hom B x) x')
+  := \ g' → comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)
+
+
+#def is-equiv-action-id
+  ( x : B)
+  : is-equiv
+    ( E x)
+    ( E x)
+    ( action x x (id-hom B x))
+  :=
+  is-equiv-has-inverse
+    ( E x)
+    ( E x)
+    ( action x x (id-hom B x))
+    ( identity (E x)
+    , ( is-unital-action x , is-unital-action x))
+
+#def is-equiv-comp-lift-darr-from-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  ( h : hom B x z)
+  ( σ : hom2 B x y z f g h)
+  ( x' : E x)
+  : is-equiv
+    ( darr-from B g E (action x y f x'))
+    ( darr-from B h E (action x x (id-hom B x) x'))
+    ( comp-lift-darr-from-action x y z f g h σ x')
+  :=
+  is-equiv-fiberwise-is-equiv-total
+    ( E x)
+    ( \ x' → darr-from B g E (action x y f x'))
+    ( \ x' → darr-from B h E (action x x (id-hom B x) x'))
+    ( \ x' → comp-lift-darr-from-action x y z f g h σ x')
+    ( is-equiv-right-factor
+      ( Σ ( x' : E x) , darr-from B g E (action x y f x'))
+      ( Σ ( x' : E x) , darr-from B h E (action x x (id-hom B x) x'))
+      ( ( t : Δ¹) → E (h t))
+      ( \ (x' , g') → (x' , comp-lift-darr-from-action x y z f g h σ x' g'))
+      ( \ (x' , g') → g')
+      ( is-equiv-comp
+        ( Σ ( x' : E x) , darr-from B h E (action x x (id-hom B x) x'))
+        ( Σ ( x' : E x) , darr-from B h E x')
+        ( ( t : Δ¹) → E (h t))
+        ( \ (x' , g') → (action x x (id-hom B x) x' , g'))
+        ( second (equiv-total-pullback-is-equiv
+          ( E x)
+          ( E x)
+          ( action x x (id-hom B x))
+          ( is-equiv-action-id x)
+          ( darr-from B h E)))
+        ( \ (x' , g') → g')
+        ( is-equiv-map-sigma-darr-from-darr B h E))
+      ( is-equiv-tot-comp-lift-action x y z f g h σ))
+    x'
+
+```
+
 
 
 ```rzk

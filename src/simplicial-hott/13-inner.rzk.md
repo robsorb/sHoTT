@@ -43,6 +43,26 @@ This is a literate `rzk` file:
 
 ```
 
+```rzk
+
+#def is-equiv-map-sigma-darr-from-darr
+  ( B : U)
+  ( f : Δ¹ → B)
+  ( E : B → U)
+  : is-equiv
+    ( Σ ( e : E (f 0₂)) , darr-from B f E e)
+    ( darr B f E)
+    ( \ (e , f') → f')
+  :=
+  is-equiv-has-inverse
+    ( Σ ( e : E (f 0₂)) , darr-from B f E e)
+    ( darr B f E)
+    ( \ (e , f') → f')
+    ( \ f' → (f' 0₂ , f')
+    , ( \ f' → refl , \ f' → refl))
+
+```
+
 ## Triangles with fixed spine
 
 ```rzk
