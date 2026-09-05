@@ -5,7 +5,10 @@
 #lang rzk-1
 ```
 
-
+```rzk
+#assume funext : FunExt
+#assume extext : ExtExt
+```
 
 ## Locally cocartesian arrows
 
@@ -151,13 +154,63 @@ The action induced by being a coherently locally cocartesian family.
     ( x) (y) (f) (e))
 ```
 
+### The chosen locally cocartesian lifts
+
+```rzk
+#def lift-coherently-locally-cocartesian
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : dhom B x y f E e (action-coherently-locally-cocartesian x y f e)
+  :=
+  first (second (second
+    ( is-coherently-locally-cocartesian-family-E)
+    ( x) (y) (f) (e)))
+
+#def is-locally-cocartesian-lift-coherently-locally-cocartesian
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : is-locally-cocartesian-arrow B x y f E
+    e
+    ( action-coherently-locally-cocartesian x y f e)
+    ( lift-coherently-locally-cocartesian x y f e)
+  :=
+  second (second (second
+    ( is-coherently-locally-cocartesian-family-E)
+    ( x) (y) (f) (e)))
+```
+
 ### Unitality
 
 This action is unital.
 
 ```rzk
 
--- #def
+#def is-unital-action-coherently-locally-cocartesian
+  ( x : B)
+  ( e : E x)
+  : action-coherently-locally-cocartesian x x (id-hom B x) e = e
+  :=
+  rev
+    ( E x)
+    ( e)
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+    ( eq-representable-isomorphism funext extext
+      ( E x)
+      ( rezk-fiber-is-isoinner-family B E
+        ( first is-coherently-locally-cocartesian-family-E) x)
+      ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+      ( e)
+      ( equiv-hom-dhom-is-locally-cocartesian-arrow-is-inner B E
+        ( is-inner-family-is-iso-inner-family B E
+          ( first is-coherently-locally-cocartesian-family-E))
+        x x (id-hom B x)
+        ( e)
+        ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+        ( lift-coherently-locally-cocartesian x x (id-hom B x) e)
+        ( is-locally-cocartesian-lift-coherently-locally-cocartesian
+          x x (id-hom B x) e)))
 
 ```
 

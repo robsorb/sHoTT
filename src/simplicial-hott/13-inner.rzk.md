@@ -539,4 +539,19 @@ This is a special lemma used in the coherent actions proof
     ( is-inner-family B E)
     ( ( b : B) → is-rezk (E b))
 
+
+#def is-inner-family-is-iso-inner-family
+  ( B : U)
+  ( E : B → U)
+  ( is-isoinner-E : is-isoinner-family B E)
+  : is-inner-family B E
+  := first (is-isoinner-E)
+
+#def rezk-fiber-is-isoinner-family
+  ( B : U)
+  ( E : B → U)
+  ( is-isoinner-E : is-isoinner-family B E)
+  ( x : B)
+  : is-rezk (E x)
+  := second (is-isoinner-E) x
 ```
