@@ -37,9 +37,17 @@ This is a literate `rzk` file:
   ( B : U)
   ( f : Δ¹ → B)
   ( E : B → U)
-  ( e : E(f 0₂))
+  ( e : E (f 0₂))
   : U
   := (t : Δ¹) → E (f t) [t ≡ 0₂ ↦ e]
+
+#def darr-to
+  ( B : U)
+  ( f : Δ¹ → B)
+  ( E : B → U)
+  ( e : E (f 1₂))
+  : U
+  := (t : Δ¹) → E (f t) [t ≡ 1₂ ↦ e]
 
 ```
 
@@ -443,6 +451,40 @@ These two types are equivalent.
         σ'
         ( \ (t , s) → f'' s))
 
+#def eq-dhom-dhom2-id-hom-inner-family'
+  ( B : U)
+  ( E : B → U)
+  ( is-inner-E : is-inner-family B E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( f' : dhom B x y f E x' y')
+  ( f'' : dhom B x y f E x' y')
+  : dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E x' y' y'
+    f''
+    ( id-hom (E y) y')
+    f'
+  → f' = f''
+  :=
+  \ σ' →
+    eq-dhom-eq-dtriangle-with-horn
+      B x y y f (id-hom B y) f (comp-id-witness B x y f) E x' y' y'
+      f''
+      ( id-hom (E y) y')
+      f'
+      f''
+      σ'
+      ( \ (t , s) → f'' t)
+      ( all-elements-equal-is-contr
+        ( dtriangle-with-horn B x y y f (id-hom B y) f (comp-id-witness B x y f)
+          E x' y' y' f'' (id-hom (E y) y'))
+        ( is-contr-fillers-inner-family B E is-inner-E
+          x y y f (id-hom B y) f (comp-id-witness B x y f)
+          x' y' y' f'' (id-hom (E y) y'))
+        σ'
+        ( \ (t , s) → f'' t))
+
 ```
 
 #### Utilities
@@ -562,5 +604,122 @@ This is a special lemma used in the coherent actions proof
   ( x : B)
   : is-segal (E x)
   := first (second (is-isoinner-E) x)
+
+```
+
+### Triangles with isomorphism components
+
+```rzk
+
+#def eq-darr-from-dhom2-is-isoinner-family
+  ( B : U)
+  ( E : B → U)
+  ( is-isoinner-E : is-isoinner-family B E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( z' : E y)
+  ( f' : dhom B x y f E x' y')
+  ( g' : Iso (E y) (is-segal-fiber-is-isoinner-family B E is-isoinner-E y) y' z')
+  ( h' : dhom B x y f E x' z')
+  ( σ' :
+    dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f)
+      E x' y' z' f' (first g') h')
+  : h' =_{darr-from B f E x'} f'
+  :=
+  iso-ind-is-rezk
+    ( E y)
+    ( is-rezk-fiber-is-isoinner-family B E is-isoinner-E y)
+    y'
+    ( \ z' g' →
+      ( h' : dhom B x y f E x' z')
+      → dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f)
+        E x' y' z' f' (first g') h'
+      → h' =_{darr-from B f E x'} f')
+    ( \ h' σ' →
+      ap
+        ( dhom B x y f E x' y')
+        ( darr-from B f E x')
+        h'
+        f'
+        ( \ f' t → f' t)
+        ( eq-dhom-dhom2-id-hom-inner-family' B E (first is-isoinner-E)
+          x y f x' y' h' f' σ'))
+    ( z')
+    ( g')
+    ( h')
+    ( σ')
+
+#def eq-darr-to-dhom2-is-isoinner-family
+  ( B : U)
+  ( E : B → U)
+  ( is-isoinner-E : is-isoinner-family B E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E x)
+  ( z' : E y)
+  ( f' : Iso (E x) (is-segal-fiber-is-isoinner-family B E is-isoinner-E x) x' y')
+  ( g' : dhom B x y f E y' z')
+  ( h' : dhom B x y f E x' z')
+  ( σ' :
+    dhom2 B x x y (id-hom B x) f f (id-comp-witness B x y f)
+      E x' y' z' (first f') g' h')
+  : h' =_{darr-to B f E z'} g'
+  :=
+  iso-ind-is-rezk
+    ( E x)
+    ( is-rezk-fiber-is-isoinner-family B E is-isoinner-E x)
+    x'
+    ( \ y' f' →
+      ( g' : dhom B x y f E y' z')
+      → ( dhom2 B x x y (id-hom B x) f f (id-comp-witness B x y f)
+        E x' y' z' (first f') g' h')
+      → h' =_{darr-to B f E z'} g')
+    ( \ g' σ' →
+      ap
+        ( dhom B x y f E x' z')
+        ( darr-to B f E z')
+        ( h')
+        ( g')
+        ( \ g' t → g' t)
+        ( eq-dhom-dhom2-id-hom-inner-family B E (first is-isoinner-E)
+          x y f x' z' h' g' σ'))
+    ( y')
+    ( f')
+    ( g')
+    ( σ')
+
+
+
+```
+
+
+### Squares with isomorphisms in endpoints
+
+```rzk
+
+-- #def eq-darr-square-is-isoinner-family
+--   ( B : U)
+--   ( E : B → U)
+--   ( is-isoinner-E : is-isoinner-family B E)
+--   ( x y : B)
+--   ( f : hom B x y)
+--   ( f' g' : darr B f E)
+--   ( square : (t : Δ¹) → hom (E (f t)) (f' t) (g' t))
+--   ( is-iso-left :
+--     is-iso-arrow (E x) (is-segal-fiber-is-isoinner-family B E is-isoinner-E x)
+--       ( f' 0₂)
+--       ( g' 0₂)
+--       ( square 0₂))
+--   ( is-iso-right :
+--     is-iso-arrow (E y) (is-segal-fiber-is-isoinner-family B E is-isoinner-E y)
+--       ( f' 1₂)
+--       ( g' 1₂)
+--       ( square 1₂))
+--   : f' = g'
+--   :=
+--   ?
 
 ```
