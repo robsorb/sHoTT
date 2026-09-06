@@ -205,19 +205,39 @@ This action is unital.
 
 ```rzk
 
-#def is-unital-action-coherently-locally-cocartesian
+#def unit-iso-action-coherently-locally-cocartesian
   ( x : B)
   ( e : E x)
-  : action-coherently-locally-cocartesian x x (id-hom B x) e = e
-  :=
-  rev
-    ( E x)
-    ( e)
-    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
-    ( eq-representable-isomorphism funext extext
+  : Iso (E x)
+    ( is-segal-is-rezk
       ( E x)
       ( rezk-fiber-is-isoinner-family B E
-        ( first is-coherently-locally-cocartesian-family-E) x)
+        ( first is-coherently-locally-cocartesian-family-E) x))
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e) (e)
+  :=
+  rev-iso extext
+    ( E x)
+    ( is-segal-is-rezk
+      ( E x)
+      ( rezk-fiber-is-isoinner-family B E
+        ( first is-coherently-locally-cocartesian-family-E) x))
+    ( e)
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+    ( arr-map-representable-equiv (E x)
+      ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+      ( e)
+      ( equiv-hom-dhom-is-locally-cocartesian-arrow-is-inner B E
+        ( is-inner-family-is-iso-inner-family B E
+          ( first is-coherently-locally-cocartesian-family-E))
+        x x (id-hom B x)
+        ( e)
+        ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+        ( lift-coherently-locally-cocartesian x x (id-hom B x) e)
+        ( is-locally-cocartesian-lift-coherently-locally-cocartesian
+          x x (id-hom B x) e))
+    , representable-isomorphism funext extext (E x)
+      ( is-segal-is-rezk (E x) (rezk-fiber-is-isoinner-family B E
+        ( first is-coherently-locally-cocartesian-family-E) x))
       ( action-coherently-locally-cocartesian x x (id-hom B x) e)
       ( e)
       ( equiv-hom-dhom-is-locally-cocartesian-arrow-is-inner B E
@@ -229,6 +249,19 @@ This action is unital.
         ( lift-coherently-locally-cocartesian x x (id-hom B x) e)
         ( is-locally-cocartesian-lift-coherently-locally-cocartesian
           x x (id-hom B x) e)))
+
+#def is-unital-action-coherently-locally-cocartesian uses (extext funext)
+  ( x : B)
+  ( e : E x)
+  : action-coherently-locally-cocartesian x x (id-hom B x) e = e
+  :=
+  eq-iso-is-rezk
+    ( E x)
+    ( rezk-fiber-is-isoinner-family B E
+      ( first is-coherently-locally-cocartesian-family-E) x)
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+    ( e)
+    ( unit-iso-action-coherently-locally-cocartesian x e)
 
 ```
 
@@ -253,7 +286,7 @@ chosen locally cocartesian lift.
 
 ```rzk
 
-#def hom-lift-action-coherently-locally-cocartesian-lift-coherently-locally-cocartesian
+#def comparison-lifts-coherently-locally-cocartesian
   uses (is-coherently-locally-cocartesian-family-E)
   ( x y : B)
   ( f : hom B x y)
@@ -272,6 +305,13 @@ chosen locally cocartesian lift.
 
 ```
 
+This comparison morphism is an isomorphism in the endpoints.
+
+```rzk
+
+
+
+```
 
 
 
