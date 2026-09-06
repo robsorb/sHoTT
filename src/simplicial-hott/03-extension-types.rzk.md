@@ -1353,9 +1353,7 @@ pointwise.
 #end pointwise-homotopy-extension-type
 ```
 
-### Extension homotopy induction
-
-A path induction principle for homotopies of extension types
+### Extension type homotopies
 
 ```rzk
 
@@ -1379,6 +1377,32 @@ A path induction principle for homotopies of extension types
   ( f : (t : ψ) → A t [ϕ t ↦ a t])
   : ext-htpy I ψ ϕ A a f f
   := \ t → refl
+
+```
+
+### Concatenation of extension type homotopies
+
+```rzk
+
+#def concat-ext-htpy
+  ( I : CUBE)
+  ( ψ : I → TOPE)
+  ( ϕ : ψ → TOPE)
+  ( A : ψ → U)
+  ( a : (t : ϕ) → A t)
+  ( f : (t : ψ) → A t [ϕ t ↦ a t])
+  ( g : (t : ψ) → A t [ϕ t ↦ a t])
+  ( h : (t : ψ) → A t [ϕ t ↦ a t])
+  : ext-htpy I ψ ϕ A a f g → ext-htpy I ψ ϕ A a g h → ext-htpy I ψ ϕ A a f h
+  := \ H H' t → concat (A t) (f t) (g t) (h t) (H t) (H' t)
+
+```
+
+### Extension type homotopy induction
+
+A path induction principle for homotopies of extension types
+
+```rzk
 
 #def ind-ext-htpy
   ( I : CUBE)

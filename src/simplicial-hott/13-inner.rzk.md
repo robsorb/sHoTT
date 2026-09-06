@@ -696,30 +696,62 @@ This is a special lemma used in the coherent actions proof
 ```
 
 
-### Squares with isomorphisms in endpoints
+### Squares with isomorphism components
 
 ```rzk
 
--- #def eq-darr-square-is-isoinner-family
---   ( B : U)
---   ( E : B → U)
---   ( is-isoinner-E : is-isoinner-family B E)
---   ( x y : B)
---   ( f : hom B x y)
---   ( f' g' : darr B f E)
---   ( square : (t : Δ¹) → hom (E (f t)) (f' t) (g' t))
---   ( is-iso-left :
---     is-iso-arrow (E x) (is-segal-fiber-is-isoinner-family B E is-isoinner-E x)
---       ( f' 0₂)
---       ( g' 0₂)
---       ( square 0₂))
---   ( is-iso-right :
---     is-iso-arrow (E y) (is-segal-fiber-is-isoinner-family B E is-isoinner-E y)
---       ( f' 1₂)
---       ( g' 1₂)
---       ( square 1₂))
---   : f' = g'
---   :=
---   ?
+#def eq-darr-square-is-isoinner-family
+  ( B : U)
+  ( E : B → U)
+  ( is-isoinner-E : is-isoinner-family B E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( f' g' : darr B f E)
+  ( square : (t : Δ¹) → hom (E (f t)) (f' t) (g' t))
+  ( is-iso-left :
+    is-iso-arrow (E x) (is-segal-fiber-is-isoinner-family B E is-isoinner-E x)
+      ( f' 0₂)
+      ( g' 0₂)
+      ( square 0₂))
+  ( is-iso-right :
+    is-iso-arrow (E y) (is-segal-fiber-is-isoinner-family B E is-isoinner-E y)
+      ( f' 1₂)
+      ( g' 1₂)
+      ( square 1₂))
+  : f' = g'
+  :=
+  concat
+    ( darr B f E)
+    ( f')
+    ( \ t → square t t)
+    ( g')
+    ( ap
+      ( darr-from B f E (f' 0₂))
+      ( darr B f E)
+      ( f')
+      ( \ t → square t t)
+      ( \ f' t → f' t)
+      ( rev
+        ( darr-from B f E (f' 0₂))
+        ( \ t → square t t)
+        ( f')
+        ( eq-darr-from-dhom2-is-isoinner-family B E is-isoinner-E x y f
+          ( f' 0₂) (f' 1₂) (g' 1₂)
+          ( f')
+          ( square 1₂ , is-iso-right)
+          ( \ s → square s s)
+          ( \ (s , t) → square s t))))
+    ( ap
+      ( darr-to B f E (g' 1₂))
+      ( darr B f E)
+      ( \ t → square t t)
+      ( g')
+      ( \ g' t → g' t)
+      ( eq-darr-to-dhom2-is-isoinner-family B E is-isoinner-E x y f
+        ( f' 0₂) (g' 0₂) (g' 1₂)
+        ( square 0₂ , is-iso-left)
+        ( g')
+        ( \ s → square s s)
+        ( \ (s , t) → square t s)))
 
 ```
