@@ -197,6 +197,73 @@ The action induced by being a coherently locally cocartesian family.
     first (first (is-locally-cocartesian-lift-coherently-locally-cocartesian
       x y f x' y' f'))
 
+#def fill-dhom-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( h' : dhom B x y f E x' y')
+  : dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+    ( x')
+    ( action-coherently-locally-cocartesian x y f x')
+    ( y')
+    ( lift-coherently-locally-cocartesian x y f x')
+    ( hom-dhom-coherently-locally-cocartesian x y f x' y' h')
+    ( h')
+  :=
+  second (first (is-locally-cocartesian-lift-coherently-locally-cocartesian
+    x y f x' y' h'))
+
+
+```
+
+Any triangle with, bottom edge being the locally cocartesian lift induces an
+equality between the vertical morphism and the induced one.
+
+```rzk
+
+#def eq-hom-dhom2-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( h' : dhom B x y f E x' y')
+  ( g' : hom (E y) (action-coherently-locally-cocartesian x y f x') y')
+  : dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+    ( x')
+    ( action-coherently-locally-cocartesian x y f x')
+    ( y')
+    ( lift-coherently-locally-cocartesian x y f x')
+    ( g')
+    ( h')
+  → hom-dhom-coherently-locally-cocartesian x y f x' y' h' = g'
+  := \ σ' →
+  ap
+    ( Σ ( g' : hom (E y) (action-coherently-locally-cocartesian x y f x') y')
+    , dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+      ( x')
+      ( action-coherently-locally-cocartesian x y f x')
+      ( y')
+      ( lift-coherently-locally-cocartesian x y f x')
+      ( g')
+      ( h'))
+    ( hom (E y) (action-coherently-locally-cocartesian x y f x') y')
+    ( hom-dhom-coherently-locally-cocartesian x y f x' y' h'
+    , fill-dhom-coherently-locally-cocartesian x y f x' y' h')
+    ( g' , σ')
+    ( \ (g' , σ') → g')
+    ( homotopy-contraction
+      ( Σ ( g' : hom (E y) (action-coherently-locally-cocartesian x y f x') y')
+      , dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+        ( x')
+        ( action-coherently-locally-cocartesian x y f x')
+        ( y')
+        ( lift-coherently-locally-cocartesian x y f x')
+        ( g')
+        ( h'))
+      ( is-locally-cocartesian-lift-coherently-locally-cocartesian x y f x' y' h')
+      ( g' , σ'))
+
 ```
 
 ### Unitality
@@ -209,19 +276,15 @@ This action is unital.
   ( x : B)
   ( e : E x)
   : Iso (E x)
-    ( is-segal-is-rezk
-      ( E x)
-      ( rezk-fiber-is-isoinner-family B E
-        ( first is-coherently-locally-cocartesian-family-E) x))
+    ( is-segal-fiber-is-isoinner-family B E
+      ( first is-coherently-locally-cocartesian-family-E) x)
     ( action-coherently-locally-cocartesian x x (id-hom B x) e)
     ( e)
   :=
   rev-iso extext
     ( E x)
-    ( is-segal-is-rezk
-      ( E x)
-      ( rezk-fiber-is-isoinner-family B E
-        ( first is-coherently-locally-cocartesian-family-E) x))
+    ( is-segal-fiber-is-isoinner-family B E
+      ( first is-coherently-locally-cocartesian-family-E) x)
     ( e)
     ( action-coherently-locally-cocartesian x x (id-hom B x) e)
     ( arr-map-representable-equiv (E x)
@@ -237,8 +300,8 @@ This action is unital.
         ( is-locally-cocartesian-lift-coherently-locally-cocartesian
           x x (id-hom B x) e))
     , representable-isomorphism funext extext (E x)
-      ( is-segal-is-rezk (E x) (rezk-fiber-is-isoinner-family B E
-        ( first is-coherently-locally-cocartesian-family-E) x))
+      ( is-segal-fiber-is-isoinner-family B E
+        ( first is-coherently-locally-cocartesian-family-E) x)
       ( action-coherently-locally-cocartesian x x (id-hom B x) e)
       ( e)
       ( equiv-hom-dhom-is-locally-cocartesian-arrow-is-inner B E
@@ -258,7 +321,7 @@ This action is unital.
   :=
   eq-iso-is-rezk
     ( E x)
-    ( rezk-fiber-is-isoinner-family B E
+    ( is-rezk-fiber-is-isoinner-family B E
       ( first is-coherently-locally-cocartesian-family-E) x)
     ( action-coherently-locally-cocartesian x x (id-hom B x) e)
     ( e)
@@ -315,14 +378,54 @@ This comparison morphism is an isomorphism in the endpoints.
   ( f : hom B x y)
   ( e : E x)
   : is-iso-arrow (E x)
-    ( is-segal-is-rezk (E x)
-      ( rezk-fiber-is-isoinner-family B E
-        ( first is-coherently-locally-cocartesian-family-E) x))
+    ( is-segal-fiber-is-isoinner-family B E
+      ( first is-coherently-locally-cocartesian-family-E) x)
     ( action-coherently-locally-cocartesian x x (id-hom B x) e)
     ( e)
     ( comparison-lifts-coherently-locally-cocartesian x y f e 0₂)
   :=
   second (unit-iso-action-coherently-locally-cocartesian x e)
+
+
+#def is-iso-comparison-lifts-1-coherently-locally-cocartesian
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : is-iso-arrow (E y)
+    ( is-segal-fiber-is-isoinner-family B E
+      ( first is-coherently-locally-cocartesian-family-E) y)
+    ( action-coherently-locally-cocartesian x y f e)
+    ( action-coherently-locally-cocartesian x y f e)
+    ( comparison-lifts-coherently-locally-cocartesian x y f e 1₂)
+  :=
+  transport
+    ( hom (E y)
+      ( action-coherently-locally-cocartesian x y f e)
+      ( action-coherently-locally-cocartesian x y f e))
+    ( is-iso-arrow (E y)
+      ( is-segal-fiber-is-isoinner-family B E
+        ( first is-coherently-locally-cocartesian-family-E) y)
+      ( action-coherently-locally-cocartesian x y f e)
+      ( action-coherently-locally-cocartesian x y f e))
+    ( id-hom (E y) (action-coherently-locally-cocartesian x y f e))
+    ( comparison-lifts-coherently-locally-cocartesian x y f e 1₂)
+    ( rev
+      ( hom (E y)
+        ( action-coherently-locally-cocartesian x y f e)
+        ( action-coherently-locally-cocartesian x y f e))
+      ( comparison-lifts-coherently-locally-cocartesian x y f e 1₂)
+      ( id-hom (E y) (action-coherently-locally-cocartesian x y f e))
+      ( eq-hom-dhom2-coherently-locally-cocartesian x y f
+        ( e)
+        ( action-coherently-locally-cocartesian x y f e)
+        ( lift-coherently-locally-cocartesian x y f e)
+        ( id-hom (E y) (action-coherently-locally-cocartesian x y f e))
+        ( \ (s , t) → lift-coherently-locally-cocartesian x y f e s)))
+    ( is-iso-arrow-id-hom
+      ( E y)
+      ( is-segal-fiber-is-isoinner-family B E
+        ( first is-coherently-locally-cocartesian-family-E) y)
+      ( action-coherently-locally-cocartesian x y f e))
 
 ```
 
