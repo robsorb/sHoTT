@@ -213,7 +213,8 @@ This action is unital.
       ( E x)
       ( rezk-fiber-is-isoinner-family B E
         ( first is-coherently-locally-cocartesian-family-E) x))
-    ( action-coherently-locally-cocartesian x x (id-hom B x) e) (e)
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+    ( e)
   :=
   rev-iso extext
     ( E x)
@@ -309,7 +310,19 @@ This comparison morphism is an isomorphism in the endpoints.
 
 ```rzk
 
-
+#def is-iso-comparison-lifts-0-coherently-locally-cocartesian uses (extext funext)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : is-iso-arrow (E x)
+    ( is-segal-is-rezk (E x)
+      ( rezk-fiber-is-isoinner-family B E
+        ( first is-coherently-locally-cocartesian-family-E) x))
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+    ( e)
+    ( comparison-lifts-coherently-locally-cocartesian x y f e 0₂)
+  :=
+  second (unit-iso-action-coherently-locally-cocartesian x e)
 
 ```
 
