@@ -429,6 +429,52 @@ This comparison square is an isomorphism in the endpoints.
 
 ```
 
+This square shows that the two types of lifts agree.
+
+```rzk
+
+#def eq-lift-action-lift-coherently-locally-cocartesian-family uses (extext funext)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : ( lift-action-coherently-locally-cocartesian x y f e)
+  =_{darr B f E}
+  ( lift-coherently-locally-cocartesian x y f e)
+  :=
+  eq-darr-square-is-isoinner-family B E
+    ( first is-coherently-locally-cocartesian-family-E)
+    ( x) (y) (f)
+    ( lift-action-coherently-locally-cocartesian x y f e)
+    ( lift-coherently-locally-cocartesian x y f e)
+    ( comparison-lifts-coherently-locally-cocartesian x y f e)
+    ( is-iso-comparison-lifts-0-coherently-locally-cocartesian x y f e)
+    ( is-iso-comparison-lifts-1-coherently-locally-cocartesian x y f e)
+
+```
+
+It follows that the lift induced by the action is also locally cocartesian.
+
+```rzk
+
+#def is-locally-cocartesian-lift-action-coherently-locally-cocartesian
+  uses (extext funext is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : is-locally-cocartesian-arrow B x y f E
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+    ( action-coherently-locally-cocartesian x y f e)
+    ( lift-action-coherently-locally-cocartesian x y f e)
+  :=
+  transport-rev
+    ( darr B f E)
+    ( \ f' → is-locally-cocartesian-arrow B x y f E (f' 0₂) (f' 1₂) (f'))
+    ( lift-action-coherently-locally-cocartesian x y f e)
+    ( lift-coherently-locally-cocartesian x y f e)
+    ( eq-lift-action-lift-coherently-locally-cocartesian-family x y f e)
+    ( is-locally-cocartesian-lift-coherently-locally-cocartesian x y f e)
+
+```
 
 
 ```rzk
