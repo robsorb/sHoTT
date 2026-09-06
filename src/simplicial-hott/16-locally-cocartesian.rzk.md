@@ -369,7 +369,7 @@ chosen locally cocartesian lift.
 
 ```
 
-This comparison morphism is an isomorphism in the endpoints.
+This comparison square is an isomorphism in the endpoints.
 
 ```rzk
 
