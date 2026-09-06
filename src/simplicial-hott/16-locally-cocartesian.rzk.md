@@ -179,6 +179,24 @@ The action induced by being a coherently locally cocartesian family.
   second (second (second
     ( is-coherently-locally-cocartesian-family-E)
     ( x) (y) (f) (e)))
+
+```
+
+### The vertical morphism induced by a dependent morphism
+```rzk
+
+#def hom-dhom-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  : dhom B x y f E x' y'
+  → hom (E y) (action-coherently-locally-cocartesian x y f x') y'
+  :=
+  \ f' →
+    first (first (is-locally-cocartesian-lift-coherently-locally-cocartesian
+      x y f x' y' f'))
+
 ```
 
 ### Unitality
@@ -213,6 +231,47 @@ This action is unital.
           x x (id-hom B x) e)))
 
 ```
+
+### The lift induced by the action
+
+```rzk
+
+#def lift-action-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : dhom B x y f E
+    ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+    ( action-coherently-locally-cocartesian x y f e)
+  :=
+  lift-action B E action-coherently-locally-cocartesian x y f e
+
+```
+
+There is a comparison morphism from the lift induced from the action to the
+chosen locally cocartesian lift.
+
+```rzk
+
+#def hom-lift-action-coherently-locally-cocartesian-lift-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : ( t : Δ¹)
+  → hom (E (f t))
+      ( lift-action-coherently-locally-cocartesian x y f e t)
+      ( lift-coherently-locally-cocartesian x y f e t)
+  :=
+  \ t →
+    hom-dhom-coherently-locally-cocartesian
+      ( x) (f t) (clamp-above B f t)
+      ( e)
+      ( lift-coherently-locally-cocartesian x y f e t)
+      ( dclamp-above B E f (lift-coherently-locally-cocartesian x y f e) t)
+
+```
+
 
 
 

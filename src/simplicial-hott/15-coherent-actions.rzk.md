@@ -53,6 +53,20 @@
     recOR (t ≤ l ↦ g l , l ≤ t ↦
       recOR (u ≤ t ↦ g u , t ≤ u ↦ g t))
 
+#def dclamp-above
+  ( f : Δ¹ → B)
+  ( g : (t : Δ¹) → E (f t))
+  ( t : Δ¹)
+  : dhom B (f 0₂) (f t) (clamp-above f t) E (g 0₂) (g t)
+  := dclamp f g (t , 0₂)
+
+#def dclamp-below
+  ( f : Δ¹ → B)
+  ( g : (t : Δ¹) → E (f t))
+  ( t : Δ¹)
+  : dhom B (f t) (f 1₂) (clamp-below f t) E (g t) (g 1₂)
+  := dclamp f g (1₂ , t)
+
 #end clamping
 ```
 
