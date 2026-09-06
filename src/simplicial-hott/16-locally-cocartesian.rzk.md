@@ -329,7 +329,7 @@ This action is unital.
 
 ```
 
-### The lift induced by the action
+### The lift induced by the action is locally cocartesian
 
 ```rzk
 
@@ -473,6 +473,81 @@ It follows that the lift induced by the action is also locally cocartesian.
     ( lift-coherently-locally-cocartesian x y f e)
     ( eq-lift-action-lift-coherently-locally-cocartesian-family x y f e)
     ( is-locally-cocartesian-lift-coherently-locally-cocartesian x y f e)
+
+```
+
+### The action is coherent
+
+We will show that the coherence morphism is degenerate by constructing two
+triangles involving these morphisms, with bottom edge locally cocartesian.
+
+We'll define some useful shorthands.
+
+```rzk
+
+#def action2-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
+  ( x y z : B)
+  ( f : hom B x y)
+  ( g : hom B y z)
+  : E x → E z
+  :=
+  \ e →
+    action-coherently-locally-cocartesian y z g
+      ( action-coherently-locally-cocartesian x y f e)
+
+#def action-id-dhom-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( x' : E x)
+  ( y' : E y)
+  ( f' : dhom B x y f E x' y')
+  : dhom B x y f E
+    ( action-coherently-locally-cocartesian x x (id-hom B x) x')
+    ( action-coherently-locally-cocartesian y y (id-hom B y) y')
+  :=
+  \ t →
+    action-coherently-locally-cocartesian (f t) (f t) (id-hom B (f t)) (f' t)
+
+```
+
+```rzk
+
+#def coherence-morphism-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : hom (E y)
+    ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
+    ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
+  :=
+  coherence-morphism-action B E action-coherently-locally-cocartesian x y f e
+
+#def dhom2-coherence-morphism-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+    ( action2-coherently-locally-cocartesian x x x (id-hom B x) (id-hom B x) e)
+    ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
+    ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
+    ( lift-action-coherently-locally-cocartesian x y f
+      ( action-coherently-locally-cocartesian x x (id-hom B x) e))
+    ( coherence-morphism-coherently-locally-cocartesian x y f e)
+    ( action-id-dhom-coherently-locally-cocartesian x y f
+      ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+      ( action-coherently-locally-cocartesian x y f e)
+      ( lift-action-coherently-locally-cocartesian x y f e))
+  :=
+  \ (s , t) →
+    action2-coherently-locally-cocartesian
+      ( x) (f t) (f s)
+      ( clamp-above B f t)
+      ( clamp B f (s , t))
+      ( e)
 
 ```
 
