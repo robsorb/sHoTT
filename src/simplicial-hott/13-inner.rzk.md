@@ -418,7 +418,7 @@ These two types are equivalent.
 
 ```rzk
 
-#def eq-dhom-dhom2-id-hom-inner-family
+#def eq-dhom2-id-hom-inner-family
   ( B : U)
   ( E : B → U)
   ( is-inner-E : is-inner-family B E)
@@ -451,7 +451,7 @@ These two types are equivalent.
         σ'
         ( \ (t , s) → f'' s))
 
-#def eq-dhom-dhom2-id-hom-inner-family'
+#def eq-dhom2-id-hom-inner-family'
   ( B : U)
   ( E : B → U)
   ( is-inner-E : is-inner-family B E)
@@ -556,7 +556,7 @@ This is a special lemma used in the coherent actions proof
             h'
             g'
             ( \ k → (x' , k))
-            ( eq-dhom-dhom2-id-hom-inner-family B E is-inner-E
+            ( eq-dhom2-id-hom-inner-family B E is-inner-E
               y z g
               ( F x') (z'')
               h'
@@ -644,7 +644,7 @@ This is a special lemma used in the coherent actions proof
         h'
         f'
         ( \ f' t → f' t)
-        ( eq-dhom-dhom2-id-hom-inner-family' B E (first is-isoinner-E)
+        ( eq-dhom2-id-hom-inner-family' B E (first is-isoinner-E)
           x y f x' y' h' f' σ'))
     ( z')
     ( g')
@@ -684,7 +684,7 @@ This is a special lemma used in the coherent actions proof
         ( h')
         ( g')
         ( \ g' t → g' t)
-        ( eq-dhom-dhom2-id-hom-inner-family B E (first is-isoinner-E)
+        ( eq-dhom2-id-hom-inner-family B E (first is-isoinner-E)
           x y f x' z' h' g' σ'))
     ( y')
     ( f')

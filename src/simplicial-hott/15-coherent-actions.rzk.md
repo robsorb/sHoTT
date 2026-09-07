@@ -5,6 +5,7 @@
 ```
 
 ```rzk
+#assume funext : FunExt
 #assume extext : ExtExt
 ```
 
@@ -437,6 +438,46 @@ sense that the coherence morphism is equal to the following canonical morphism
       ( is-unital-action y (action x y f e)))
 
 ```
+
+The zig-zag morphism applied to the identity is the identity.
+
+```rzk
+
+#def eq-zig-zag-hom-id-id-unital-action uses (is-unital-action)
+  ( x : B)
+  ( e : E x)
+  : zig-zag-hom-unital-action x x (id-hom B x) e
+    = id-hom (E x) (action x x (id-hom B x) (action x x (id-hom B x) e))
+  :=
+  ap
+    ( ( action x x (id-hom B x) (action x x (id-hom B x) e))
+      = ( action x x (id-hom B x) (action x x (id-hom B x) e)))
+    ( hom (E x)
+      ( action x x (id-hom B x) (action x x (id-hom B x) e))
+      ( action x x (id-hom B x) (action x x (id-hom B x) e)))
+    ( zig-zag-concat (E x)
+      ( action x x (id-hom B x) (action x x (id-hom B x) e))
+      ( action x x (id-hom B x) e)
+      ( action x x (id-hom B x) (action x x (id-hom B x) e))
+      ( ap
+        ( E x)
+        ( E x)
+        ( action x x (id-hom B x) e)
+        ( e)
+        ( action x x (id-hom B x))
+        ( is-unital-action x e))
+      ( is-unital-action x (action x x (id-hom B x) e)))
+    ( refl)
+    ( hom-eq (E x)
+      ( action x x (id-hom B x) (action x x (id-hom B x) e))
+      ( action x x (id-hom B x) (action x x (id-hom B x) e)))
+    ( eq-zig-zag-homotopy-id-refl funext
+      ( E x)
+      ( action x x (id-hom B x))
+      ( is-unital-action x)
+      ( e))
+```
+
 
 ```rzk
 
