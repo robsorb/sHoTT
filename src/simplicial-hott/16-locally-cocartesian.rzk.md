@@ -555,6 +555,8 @@ The triangle involving the coherence morphism.
 
 The triangle involving the zig-zag morphism.
 
+TODO: Fix naming convention zig-zag-hom vs zig-zag-morphism
+
 ```rzk
 
 #def zig-zag-hom-coherently-locally-cocartesian
@@ -673,6 +675,71 @@ The triangle involving the zig-zag morphism.
             ( t , s))))
     ( square-zig-zag-morphism-coherently-locally-cocartesian x y f e)
 
+```
+
+We use locally cocartesianness to show that these triangles are equal and
+consequently, that coherence morphism is the zig-zag morphism.
+
+```rzk
+
+#def is-coherent-action-coherently-locally-cocartesian
+  uses (funext extext is-coherently-locally-cocartesian-family-E)
+  : is-coherent-unital-action B E
+    action-coherently-locally-cocartesian
+    is-unital-action-coherently-locally-cocartesian
+  :=
+  \ x y f e →
+    ap
+      ( Σ ( g' : hom (E y)
+        ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
+        ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e))
+      , dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+          ( action2-coherently-locally-cocartesian x x x
+            ( id-hom B x) (id-hom B x) e)
+          ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
+          ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
+          ( lift-action-coherently-locally-cocartesian x y f
+            ( action-coherently-locally-cocartesian x x (id-hom B x) e))
+          ( g')
+          ( action-id-dhom-coherently-locally-cocartesian x y f
+            ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+            ( action-coherently-locally-cocartesian x y f e)
+            ( lift-action-coherently-locally-cocartesian x y f e)))
+      ( hom (E y)
+        ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
+        ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e))
+      ( coherence-morphism-coherently-locally-cocartesian x y f e
+      , dhom2-coherence-morphism-coherently-locally-cocartesian x y f e)
+      ( zig-zag-hom-coherently-locally-cocartesian x y f e
+      , dhom2-zig-zag-morphism-coherently-locally-cocartesian x y f e)
+      ( \ p → first p)
+      ( all-elements-equal-is-contr
+        ( Σ ( g' : hom (E y)
+          ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
+          ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e))
+        , dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+            ( action2-coherently-locally-cocartesian x x x
+              ( id-hom B x) (id-hom B x) e)
+            ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
+            ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
+            ( lift-action-coherently-locally-cocartesian x y f
+              ( action-coherently-locally-cocartesian x x (id-hom B x) e))
+            ( g')
+            ( action-id-dhom-coherently-locally-cocartesian x y f
+              ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+              ( action-coherently-locally-cocartesian x y f e)
+              ( lift-action-coherently-locally-cocartesian x y f e)))
+        ( is-locally-cocartesian-lift-action-coherently-locally-cocartesian
+          x y f (action-coherently-locally-cocartesian x x (id-hom B x) e)
+          ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
+          ( action-id-dhom-coherently-locally-cocartesian x y f
+            ( action-coherently-locally-cocartesian x x (id-hom B x) e)
+            ( action-coherently-locally-cocartesian x y f e)
+            ( lift-action-coherently-locally-cocartesian x y f e)))
+        ( coherence-morphism-coherently-locally-cocartesian x y f e
+        , dhom2-coherence-morphism-coherently-locally-cocartesian x y f e)
+        ( zig-zag-hom-coherently-locally-cocartesian x y f e
+        , dhom2-zig-zag-morphism-coherently-locally-cocartesian x y f e))
 
 ```
 
