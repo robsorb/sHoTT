@@ -553,7 +553,7 @@ The triangle involving the coherence morphism.
 
 ```
 
-The coherence involving the zig-zag morphism.
+The triangle involving the zig-zag morphism.
 
 ```rzk
 
