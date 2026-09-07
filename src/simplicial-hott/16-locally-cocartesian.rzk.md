@@ -751,3 +751,23 @@ consequently, that coherence morphism is the zig-zag morphism.
 
 
 ## Coherently locally cocartesian families are cocartesian
+
+```rzk
+
+#def is-cocartesian-coherently-locally-cocartesian uses (funext)
+  ( B : U)
+  ( E : B → U)
+  ( is-coherently-locally-cocartesian-E :
+    is-coherently-locally-cocartesian-family B E)
+  : is-cocartesian-family B E
+  :=
+  is-cocartesian-coherent-action extext B E
+    ( first is-coherently-locally-cocartesian-E)
+    ( action-coherently-locally-cocartesian B E
+      is-coherently-locally-cocartesian-E)
+    ( is-unital-action-coherently-locally-cocartesian B E
+      is-coherently-locally-cocartesian-E)
+    ( is-coherent-action-coherently-locally-cocartesian B E
+      is-coherently-locally-cocartesian-E)
+
+```
