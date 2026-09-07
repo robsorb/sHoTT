@@ -579,29 +579,7 @@ The triangle involving the zig-zag morphism.
   : ( ( s , t) : 2 × 2) → E (f s)
   :=
   \ (s , t) →
-    hom-eq (E (f s))
-      ( action2-coherently-locally-cocartesian x x (f s)
-        ( id-hom B x) (clamp-above B f s) e)
-      ( action2-coherently-locally-cocartesian x (f s) (f s)
-        ( clamp-above B f s) (id-hom B (f s)) e)
-      ( zig-zag-concat
-        ( E (f s))
-        ( action2-coherently-locally-cocartesian x x (f s)
-          ( id-hom B x) (clamp-above B f s) e)
-        ( action-coherently-locally-cocartesian x (f s) (clamp-above B f s) e)
-        ( action2-coherently-locally-cocartesian x (f s) (f s)
-          ( clamp-above B f s) (id-hom B (f s)) e)
-        ( ap
-          ( E x)
-          ( E (f s))
-          ( action-coherently-locally-cocartesian x x (id-hom B x) e)
-          ( e)
-          ( action-coherently-locally-cocartesian x (f s) (clamp-above B f s))
-          ( is-unital-action-coherently-locally-cocartesian x e))
-        ( is-unital-action-coherently-locally-cocartesian (f s)
-          ( action-coherently-locally-cocartesian x (f s)
-            ( clamp-above B f s) e)))
-      ( t)
+    zig-zag-hom-coherently-locally-cocartesian x (f s) (clamp-above B f s) e t
 
 -- #def dhom2-zig-zag-morphism-coherently-locally-cocartesian
 --   ( x y : B)
