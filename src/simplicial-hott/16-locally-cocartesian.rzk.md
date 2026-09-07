@@ -5,6 +5,8 @@
 #lang rzk-1
 ```
 
+*TODO: prerequisites*
+
 ```rzk
 #assume funext : FunExt
 #assume extext : ExtExt
@@ -185,7 +187,8 @@ The action induced by being a coherently locally cocartesian family.
 ### The vertical morphism induced by a dependent morphism
 ```rzk
 
-#def hom-dhom-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+#def hom-dhom-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
   ( x y : B)
   ( f : hom B x y)
   ( x' : E x)
@@ -197,7 +200,8 @@ The action induced by being a coherently locally cocartesian family.
     first (first (is-locally-cocartesian-lift-coherently-locally-cocartesian
       x y f x' y' f'))
 
-#def fill-dhom-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+#def fill-dhom-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
   ( x y : B)
   ( f : hom B x y)
   ( x' : E x)
@@ -222,7 +226,8 @@ equality between the vertical morphism and the induced one.
 
 ```rzk
 
-#def eq-hom-dhom2-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+#def eq-hom-dhom2-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
   ( x y : B)
   ( f : hom B x y)
   ( x' : E x)
@@ -237,22 +242,9 @@ equality between the vertical morphism and the induced one.
     ( g')
     ( h')
   → hom-dhom-coherently-locally-cocartesian x y f x' y' h' = g'
-  := \ σ' →
-  ap
-    ( Σ ( g' : hom (E y) (action-coherently-locally-cocartesian x y f x') y')
-    , dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
-      ( x')
-      ( action-coherently-locally-cocartesian x y f x')
-      ( y')
-      ( lift-coherently-locally-cocartesian x y f x')
-      ( g')
-      ( h'))
-    ( hom (E y) (action-coherently-locally-cocartesian x y f x') y')
-    ( hom-dhom-coherently-locally-cocartesian x y f x' y' h'
-    , fill-dhom-coherently-locally-cocartesian x y f x' y' h')
-    ( g' , σ')
-    ( \ (g' , σ') → g')
-    ( homotopy-contraction
+  :=
+  \ σ' →
+    ap
       ( Σ ( g' : hom (E y) (action-coherently-locally-cocartesian x y f x') y')
       , dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
         ( x')
@@ -261,8 +253,23 @@ equality between the vertical morphism and the induced one.
         ( lift-coherently-locally-cocartesian x y f x')
         ( g')
         ( h'))
-      ( is-locally-cocartesian-lift-coherently-locally-cocartesian x y f x' y' h')
-      ( g' , σ'))
+      ( hom (E y) (action-coherently-locally-cocartesian x y f x') y')
+      ( hom-dhom-coherently-locally-cocartesian x y f x' y' h'
+      , fill-dhom-coherently-locally-cocartesian x y f x' y' h')
+      ( g' , σ')
+      ( \ (g' , σ') → g')
+      ( homotopy-contraction
+        ( Σ ( g' : hom (E y) (action-coherently-locally-cocartesian x y f x') y')
+        , dhom2 B x y y f (id-hom B y) f (comp-id-witness B x y f) E
+          ( x')
+          ( action-coherently-locally-cocartesian x y f x')
+          ( y')
+          ( lift-coherently-locally-cocartesian x y f x')
+          ( g')
+          ( h'))
+        ( is-locally-cocartesian-lift-coherently-locally-cocartesian
+          x y f x' y' h')
+        ( g' , σ'))
 
 ```
 
@@ -333,7 +340,8 @@ This action is unital.
 
 ```rzk
 
-#def lift-action-coherently-locally-cocartesian uses (is-coherently-locally-cocartesian-family-E)
+#def lift-action-coherently-locally-cocartesian
+  uses (is-coherently-locally-cocartesian-family-E)
   ( x y : B)
   ( f : hom B x y)
   ( e : E x)
@@ -373,7 +381,8 @@ This comparison square is an isomorphism in the endpoints.
 
 ```rzk
 
-#def is-iso-comparison-lifts-0-coherently-locally-cocartesian uses (extext funext)
+#def is-iso-comparison-lifts-0-coherently-locally-cocartesian
+  uses (extext funext)
   ( x y : B)
   ( f : hom B x y)
   ( e : E x)
@@ -433,7 +442,8 @@ This square shows that the two types of lifts agree.
 
 ```rzk
 
-#def eq-lift-action-lift-coherently-locally-cocartesian-family uses (extext funext)
+#def eq-lift-action-lift-coherently-locally-cocartesian-family
+  uses (extext funext)
   ( x y : B)
   ( f : hom B x y)
   ( e : E x)
@@ -555,7 +565,7 @@ The triangle involving the coherence morphism.
 
 The triangle involving the zig-zag morphism.
 
-TODO: Fix naming convention zig-zag-hom vs zig-zag-morphism
+*TODO: Fix naming convention zig-zag-hom vs zig-zag-morphism*
 
 ```rzk
 

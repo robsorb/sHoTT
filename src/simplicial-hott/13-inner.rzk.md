@@ -15,6 +15,7 @@ This is a literate `rzk` file:
 
 ## Prerequisites
 
+*TODO*
 
 ```rzk
 #assume extext : ExtExt
@@ -508,7 +509,8 @@ This is a special lemma used in the coherent actions proof
   ( H : (t : Δ¹) → g'' t =_{E (g t)} g' t)
   :
   ( h' : dhom B y z g E (F x') (g'' 1₂))
-  → ( dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E (F x') (g'' 0₂) (g'' 1₂)
+  → ( dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E
+    ( F x') (g'' 0₂) (g'' 1₂)
     ( hom-eq (E y) (F x') (g'' 0₂)
       ( zig-zag-concat (E y)
         ( F x')
@@ -525,7 +527,8 @@ This is a special lemma used in the coherent actions proof
     g'
     ( \ g'' H →
       ( h' : dhom B y z g E (F x') (g'' 1₂))
-    → ( dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E (F x') (g'' 0₂) (g'' 1₂)
+    → ( dhom2 B y y z (id-hom B y) g g (id-comp-witness B y z g) E
+        ( F x') (g'' 0₂) (g'' 1₂)
         ( hom-eq (E y) (F x') (g'' 0₂)
           ( zig-zag-concat (E y)
             ( F x')

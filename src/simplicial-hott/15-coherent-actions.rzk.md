@@ -9,7 +9,7 @@
 #assume extext : ExtExt
 ```
 
-
+*TODO: prerequisites*
 
 ## Clamping morphisms
 
@@ -21,7 +21,8 @@
 
 #def clamp (f : Δ¹ → B) ((u , l) : Δ²)
   : hom B (f l) (f u)
-  := \ t →
+  :=
+  \ t →
     recOR (t ≤ l ↦ f l , l ≤ t ↦
       recOR (u ≤ t ↦ f u , t ≤ u ↦ f t))
 
@@ -50,7 +51,8 @@
   ( g : (t : Δ¹) → E (f t))
   ( ( u , l) : Δ²)
   : dhom B (f l) (f u) (clamp f (u , l)) E (g l) (g u)
-  := \ t →
+  :=
+  \ t →
     recOR (t ≤ l ↦ g l , l ≤ t ↦
       recOR (u ≤ t ↦ g u , t ≤ u ↦ g t))
 
@@ -83,7 +85,8 @@
   ( σ : hom2 B x y z f g h)
   ( t : Δ¹)
   : hom B (h t) (g t)
-  := \ s →
+  :=
+  \ s →
     recOR (
       s ≤ t ↦ h t
       , t ≤ s ↦ σ (s , t)
@@ -174,7 +177,8 @@ the right inverse law
     ( lift-action x y f x')
     ( inv-comp-lift-action x y z f g h σ x' z' h')
     ( action-id-dhom x z h x' z' h')
-  := \ (s , t) →
+  :=
+  \ (s , t) →
     lift-action
       ( h t) (g t) (hor-hom-hom2 B x y z f g h σ t)
       ( h' t) s
@@ -195,7 +199,8 @@ over the codomain of `f`, which we call the coherence morphism.
   : hom (E y)
     ( action x y f (action x x (id-hom B x) e))
     ( action y y (id-hom B y) (action x y f e))
-  := \ t →
+  :=
+  \ t →
     ( action (f t) y (clamp-below B f t) (action x (f t) (clamp-above B f t) e))
 
 ```
@@ -232,7 +237,8 @@ the lift and the coherence morphism.
     ( coherence-morphism-action x y f x')
     ( action-id-dhom y z g (action x y f x') z' g')
     ( inv-comp-lift-action x y z f g h σ (action x x (id-hom B x) x') z' h')
-  := \ (t , s) →
+  :=
+  \ (t , s) →
     action (σ (t , s)) (g s)
       ( clamp-below B (hor-hom-hom2 B x y z f g h σ s) t)
       ( σ' (t , s))
@@ -265,7 +271,8 @@ map is an equivalence.
   ( z' : E z)
   : dhom B y z g E (action x y f x') z'
   → dhom B x z h E (action x x (id-hom B x) x') z'
-  := \ g' → comp-over-is-inner-family B E is-inner-E
+  :=
+  \ g' → comp-over-is-inner-family B E is-inner-E
     x y z f g h σ
     ( action x x (id-hom B x) x')
     ( action x y f x') z'
@@ -308,7 +315,8 @@ We will do this by considering the map on total types
   :
   ( Σ ( x' : E x) , darr-from B g E (action x y f x'))
   → ( ( t : Δ¹) → E (h t))
-  := \ (x' , g') → comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)
+  :=
+  \ (x' , g') → comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)
 
 
 #def inv-tot-comp-lift-action
@@ -320,7 +328,8 @@ We will do this by considering the map on total types
   :
   ( ( t : Δ¹) → E (h t))
   → ( Σ ( x' : E x) , darr-from B g E (action x y f x'))
-  := \ h' → (h' 0₂ , inv-comp-lift-action x y z f g h σ (h' 0₂) (h' 1₂) h')
+  :=
+  \ h' → (h' 0₂ , inv-comp-lift-action x y z f g h σ (h' 0₂) (h' 1₂) h')
 
 ```
 
@@ -340,7 +349,8 @@ The lift over our triangle almost witnesses the right inverse law
   : comp-lift-action x y z f g h σ x' (action z z (id-hom B z) z')
     ( inv-comp-lift-action x y z f g h σ x' z' h')
     = action-id-dhom x z h x' z' h'
-  := unqiue-comp-over-is-inner-family B E is-inner-E
+  :=
+  unqiue-comp-over-is-inner-family B E is-inner-E
     x y z f g h σ
     ( action x x (id-hom B x) x')
     ( action x y f x')
@@ -381,7 +391,8 @@ Now we can show that our total map has a right inverse
   : tot-comp-lift-action x y z f g h σ
     ( inv-tot-comp-lift-action x y z f g h σ h')
     = h'
-  := concat ((t : Δ¹) → E (h t))
+  :=
+  concat ((t : Δ¹) → E (h t))
     ( tot-comp-lift-action x y z f g h σ
       ( inv-tot-comp-lift-action x y z f g h σ h'))
     ( action-id-dhom x z h x' z' (h'))
@@ -393,7 +404,8 @@ Now we can show that our total map has a right inverse
         ( inv-comp-lift-action x y z f g h σ x' z' h'))
       ( action-id-dhom x z h x' z' h')
       ( \ h' → \ t → h' t)
-      ( comp-lift-action-inv-lift-action-is-action-id-dhom-action x y z f g h σ x' z' h'))
+      ( comp-lift-action-inv-lift-action-is-action-id-dhom-action
+        x y z f g h σ x' z' h'))
     ( naiveextext-extext extext
       2
       Δ¹
@@ -548,7 +560,8 @@ This triangle witnesses the left inverse law for our total map
 
 ```rzk
 
-#def is-section-tot-comp-lift-action uses (is-inner-E is-coherent-unital-action-action)
+#def is-section-tot-comp-lift-action
+  uses (is-inner-E is-coherent-unital-action-action)
   ( x y z : B)
   ( f : hom B x y)
   ( g : hom B y z)
@@ -558,7 +571,8 @@ This triangle witnesses the left inverse law for our total map
   → ( inv-tot-comp-lift-action x y z f g h σ
     ( tot-comp-lift-action x y z f g h σ g'))
     = g'
-  := \ (x' , g') →
+  :=
+  \ (x' , g') →
     eq-pullback-dom-projection-dhom2-ext-homotopy-inner-family
       extext B E is-inner-E
       x y z g
@@ -579,7 +593,8 @@ This triangle witnesses the left inverse law for our total map
         ( comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t))
         ( fill-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)))
 
-#def is-equiv-tot-comp-lift-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+#def is-equiv-tot-comp-lift-action
+  uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
   ( x y z : B)
   ( f : hom B x y)
   ( g : hom B y z)
@@ -620,7 +635,8 @@ First we show that we obtain an equivalence when one endpoint is fixed.
   ( x' : E x)
   : darr-from B g E (action x y f x')
   → darr-from B h E (action x x (id-hom B x) x')
-  := \ g' → comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)
+  :=
+  \ g' → comp-lift-action x y z f g h σ x' (g' 1₂) (\ t → g' t)
 
 
 #def is-equiv-action-id
@@ -637,7 +653,8 @@ First we show that we obtain an equivalence when one endpoint is fixed.
     ( identity (E x)
     , ( is-unital-action x , is-unital-action x))
 
-#def is-equiv-comp-lift-darr-from-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+#def is-equiv-comp-lift-darr-from-action
+  uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
   ( x y z : B)
   ( f : hom B x y)
   ( g : hom B y z)
@@ -682,7 +699,8 @@ Finally, we show that the other endpoint can also be fixed
 
 ```rzk
 
-#def is-equiv-comp-lift-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+#def is-equiv-comp-lift-action
+  uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
   ( x y z : B)
   ( f : hom B x y)
   ( g : hom B y z)
@@ -731,7 +749,8 @@ It follows that our lift is indeed a cocartesian morphism.
 
 ```rzk
 
-#def is-cocartesian-arrow-lift-action uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
+#def is-cocartesian-arrow-lift-action
+  uses (extext is-inner-E is-unital-action is-coherent-unital-action-action)
   ( x y : B)
   ( f : hom B x y)
   ( x' : E x)
