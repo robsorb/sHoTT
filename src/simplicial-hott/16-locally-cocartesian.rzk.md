@@ -1,7 +1,7 @@
 # Coherently locally cocartesian families
 
 This is a formalization of part of the theory of coherenttly locally cocartesian
-families as developed in Chapter 5 of [Rob Schellingerhout (2026), Master's thesis](https://studenttheses.uu.nl/items/6b387401-50f1-4463-836a-9ee8c138fec6).
+families as developed in Chapter 5 of [Rob Schellingerhout (2026), Master's thesis, §4](https://studenttheses.uu.nl/items/6b387401-50f1-4463-836a-9ee8c138fec6).
 
 This is a literate `rzk` file:
 

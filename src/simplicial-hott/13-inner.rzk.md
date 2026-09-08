@@ -256,7 +256,7 @@ These two types are equivalent.
     E
 ```
 
-### The relative composition map for morphisms with a fixed domain
+### The relative composition map for dependent morphisms
 
 ```rzk
 

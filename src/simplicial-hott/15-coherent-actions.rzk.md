@@ -1,7 +1,7 @@
 # Cocartesian families
 
 This is a formalization of part of the theory of coherent actions on inner
-families as developed in Chapter 5 of [Rob Schellingerhout (2026), Master's thesis](https://studenttheses.uu.nl/items/6b387401-50f1-4463-836a-9ee8c138fec6).
+families as developed in [Rob Schellingerhout (2026), Master's thesis, §5](https://studenttheses.uu.nl/items/6b387401-50f1-4463-836a-9ee8c138fec6).
 
 This is a literate `rzk` file:
 
@@ -140,7 +140,7 @@ construct a morphism $id_* e \to f_* e$ laying over it.
 
 Given a triangle `hom2 B x y z f g h` in the base and a morphism over `h`,
 we construct a morphism over `g` that will be the inverse to postcomposition
-with the lift over `f`
+with the lift over `f`.
 
 ```rzk
 #def inv-comp-lift-action uses (action)
@@ -159,7 +159,7 @@ with the lift over `f`
 ```
 
 We can lift the entire triangle to a dependent triangle, which will witness
-the right inverse law
+the right inverse law.
 
 ```rzk
 
@@ -260,7 +260,7 @@ the lift and the coherence morphism.
 
 ## Composing with lifts
 
-Now we will assume that our family is inner
+Now we will assume that our family is inner.
 
 ```rzk
 
@@ -315,7 +315,7 @@ map is an equivalence.
 
 ```
 
-We will do this by considering the map on total types
+We will do this by considering the map on total types.
 
 ```rzk
 
@@ -346,7 +346,7 @@ We will do this by considering the map on total types
 
 ```
 
-The lift over our triangle almost witnesses the right inverse law
+The lift over our triangle almost witnesses the right inverse law.
 
 ```rzk
 
@@ -377,7 +377,7 @@ The lift over our triangle almost witnesses the right inverse law
 
 ## Unital actions
 
-For the next part of the argument we need to assume that the action is unital
+For the next part of the argument we need to assume that the action is unital.
 
 ```rzk
 #variable is-unital-action :
@@ -388,7 +388,7 @@ For the next part of the argument we need to assume that the action is unital
 
 ### The right inverse law
 
-Now we can show that our total map has a right inverse
+Now we can show that our total map has a right inverse.
 
 ```rzk
 
@@ -798,7 +798,7 @@ We can use this to change the bottom edge of our pushed forward triangle
 ### Left inverse law
 
 This triangle witnesses the left inverse law for our total map
-`tot-comp-lift-action`
+`tot-comp-lift-action`.
 
 ```rzk
 
@@ -937,7 +937,7 @@ First we show that we obtain an equivalence when one endpoint is fixed.
 
 ```
 
-Finally, we show that the other endpoint can also be fixed
+Finally, we show that the other endpoint can also be fixed.
 
 ```rzk
 
@@ -1013,7 +1013,7 @@ It follows that our lift is indeed a cocartesian morphism.
 #end lift-action
 ```
 
-It follows that all morpshisms have cocartesian lifts
+It follows that all morpshisms have cocartesian lifts.
 
 ```rzk title="S26, Theorem 5.1.6"
 

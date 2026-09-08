@@ -35,7 +35,7 @@ nav:
       - The Yoneda Lemma: simplicial-hott/09-yoneda.rzk.md
       - Rezk Types: simplicial-hott/10-rezk-types.rzk.md
       - Adjunctions: simplicial-hott/11-adjunctions.rzk.md
-      - Orthogonal Families: simplicial-hott/12-orthogonal-families.rzk
+      - Orthogonal Families: simplicial-hott/12-orthogonal-families.rzk.md
       - Inner Families: simplicial-hott/13-inner.rzk.md
       - Cocartesian Families: simplicial-hott/14-cocartesian.rzk.md
       - Coherent Actions: simplicial-hott/15-coherent-actions.rzk.md
