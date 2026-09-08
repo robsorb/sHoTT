@@ -420,8 +420,69 @@ Now we can show that our total map has a right inverse
 
 ## Coherent actions
 
-For the left inverse we will need to assume that our action is coherent, in the
-sense that the coherence morphism is equal to the following canonical morphism
+For the left inverse we will need to assume that our action is coherent in a
+suitable sense. More specifically, we need to assume that the action preserves
+the composites of `clamp-below f t` and `clamp-above f t`. In addition we need
+some coherences, relating these compositors to the unitors.
+
+```rzk
+
+#def local-composition-law-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : U
+  :=
+  ( t : Δ¹)
+  → action (f t) y (clamp-below B f t) (action x (f t) (clamp-above B f t) e)
+    = action x y f e
+
+#def left-coherence-local-composition-law-unital-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  ( compositor : local-composition-law-action x y f e)
+  : U
+  :=
+  ( compositor 0₂)
+    = ( ap (E x) (E y)
+      ( action x x (id-hom B x) e)
+      ( e)
+      ( action x y f)
+      ( is-unital-action x e))
+
+#def right-coherence-local-composition-law-unital-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  ( compositor : local-composition-law-action x y f e)
+  : U
+  := (compositor 1₂) = is-unital-action y (action x y f e)
+
+
+#def is-coherent-over-hom-unital-action uses (E action is-unital-action)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : U
+  :=
+  Σ ( compositor : local-composition-law-action x y f e)
+  , product
+    ( left-coherence-local-composition-law-unital-action x y f e compositor)
+    ( right-coherence-local-composition-law-unital-action x y f e compositor)
+
+#def is-coherent-unital-action uses (E action is-unital-action)
+  : U
+  :=
+  ( x y : B) → (f : hom B x y) → (e : E x)
+  → is-coherent-over-hom-unital-action x y f e
+
+```
+
+### Alternative characterization of coherent actions
+
+There is an alternative characterization of the coherence data in terms of the
+coherence morphism.
 
 ```rzk
 
@@ -490,16 +551,134 @@ The zig-zag morphism applied to the identity is the identity.
       ( e))
 ```
 
-
 ```rzk
 
-#def is-coherent-unital-action uses (is-unital-action)
+#def is-coherent-over-hom-unital-action' uses (is-unital-action)
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : U
+  := (coherence-morphism-action x y f e) = (zig-zag-hom-unital-action x y f e)
+
+#def is-coherent-unital-action' uses (action is-unital-action)
   : U
   :=
   ( x y : B) → (f : hom B x y) → (e : E x)
-  → ( coherence-morphism-action x y f e) = (zig-zag-hom-unital-action x y f e)
+  → is-coherent-over-hom-unital-action' x y f e
 
-#assume is-coherent-unital-action-action : is-coherent-unital-action
+```
+
+These characterizations are equivalent.
+
+```rzk
+
+#def extension-type-is-coherent-over-hom-unital-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : U
+  :=
+  extension-type
+      2
+      Δ¹
+      ∂Δ¹
+      ( \ t → coherence-morphism-action x y f e t =_{E y} action x y f e)
+      ( \ t → recOR (
+        t ≡ 0₂ ↦
+          ap (E x) (E y)
+            ( action x x (id-hom B x) e)
+            ( e)
+            ( action x y f)
+            ( is-unital-action x e)
+      , t ≡ 1₂ ↦ is-unital-action y (action x y f e)))
+
+#def pointwise-homotopy-extension-type-is-coherent-over-hom-unital-action
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : U
+  :=
+  pointwise-homotopy-extension-type
+      2
+      Δ¹
+      ∂Δ¹
+      ( \ t → coherence-morphism-action x y f e t =_{E y} action x y f e)
+      ( \ t → recOR (
+        t ≡ 0₂ ↦
+          ap (E x) (E y)
+            ( action x x (id-hom B x) e)
+            ( e)
+            ( action x y f)
+            ( is-unital-action x e)
+      , t ≡ 1₂ ↦ is-unital-action y (action x y f e)))
+
+#def equiv-is-coherent-unital-action-over-is-coherent-unital-action-over'
+  ( x y : B)
+  ( f : hom B x y)
+  ( e : E x)
+  : Equiv
+    ( is-coherent-over-hom-unital-action x y f e)
+    ( is-coherent-over-hom-unital-action' x y f e)
+  :=
+  equiv-triple-comp
+    ( is-coherent-over-hom-unital-action x y f e)
+    ( pointwise-homotopy-extension-type-is-coherent-over-hom-unital-action
+      x y f e)
+    ( extension-type-is-coherent-over-hom-unital-action x y f e)
+    ( is-coherent-over-hom-unital-action' x y f e)
+    ( equiv-has-inverse
+      ( is-coherent-over-hom-unital-action x y f e)
+      ( pointwise-homotopy-extension-type-is-coherent-over-hom-unital-action
+        x y f e)
+      ( \ (compositor , (left-coh , right-coh)) →
+        ( compositor
+        , \ t → recOR (
+          t ≡ 0₂ ↦ left-coh
+        , t ≡ 1₂ ↦ right-coh
+        )))
+      ( \ (compositor , coh) → (compositor , (coh 0₂ , coh 1₂)))
+      ( \ _ → refl)
+      ( \ _ → refl))
+    ( inv-equiv
+      ( extension-type-is-coherent-over-hom-unital-action x y f e)
+      ( pointwise-homotopy-extension-type-is-coherent-over-hom-unital-action
+        x y f e)
+      ( extension-type-pointwise-weakening extext
+        2
+        Δ¹
+        ∂Δ¹
+        ( \ t → coherence-morphism-action x y f e t =_{E y} action x y f e)
+        ( \ t → recOR (
+          t ≡ 0₂ ↦
+            ap (E x) (E y)
+              ( action x x (id-hom B x) e)
+              ( e)
+              ( action x y f)
+              ( is-unital-action x e)
+        , t ≡ 1₂ ↦ is-unital-action y (action x y f e)))))
+    ( inv-equiv
+      ( is-coherent-over-hom-unital-action' x y f e)
+      ( extension-type-is-coherent-over-hom-unital-action x y f e)
+      ( equiv-eq-hom-eq-zig-zag-concat extext
+        ( E y)
+        ( action x y f (action x x (id-hom B x) e))
+        ( action x y f e)
+        ( action y y (id-hom B y) (action x y f e))
+        ( ap (E x) (E y)
+          ( action x x (id-hom B x) e)
+          ( e)
+          ( action x y f)
+          ( is-unital-action x e))
+        ( is-unital-action y (action x y f e))
+        ( coherence-morphism-action x y f e)))
+
+```
+
+From now on we will assume that the action is coherent.
+
+```rzk
+
+#assume is-coherent-unital-action-action : is-coherent-unital-action'
 
 ```
 
@@ -782,7 +961,7 @@ It follows that all morpshisms have cocartesian lifts
   ( action : (x y : B) → hom B x y → E x → E y)
   ( is-unital-action : (x : B) → (e : E x) → action x x (id-hom B x) e = e)
   ( is-coherent-unital-action-action :
-    is-coherent-unital-action B E action is-unital-action)
+    is-coherent-unital-action' B E action is-unital-action)
   : has-cocartesian-lifts B E
   :=
   \ x y f x' →
@@ -811,7 +990,7 @@ It follows that all morpshisms have cocartesian lifts
   ( action : (x y : B) → hom B x y → E x → E y)
   ( is-unital-action : (x : B) → (e : E x) → action x x (id-hom B x) e = e)
   ( is-coherent-unital-action-action :
-    is-coherent-unital-action B E action is-unital-action)
+    is-coherent-unital-action' B E action is-unital-action)
   : is-cocartesian-family B E
   :=
   ( is-iso-inner-E

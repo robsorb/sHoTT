@@ -694,7 +694,7 @@ consequently, that coherence morphism is the zig-zag morphism.
 
 #def is-coherent-action-coherently-locally-cocartesian
   uses (funext extext is-coherently-locally-cocartesian-family-E)
-  : is-coherent-unital-action B E
+  : is-coherent-unital-action' B E
     action-coherently-locally-cocartesian
     is-unital-action-coherently-locally-cocartesian
   :=
