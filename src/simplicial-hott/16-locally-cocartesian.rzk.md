@@ -5,8 +5,6 @@
 #lang rzk-1
 ```
 
-*TODO: prerequisites*
-
 ```rzk
 #assume funext : FunExt
 #assume extext : ExtExt
@@ -575,11 +573,9 @@ The triangle involving the coherence morphism.
 
 The triangle involving the zig-zag morphism.
 
-*TODO: Fix naming convention zig-zag-hom vs zig-zag-morphism*
-
 ```rzk
 
-#def zig-zag-hom-coherently-locally-cocartesian
+#def zig-zag-morphism-coherently-locally-cocartesian
   uses (extext funext is-coherently-locally-cocartesian-family-E)
   ( x y : B)
   ( f : hom B x y)
@@ -588,7 +584,7 @@ The triangle involving the zig-zag morphism.
     ( action2-coherently-locally-cocartesian x x y (id-hom B x) f e)
     ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
   :=
-  zig-zag-hom-unital-action B E
+  zig-zag-morphism-unital-action B E
     action-coherently-locally-cocartesian
     is-unital-action-coherently-locally-cocartesian
     x y f e
@@ -601,7 +597,8 @@ The triangle involving the zig-zag morphism.
   : ( ( s , t) : 2 × 2) → E (f s)
   :=
   \ (s , t) →
-    zig-zag-hom-coherently-locally-cocartesian x (f s) (clamp-above B f s) e t
+    zig-zag-morphism-coherently-locally-cocartesian
+      x (f s) (clamp-above B f s) e t
 
 #def diagonal-square-zig-zag-morphism-coherently-locally-cocartesian
   uses (funext extext is-coherently-locally-cocartesian-family-E)
@@ -625,7 +622,7 @@ The triangle involving the zig-zag morphism.
     ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
     ( lift-action-coherently-locally-cocartesian x y f
       ( action-coherently-locally-cocartesian x x (id-hom B x) e))
-    ( zig-zag-hom-coherently-locally-cocartesian x y f e)
+    ( zig-zag-morphism-coherently-locally-cocartesian x y f e)
     ( action-id-dhom-coherently-locally-cocartesian x y f
       ( action-coherently-locally-cocartesian x x (id-hom B x) e)
       ( action-coherently-locally-cocartesian x y f e)
@@ -642,7 +639,7 @@ The triangle involving the zig-zag morphism.
       ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e)
       ( lift-action-coherently-locally-cocartesian x y f
         ( action-coherently-locally-cocartesian x x (id-hom B x) e))
-      ( zig-zag-hom-coherently-locally-cocartesian x y f e)
+      ( zig-zag-morphism-coherently-locally-cocartesian x y f e)
       ( h')
     )
     ( diagonal-square-zig-zag-morphism-coherently-locally-cocartesian x y f e)
@@ -681,11 +678,11 @@ The triangle involving the zig-zag morphism.
               ( lift-action-coherently-locally-cocartesian x y f e))
             ( diagonal-square-zig-zag-morphism-coherently-locally-cocartesian
               x y f e))
-        ( zig-zag-hom-coherently-locally-cocartesian x x (id-hom B x) e)
+        ( zig-zag-morphism-coherently-locally-cocartesian x x (id-hom B x) e)
         ( id-hom (E x)
           ( action2-coherently-locally-cocartesian x x x
             ( id-hom B x) (id-hom B x) e))
-        ( eq-zig-zag-hom-id-id-unital-action funext B E
+        ( eq-zig-zag-morphism-id-id-unital-action funext B E
           action-coherently-locally-cocartesian
           is-unital-action-coherently-locally-cocartesian
           x
@@ -730,7 +727,7 @@ consequently, that coherence morphism is the zig-zag morphism.
         ( action2-coherently-locally-cocartesian x y y f (id-hom B y) e))
       ( coherence-morphism-coherently-locally-cocartesian x y f e
       , dhom2-coherence-morphism-coherently-locally-cocartesian x y f e)
-      ( zig-zag-hom-coherently-locally-cocartesian x y f e
+      ( zig-zag-morphism-coherently-locally-cocartesian x y f e
       , dhom2-zig-zag-morphism-coherently-locally-cocartesian x y f e)
       ( \ p → first p)
       ( all-elements-equal-is-contr
@@ -758,7 +755,7 @@ consequently, that coherence morphism is the zig-zag morphism.
             ( lift-action-coherently-locally-cocartesian x y f e)))
         ( coherence-morphism-coherently-locally-cocartesian x y f e
         , dhom2-coherence-morphism-coherently-locally-cocartesian x y f e)
-        ( zig-zag-hom-coherently-locally-cocartesian x y f e
+        ( zig-zag-morphism-coherently-locally-cocartesian x y f e
         , dhom2-zig-zag-morphism-coherently-locally-cocartesian x y f e))
 
 ```

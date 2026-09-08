@@ -495,7 +495,7 @@ coherence morphism.
 
 ```rzk
 
-#def zig-zag-hom-unital-action
+#def zig-zag-morphism-unital-action
   ( x y : B)
   ( f : hom B x y)
   ( e : E x)
@@ -525,10 +525,10 @@ The zig-zag morphism applied to the identity is the identity.
 
 ```rzk
 
-#def eq-zig-zag-hom-id-id-unital-action uses (is-unital-action)
+#def eq-zig-zag-morphism-id-id-unital-action uses (is-unital-action)
   ( x : B)
   ( e : E x)
-  : zig-zag-hom-unital-action x x (id-hom B x) e
+  : zig-zag-morphism-unital-action x x (id-hom B x) e
     = id-hom (E x) (action x x (id-hom B x) (action x x (id-hom B x) e))
   :=
   ap
@@ -567,7 +567,8 @@ The zig-zag morphism applied to the identity is the identity.
   ( f : hom B x y)
   ( e : E x)
   : U
-  := (coherence-morphism-action x y f e) = (zig-zag-hom-unital-action x y f e)
+  :=
+  ( coherence-morphism-action x y f e) = (zig-zag-morphism-unital-action x y f e)
 
 #def is-coherent-unital-action' uses (action is-unital-action)
   : U
@@ -767,7 +768,7 @@ We can use this to change the bottom edge of our pushed forward triangle
     ( action x y f (action x x (id-hom B x) x'))
     ( action y y (id-hom B y) (action x y f x'))
     ( action z z (id-hom B z) z')
-    ( zig-zag-hom-unital-action x y f x')
+    ( zig-zag-morphism-unital-action x y f x')
     ( action-id-dhom y z g (action x y f x') z' g')
     ( inv-comp-lift-action x y z f g h σ (action x x (id-hom B x) x') z' h')
   :=
@@ -784,7 +785,7 @@ We can use this to change the bottom edge of our pushed forward triangle
         ( action-id-dhom y z g (action x y f x') z' g')
         ( inv-comp-lift-action x y z f g h σ (action x x (id-hom B x) x') z' h'))
     ( coherence-morphism-action x y f x')
-    ( zig-zag-hom-unital-action x y f x')
+    ( zig-zag-morphism-unital-action x y f x')
     ( is-coherent-unital-action-action x y f x')
     ( action-dhom2-action x y z f g h σ x' z' g' h' σ')
 
