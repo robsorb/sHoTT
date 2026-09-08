@@ -243,7 +243,7 @@ These two types are equivalent.
 
 ## Inner families
 
-```rzk
+```rzk title="BW23, Definition 4.1.1"
 #def is-inner-family
   ( B : U)
   ( E : B → U)
@@ -577,7 +577,7 @@ This is a special lemma used in the coherent actions proof
 
 ## Iso-Inner families
 
-```rzk
+```rzk title="BW23 Definition 4.2.3"
 #def is-isoinner-family
   ( B : U)
   ( E : B → U)

@@ -1,5 +1,9 @@
 # Coherently locally cocartesian families
 
+This is a formalization of part of the theory of coherenttly locally cocartesian
+families as developed in Chapter 5 of [Rob Schellingerhout (2026), Master's thesis](https://studenttheses.uu.nl/items/6b387401-50f1-4463-836a-9ee8c138fec6).
+
+This is a literate `rzk` file:
 
 ```rzk
 #lang rzk-1
@@ -22,7 +26,7 @@
 
 ## Locally cocartesian arrows
 
-```rzk
+```rzk title="S26, Definition 5.1.7"
 #def is-locally-cocartesian-arrow
   ( B : U)
   ( b b' : B)
@@ -129,7 +133,7 @@ classical notion of locally cocartesian fibrations.
           P e e' f))
 ```
 
-```rzk
+```rzk title="S26, Definition 5.1.8"
 #def is-coherently-locally-cocartesian-family
   ( B : U)
   ( P : B → U)
@@ -153,7 +157,7 @@ classical notion of locally cocartesian fibrations.
 
 The action induced by being a coherently locally cocartesian family.
 
-```rzk
+```rzk title="S26, Lemma 5.1.9"
 #def action-coherently-locally-cocartesian
   ( x y : B)
   ( f : hom B x y)
@@ -285,7 +289,7 @@ equality between the vertical morphism and the induced one.
 
 This action is unital.
 
-```rzk
+```rzk title="S26, Lemma 5.1.9"
 
 #def unit-iso-action-coherently-locally-cocartesian
   ( x : B)
@@ -346,7 +350,7 @@ This action is unital.
 
 ### The lift induced by the action is locally cocartesian
 
-```rzk
+```rzk title="S26, Lemma 5.1.10"
 
 #def lift-action-coherently-locally-cocartesian
   uses (is-coherently-locally-cocartesian-family-E)
@@ -697,7 +701,7 @@ The triangle involving the zig-zag morphism.
 We use locally cocartesianness to show that these triangles are equal and
 consequently, that coherence morphism is the zig-zag morphism.
 
-```rzk
+```rzk title="S26, Lemma 5.1.11"
 
 #def is-coherent-action-coherently-locally-cocartesian
   uses (funext extext is-coherently-locally-cocartesian-family-E)
@@ -769,7 +773,7 @@ consequently, that coherence morphism is the zig-zag morphism.
 
 ## Coherently locally cocartesian families are cocartesian
 
-```rzk
+```rzk title="S26, Corollary 5.1.11.1"
 
 #def is-cocartesian-coherently-locally-cocartesian uses (funext)
   ( B : U)

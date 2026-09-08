@@ -1,5 +1,10 @@
 # Cocartesian families
 
+This is a formalization of part of the theory of coherent actions on inner
+families as developed in Chapter 5 of [Rob Schellingerhout (2026), Master's thesis](https://studenttheses.uu.nl/items/6b387401-50f1-4463-836a-9ee8c138fec6).
+
+This is a literate `rzk` file:
+
 ```rzk
 #lang rzk-1
 ```
@@ -8,7 +13,6 @@
 #assume funext : FunExt
 #assume extext : ExtExt
 ```
-
 
 ## Prerequisites
 
@@ -22,7 +26,7 @@
 
 ## Clamping morphisms
 
-```rzk
+```rzk title="S26, Definition 5.1.2"
 #section clamping
 
 #variable B : U
@@ -121,7 +125,7 @@
 Given a morphism $f : x \to y$ in the base and a start point $e : E(x)$ we can
 construct a morphism $id_* e \to f_* e$ laying over it.
 
-```rzk
+```rzk title="S26, Remark 5.1.2"
 
 #def lift-action
   ( x y : B)
@@ -434,7 +438,7 @@ suitable sense. More specifically, we need to assume that the action preserves
 the composites of `clamp-below f t` and `clamp-above f t`. In addition we need
 some coherences, relating these compositors to the unitors.
 
-```rzk
+```rzk title="S26, Remark 5.1.4"
 
 #def local-composition-law-action
   ( x y : B)
@@ -560,7 +564,7 @@ The zig-zag morphism applied to the identity is the identity.
       ( e))
 ```
 
-```rzk
+```rzk title="S26, Definition 5.1.5"
 
 #def is-coherent-over-hom-unital-action' uses (is-unital-action)
   ( x y : B)
@@ -580,7 +584,7 @@ The zig-zag morphism applied to the identity is the identity.
 
 These characterizations are equivalent.
 
-```rzk
+```rzk title="S26, Remark 5.1.4"
 
 #def extension-type-is-coherent-over-hom-unital-action
   ( x y : B)
@@ -1011,7 +1015,7 @@ It follows that our lift is indeed a cocartesian morphism.
 
 It follows that all morpshisms have cocartesian lifts
 
-```rzk
+```rzk title="S26, Theorem 5.1.6"
 
 #def has-cocartesian-lifts-coherent-action' uses (extext)
   ( B : U)

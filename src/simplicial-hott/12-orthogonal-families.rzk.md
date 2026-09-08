@@ -14,7 +14,7 @@ This is a literate `rzk` file:
 
 ## Definition of orthogonal families
 
-```rzk
+```rzk title="BW23, Corollary 3.1.2"
 #def is-right-orthogonal-family
   ( I : CUBE)
   ( ψ : I → TOPE)
