@@ -771,7 +771,7 @@ consequently, that coherence morphism is the zig-zag morphism.
     is-coherently-locally-cocartesian-family B E)
   : is-cocartesian-family B E
   :=
-  is-cocartesian-coherent-action extext B E
+  is-cocartesian-coherent-action' extext B E
     ( first is-coherently-locally-cocartesian-E)
     ( action-coherently-locally-cocartesian B E
       is-coherently-locally-cocartesian-E)

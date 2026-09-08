@@ -672,6 +672,55 @@ These characterizations are equivalent.
         ( is-unital-action y (action x y f e))
         ( coherence-morphism-action x y f e)))
 
+
+#def equiv-is-coherent-unital-action-is-coherent-unital-action'
+  uses (extext action is-unital-action)
+  : Equiv is-coherent-unital-action is-coherent-unital-action'
+  :=
+  equiv-function-equiv-family funext
+    B
+    ( \ x → (y : B) → (f : hom B x y) → (e : E x)
+    → is-coherent-over-hom-unital-action x y f e)
+    ( \ x → (y : B) → (f : hom B x y) → (e : E x)
+    → is-coherent-over-hom-unital-action' x y f e)
+    ( \ x →
+      equiv-function-equiv-family funext
+        B
+        ( \ y → (f : hom B x y) → (e : E x)
+        → is-coherent-over-hom-unital-action x y f e)
+        ( \ y → (f : hom B x y) → (e : E x)
+        → is-coherent-over-hom-unital-action' x y f e)
+        ( \ y →
+          equiv-function-equiv-family funext
+            ( hom B x y)
+            ( \ f → (e : E x)
+            → is-coherent-over-hom-unital-action x y f e)
+            ( \ f → (e : E x)
+            → is-coherent-over-hom-unital-action' x y f e)
+            ( \ f →
+              equiv-function-equiv-family funext
+              ( E x)
+              ( is-coherent-over-hom-unital-action x y f)
+              ( is-coherent-over-hom-unital-action' x y f)
+              ( \ e →
+                equiv-is-coherent-unital-action-over-is-coherent-unital-action-over'
+                  x y f e))))
+
+#def is-coherent'-is-coherent-unital-action
+  uses (funext extext B E action is-unital-action)
+  : is-coherent-unital-action → is-coherent-unital-action'
+  :=
+  first equiv-is-coherent-unital-action-is-coherent-unital-action'
+
+#def is-coherent-is-coherent'-unital-action
+  uses (funext extext B E action is-unital-action)
+  : is-coherent-unital-action' → is-coherent-unital-action
+  :=
+  first (inv-equiv
+    is-coherent-unital-action
+    is-coherent-unital-action'
+    equiv-is-coherent-unital-action-is-coherent-unital-action')
+
 ```
 
 From now on we will assume that the action is coherent.
@@ -954,7 +1003,7 @@ It follows that all morpshisms have cocartesian lifts
 
 ```rzk
 
-#def has-cocartesian-lifts-coherent-action uses (extext)
+#def has-cocartesian-lifts-coherent-action' uses (extext)
   ( B : U)
   ( E : B → U)
   ( is-inner-E : is-inner-family B E)
@@ -983,7 +1032,26 @@ It follows that all morpshisms have cocartesian lifts
           is-coherent-unital-action-action
           x y f x'))
 
-#def is-cocartesian-coherent-action uses (extext)
+#def has-cocartesian-lifts-coherent-action uses (funext extext)
+  ( B : U)
+  ( E : B → U)
+  ( is-inner-E : is-inner-family B E)
+  ( action : (x y : B) → hom B x y → E x → E y)
+  ( is-unital-action : (x : B) → (e : E x) → action x x (id-hom B x) e = e)
+  ( is-coherent-unital-action-action :
+    is-coherent-unital-action B E action is-unital-action)
+  : has-cocartesian-lifts B E
+  :=
+  has-cocartesian-lifts-coherent-action'
+    B
+    E
+    is-inner-E
+    action
+    is-unital-action
+    ( is-coherent'-is-coherent-unital-action B E action is-unital-action
+      is-coherent-unital-action-action)
+
+#def is-cocartesian-coherent-action' uses (extext)
   ( B : U)
   ( E : B → U)
   ( is-iso-inner-E : is-isoinner-family B E)
@@ -991,6 +1059,23 @@ It follows that all morpshisms have cocartesian lifts
   ( is-unital-action : (x : B) → (e : E x) → action x x (id-hom B x) e = e)
   ( is-coherent-unital-action-action :
     is-coherent-unital-action' B E action is-unital-action)
+  : is-cocartesian-family B E
+  :=
+  ( is-iso-inner-E
+  , has-cocartesian-lifts-coherent-action' B E
+    ( first (is-iso-inner-E))
+    action
+    is-unital-action
+    is-coherent-unital-action-action)
+
+#def is-cocartesian-coherent-action uses (funext extext)
+  ( B : U)
+  ( E : B → U)
+  ( is-iso-inner-E : is-isoinner-family B E)
+  ( action : (x y : B) → hom B x y → E x → E y)
+  ( is-unital-action : (x : B) → (e : E x) → action x x (id-hom B x) e = e)
+  ( is-coherent-unital-action-action :
+    is-coherent-unital-action B E action is-unital-action)
   : is-cocartesian-family B E
   :=
   ( is-iso-inner-E
