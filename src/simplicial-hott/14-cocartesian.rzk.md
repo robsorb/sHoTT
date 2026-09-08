@@ -3,10 +3,6 @@
 These formalizations capture cocartesian families as treated in
 [Buchholtz and Weinberger (2023), Higher Structures 7](https://doi.org/10.21136/HS.2023.04).
 
-The goal, for now, is not to give a general structural account as in the paper
-but rather to provide the definitions and results that are necessary to prove
-the cocartesian Yoneda Lemma.
-
 This is a literate `rzk` file:
 
 ```rzk
@@ -17,13 +13,9 @@ This is a literate `rzk` file:
 
 - `hott/*` - We require various prerequisites from homotopy type theory, for
   instance the axiom of function extensionality.
-- `02-simplicial-type-theory.rzk.md` — We rely on definitions of simplices and
-  their subshapes.
-- `03-extension-types.rzk.md` — We use the fubini theorem and extension
-  extensionality.
-- `05-segal-types.rzk.md` - We make heavy use of the notion of Segal types
-- `10-rezk-types.rzk.md` - We use Rezk types.
-- `12-inner.rzk.md` - We use (iso)inner families.
+- `02-simplicial-type-theory.rzk.md`
+- `03-extension-types.rzk.md`
+- `13-inner.rzk.md` - We use (iso)inner families.
 
 ## Cocartesian arrows
 

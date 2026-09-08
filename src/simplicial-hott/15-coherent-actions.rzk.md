@@ -9,7 +9,16 @@
 #assume extext : ExtExt
 ```
 
-*TODO: prerequisites*
+
+## Prerequisites
+
+- `hott/*` - We require various prerequisites from homotopy type theory, for
+  instance the axiom of function extensionality.
+- `02-simplicial-type-theory.rzk.md`
+- `03-extension-types.rzk.md`
+- `13-inner.rzk.md` - We use (iso)inner families.
+- `14-cocartesian.rzk.md`
+
 
 ## Clamping morphisms
 

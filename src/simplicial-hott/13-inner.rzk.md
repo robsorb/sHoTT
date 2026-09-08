@@ -13,15 +13,17 @@ This is a literate `rzk` file:
 #lang rzk-1
 ```
 
-## Prerequisites
-
-*TODO*
-
 ```rzk
 #assume extext : ExtExt
 ```
 
+## Prerequisites
 
+- `hott/*` - We require various prerequisites from homotopy type theory, for
+  instance the notion of equivalence (`#!rzk Equiv`, `#!rzk is-equiv`).
+- `shott/02-simplicial-type-theory.rzk.md`
+- `shott/03-extension-types.rzk.md`
+- `shott/10-rezk-types.rzk.md`
 
 
 ## Dependent arrows

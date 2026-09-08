@@ -6,9 +6,13 @@ This is a literate `rzk` file:
 #lang rzk-1
 ```
 
-## Definition of orthogonal families
+## Prerequisites
 
-(Benno Lossin's definition of inner families)
+- `hott/*` - We require various prerequisites from homotopy type theory, for
+  instance the notion of equivalence (`#!rzk Equiv`, `#!rzk is-equiv`).
+- `shott/03-extension-types.rzk.md`
+
+## Definition of orthogonal families
 
 ```rzk
 #def is-right-orthogonal-family
@@ -103,7 +107,5 @@ This is a literate `rzk` file:
           ( is-right-orthogonal-C a f))
 
 #end is-right-orthogonal-iff-is-equiv-restrict-sections
-
-
 
 ```
